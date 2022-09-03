@@ -13,13 +13,11 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '',
+      title: 'Lernapp',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
         useMaterial3: true,
       ),
       home: const MyHomePage(),
@@ -33,12 +31,15 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Lernapp')),
-      body: Row(
+      appBar: AppBar(
+        title: const Text('Lernapp'),
+        primary: true,
+      ),
+      body: Column(
         children: [
           Flexible(
             flex: 1,
-            child: Column(
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: const [
                 Expanded(child: TaskCard()),
@@ -53,7 +54,7 @@ class MyHomePage extends StatelessWidget {
           ),
           const Flexible(
             flex: 5,
-            child: DrawingArea(),
+            child: ClipRect(child: DrawingArea()),
           ),
         ],
       ),
