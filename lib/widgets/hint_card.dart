@@ -5,6 +5,6 @@ class HintCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text("42");
+    return const Card(child: Text("42"));
   }
 }

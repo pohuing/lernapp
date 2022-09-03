@@ -5,6 +5,6 @@ class TaskCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Text("Hello World");
+    return const Card(child: Text("Hello World"));
   }
 }

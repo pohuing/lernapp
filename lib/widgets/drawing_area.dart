@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:lernapp/widgets/drawing_area_painter.dart';
 
@@ -63,10 +61,7 @@ class _DrawingAreaState extends State<DrawingArea> {
         ),
         Positioned(
           child: IconButton(
-            onPressed: () => setState(() {
-              log("hit");
-              isMoving = !isMoving;
-            }),
+            onPressed: () => setState(() => isMoving = !isMoving),
             icon: Icon(isMoving ? Icons.draw : Icons.pan_tool),
           ),
         )
