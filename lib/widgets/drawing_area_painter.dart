@@ -7,11 +7,14 @@ import 'package:flutter/material.dart';
 class DrawingAreaPainter extends CustomPainter {
   static final linePaint = Paint();
   final List<Offset> line;
+  double xOffset = 0;
+  double yOffset = 0;
 
-  DrawingAreaPainter(this.line);
+  DrawingAreaPainter(this.line, {this.xOffset = 0, this.yOffset = 0});
 
   @override
   void paint(Canvas canvas, Size size) {
+    canvas.translate(xOffset, yOffset);
     if (line.isEmpty) {
       return;
     } else if (line.length == 1) {
