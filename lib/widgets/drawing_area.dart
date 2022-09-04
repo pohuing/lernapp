@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lernapp/widgets/drawing_area_painter.dart';
 
+import '../model/line.dart';
+
 class DrawingArea extends StatefulWidget {
   const DrawingArea({Key? key}) : super(key: key);
 
@@ -9,7 +11,8 @@ class DrawingArea extends StatefulWidget {
 }
 
 class _DrawingAreaState extends State<DrawingArea> {
-  final List<Offset> points = [];
+  Line line = Line([]);
+  final List<Line> lines = [];
   var isMoving = false;
   double xOffset = 0;
   double yOffset = 0;
@@ -20,33 +23,14 @@ class _DrawingAreaState extends State<DrawingArea> {
       child: Stack(
         children: [
           GestureDetector(
-            onPanStart: (details) {
-              if (isMoving) {
-                return;
-              }
-              final point = details.localPosition.translate(-xOffset, -yOffset);
-              setState(() {
-                points.add(point);
-              });
-            },
-            onPanUpdate: (details) {
-              if (isMoving) {
-                setState(() {
-                  xOffset += details.delta.dx;
-                  yOffset += details.delta.dy;
-                });
-              } else {
-                final point =
-                    details.localPosition.translate(-xOffset, -yOffset);
-                setState(() {
-                  points.add(point);
-                });
-              }
-            },
+            onPanStart: onPanStart,
+            onPanUpdate: onPanUpdate,
+            onPanEnd: onPanEnd,
             child: CustomPaint(
               size: MediaQuery.of(context).size,
               painter: DrawingAreaPainter(
-                points,
+                line: line.path,
+                lines: lines,
                 xOffset: xOffset,
                 yOffset: yOffset,
               ),
@@ -61,5 +45,36 @@ class _DrawingAreaState extends State<DrawingArea> {
         ],
       ),
     );
+  }
+
+  void onPanEnd(DragEndDetails details) {
+    if (!isMoving) {
+      lines.add(line..prune());
+      line = Line([]);
+    }
+  }
+
+  void onPanStart(DragStartDetails details) {
+    if (isMoving) {
+      return;
+    }
+    final point = details.localPosition.translate(-xOffset, -yOffset);
+    setState(() {
+      line.add(point);
+    });
+  }
+
+  void onPanUpdate(DragUpdateDetails details) {
+    if (isMoving) {
+      setState(() {
+        xOffset += details.delta.dx;
+        yOffset += details.delta.dy;
+      });
+    } else {
+      final point = details.localPosition.translate(-xOffset, -yOffset);
+      setState(() {
+        line.add(point);
+      });
+    }
   }
 }
