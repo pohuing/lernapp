@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_lorem/flutter_lorem.dart';
+import 'package:flutter_ameno_ipsum/flutter_ameno_ipsum.dart';
 
 class HintCard extends StatelessWidget {
   const HintCard({Key? key}) : super(key: key);
@@ -10,7 +10,7 @@ class HintCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Text(
-          lorem(words: 20),
+          ameno(words: 20),
           style: Theme.of(context).textTheme.bodyLarge,
         ),
       ),

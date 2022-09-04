@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_lorem/flutter_lorem.dart';
+import 'package:flutter_ameno_ipsum/flutter_ameno_ipsum.dart';
 import 'package:lernapp/widgets/solution_card.dart';
 import 'package:lernapp/widgets/task_card.dart';
 
@@ -28,7 +28,7 @@ class TaskScreen extends StatelessWidget {
                       tag: title,
                       child: TaskCard(
                         title: title,
-                        description: lorem(paragraphs: 2, words: 20),
+                        description: ameno(paragraphs: 2, words: 20),
                       ),
                     ),
                   ),
