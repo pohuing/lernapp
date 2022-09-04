@@ -19,20 +19,28 @@ class Line {
       final point1 = path[i];
       final point2 = path[i + 2];
 
-      if (isPointOnLine(point1, point2, centerPoint)) {
+      if (isPointOnLine(
+        point1: point1,
+        point2: point2,
+        centerPoint: centerPoint,
+      )) {
         offsetsToRemove.add(i + 1);
       }
     }
     log('Pruned ${offsetsToRemove.length} out of ${path.length} offsets(${(offsetsToRemove.length / path.length) * 100}%)',
-        name: '$runtimeType.pruneOnce()');
+        name: 'Line.prune()');
     for (var index in offsetsToRemove.reversed) {
       path.removeAt(index);
     }
-
+    log('Pruned points ${offsetsToRemove}', name: 'Line.prune()');
     return offsetsToRemove.isNotEmpty;
   }
 
-  bool isPointOnLine(Offset point1, Offset point2, Offset centerPoint) {
+  bool isPointOnLine({
+    required Offset point1,
+    required Offset point2,
+    required Offset centerPoint,
+  }) {
     if (point1 == point2) {
       if (point1 == centerPoint) {
         return true;
@@ -66,8 +74,12 @@ class Line {
   }
 
   void add(Offset point) {
-    if (path.length > 2 &&
-        isPointOnLine(path[path.length - 2], point, path.last)) {
+    if (path.length >= 2 &&
+        isPointOnLine(
+          point1: path[path.length - 2],
+          point2: point,
+          centerPoint: path.last,
+        )) {
       path.last = point;
       _savedCounter++;
       log('Avoided adding redundant point. Saved $_savedCounter points',
