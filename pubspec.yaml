@@ -39,6 +39,7 @@ dependencies:
   collection: ^1.16.0
   go_router: ^4.3.0
   flutter_ameno_ipsum: ^1.0.1
+  system_theme: ^2.0.0
 
 dev_dependencies:
   flutter_test:
