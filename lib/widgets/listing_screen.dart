@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_lorem/flutter_lorem.dart';
 import 'package:go_router/go_router.dart';
 
 class ListingScreen extends StatelessWidget {
@@ -20,14 +21,15 @@ class ListingScreen extends StatelessWidget {
               delegate: SliverChildBuilderDelegate(
                 childCount: 40,
                 (context, index) {
+                  final title = lorem(paragraphs: 1, words: 4);
                   return Hero(
                     tag: index.toString(),
                     child: Material(
                       child: ListTile(
-                        title: Text(index.toString()),
+                        title: Text(title),
                         onTap: () => context.pushNamed(
                           'Task',
-                          params: {'tid': index.toString()},
+                          params: {'tid': title},
                         ),
                       ),
                     ),

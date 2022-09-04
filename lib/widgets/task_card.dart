@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class TaskCard extends StatelessWidget {
-  final Function()? onTap;
   final String title;
+  final String description;
 
-  const TaskCard({Key? key, this.onTap, required this.title}) : super(key: key);
+  final _scrollController = ScrollController();
+
+  TaskCard({Key? key, required this.title, required this.description})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,18 +19,35 @@ class TaskCard extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const BackButton(),
+              BackButton(
+                onPressed: () {
+                  context.canPop() ? context.pop() : context.goNamed('listing');
+                },
+              ),
               const VerticalDivider(width: 8),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: Theme.of(context).textTheme.titleMedium,
-                    textAlign: TextAlign.start,
+              Expanded(
+                child: Scrollbar(
+                  thumbVisibility: true,
+                  controller: _scrollController,
+                  child: SingleChildScrollView(
+                    controller: _scrollController,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          title,
+                          style: Theme.of(context).textTheme.titleLarge,
+                          textAlign: TextAlign.start,
+                        ),
+                        Text(
+                          description,
+                          style: Theme.of(context).textTheme.bodyLarge,
+                          overflow: TextOverflow.fade,
+                        ),
+                      ],
+                    ),
                   ),
-                  const Text("Bottom Text"),
-                ],
+                ),
               ),
             ],
           ),

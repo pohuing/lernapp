@@ -5,8 +5,14 @@ class SolutionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Card(
-      child: Text('The solution'),
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          'The solution',
+          style: Theme.of(context).textTheme.bodyLarge,
+        ),
+      ),
     );
   }
 }

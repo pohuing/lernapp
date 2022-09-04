@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:collection/collection.dart';
@@ -45,6 +46,10 @@ class DrawingAreaPainter extends CustomPainter {
       //if (equals) log('Redrawing', name: 'DrawingAreaPainter.shouldRepaint');
       return equals;
     } else {
+      log(
+        'Got old painter that is not DrawingAreaPainter ${oldDelegate.runtimeType}',
+        name: 'DrawingAreaPainter.shouldRepaint()',
+      );
       return true;
     }
   }

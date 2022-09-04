@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_lorem/flutter_lorem.dart';
 import 'package:lernapp/widgets/solution_card.dart';
 import 'package:lernapp/widgets/task_card.dart';
 
@@ -8,9 +8,9 @@ import 'flippable.dart';
 import 'hint_card.dart';
 
 class TaskScreen extends StatelessWidget {
-  const TaskScreen(this.title, {super.key});
-
   final String title;
+
+  const TaskScreen(this.title, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class TaskScreen extends StatelessWidget {
                       tag: title,
                       child: TaskCard(
                         title: title,
-                        onTap: () => context.pop(),
+                        description: lorem(paragraphs: 2, words: 20),
                       ),
                     ),
                   ),

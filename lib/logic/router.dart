@@ -10,7 +10,7 @@ class LernappRouter {
       GoRoute(
         name: 'listing',
         path: '/listing',
-        builder: (context, state) => ListingScreen(),
+        builder: (context, state) => const ListingScreen(),
       ),
       GoRoute(
         name: 'task',
