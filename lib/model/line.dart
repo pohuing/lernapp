@@ -32,7 +32,7 @@ class Line {
     for (var index in offsetsToRemove.reversed) {
       path.removeAt(index);
     }
-    log('Pruned points ${offsetsToRemove}', name: 'Line.prune()');
+    log('Pruned points $offsetsToRemove', name: 'Line.prune()');
     return offsetsToRemove.isNotEmpty;
   }
 

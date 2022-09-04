@@ -15,34 +15,38 @@ class TaskScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-        leading: BackButton(
-          onPressed: () => context.pop(),
-        ),
-      ),
-      body: Column(
-        children: [
-          Flexible(
-            flex: 1,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: const [
-                Expanded(child: TaskCard()),
-                Expanded(
-                  child: Flippable(
-                    front: HintCard(),
-                    back: SolutionCard(),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Flexible(
+              flex: 1,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: Hero(
+                      tag: title,
+                      child: TaskCard(
+                        title: title,
+                        onTap: () => context.pop(),
+                      ),
+                    ),
                   ),
-                ),
-              ],
+                  const Expanded(
+                    child: Flippable(
+                      front: HintCard(),
+                      back: SolutionCard(),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-          const Flexible(
-            flex: 5,
-            child: ClipRect(child: DrawingArea()),
-          ),
-        ],
+            const Flexible(
+              flex: 5,
+              child: ClipRect(child: DrawingArea()),
+            ),
+          ],
+        ),
       ),
     );
   }

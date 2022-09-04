@@ -49,7 +49,7 @@ class _DrawingAreaState extends State<DrawingArea> {
 
   void onPanEnd(DragEndDetails details) {
     if (!isMoving) {
-      lines.add(line..prune());
+      lines.add(line);
       line = Line([]);
     }
   }
