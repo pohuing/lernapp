@@ -3,11 +3,12 @@ import 'dart:ui';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-
-import '../model/line.dart';
+import 'package:lernapp/model/line.dart';
+import 'package:system_theme/system_theme.dart';
 
 class DrawingAreaPainter extends CustomPainter {
-  static final linePaint = Paint();
+  final linePaint = Paint()
+    ..color = SystemTheme.isDarkMode ? Colors.white : Colors.black;
   final List<Offset> line;
   final List<Line> lines;
   double xOffset = 0;
