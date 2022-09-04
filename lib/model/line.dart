@@ -7,15 +7,9 @@ class Line {
 
   Line(this.path);
 
-  void prune() {
-    var counter = 0;
-    while (pruneOnce()) {
-      counter++;
-    }
-    log('Used $counter passes', name: '$runtimeType.prune()');
-  }
+  var _savedCounter = 0;
 
-  bool pruneOnce() {
+  bool prune() {
     if (path.length < 3) {
       return false;
     }
@@ -54,7 +48,7 @@ class Line {
 
     final cross = dxc * dyl - dyc * dxl;
 
-    return cross.abs() < 0.0001 &&
+    return cross.abs() < 0.01 &&
         isBetweenPoints(dxl, dyl, point1, centerPoint, point2);
   }
 
@@ -72,7 +66,14 @@ class Line {
   }
 
   void add(Offset point) {
-    // TODO prune right here to avoid the performance hit while drawing.
-    path.add(point);
+    if (path.length > 2 &&
+        isPointOnLine(path[path.length - 2], point, path.last)) {
+      path.last = point;
+      _savedCounter++;
+      log('Avoided adding redundant point. Saved $_savedCounter points',
+          name: 'Line.add()');
+    } else {
+      path.add(point);
+    }
   }
 }
