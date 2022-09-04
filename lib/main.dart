@@ -1,10 +1,16 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lernapp/logic/router.dart';
 import 'package:system_theme/system_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await SystemTheme.accentColor.load();
+
+  if (kIsWeb ||
+      [TargetPlatform.android, TargetPlatform.windows]
+          .contains(defaultTargetPlatform)) {
+    await SystemTheme.accentColor.load();
+  }
 
   runApp(const MyApp());
 }

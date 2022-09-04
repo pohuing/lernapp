@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_ameno_ipsum/flutter_ameno_ipsum.dart';
 import 'package:go_router/go_router.dart';
@@ -36,7 +37,7 @@ class ListingScreen extends StatelessWidget {
                 (context, index) {
                   final title = ameno(paragraphs: 1, words: 4);
                   return Hero(
-                    tag: index.toString(),
+                    tag: title,
                     child: Material(
                       child: ListTile(
                         title: Text(title),
@@ -44,6 +45,9 @@ class ListingScreen extends StatelessWidget {
                           'Task',
                           params: {'tid': title},
                         ),
+                        trailing: defaultTargetPlatform == TargetPlatform.iOS
+                            ? Icon(Icons.adaptive.arrow_forward)
+                            : null,
                       ),
                     ),
                   );
