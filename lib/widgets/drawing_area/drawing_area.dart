@@ -65,15 +65,24 @@ class _DrawingAreaState extends State<DrawingArea> {
   void onPanStart(DragStartDetails details) {
     switch (controller.tapMode) {
       case TapMode.draw:
-        final point = details.localPosition
-            .translate(-controller.xOffset, -controller.yOffset);
         setState(() {
-          line.add(point);
+          drawAt(details.localPosition);
+        });
+        break;
+      case TapMode.erase:
+        setState(() {
+          eraseAt(details.localPosition);
         });
         break;
       default:
         break;
     }
+  }
+
+  void drawAt(Offset localPosition) {
+    final point =
+        localPosition.translate(-controller.xOffset, -controller.yOffset);
+    line.add(point);
   }
 
   void onPanUpdate(DragUpdateDetails details) {
@@ -85,16 +94,26 @@ class _DrawingAreaState extends State<DrawingArea> {
         });
         break;
       case TapMode.draw:
-        final point = details.localPosition
-            .translate(-controller.xOffset, -controller.yOffset);
         setState(() {
-          line.add(point);
+          drawAt(details.localPosition);
         });
-
         break;
       case TapMode.erase:
-        // TODO: Handle this case.
+        setState(() {
+          eraseAt(details.localPosition);
+        });
         break;
+    }
+  }
+
+  void eraseAt(Offset localPosition) {
+    for (var i = 0; i < lines.length; ++i) {
+      lines.removeWhere(
+        (line) => line.isInCircle(
+          localPosition.translate(-controller.xOffset, -controller.yOffset),
+          controller.eraserSize,
+        ),
+      );
     }
   }
 }

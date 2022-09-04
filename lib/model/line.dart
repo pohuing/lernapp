@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:math' hide log;
 
 import 'package:flutter/material.dart';
 
@@ -96,5 +97,15 @@ class Line {
     }
     log('Pruned points $offsetsToRemove', name: 'Line.prune()');
     return offsetsToRemove.isNotEmpty;
+  }
+
+  bool isInCircle(Offset center, double radius) {
+    return path.any((element) {
+      final xDifference = element.dx - center.dx;
+      final yDifference = element.dy - center.dy;
+
+      return sqrt(xDifference * xDifference + yDifference * yDifference) <
+          radius;
+    });
   }
 }
