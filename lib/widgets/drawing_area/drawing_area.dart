@@ -8,10 +8,15 @@ class DrawingArea extends StatefulWidget {
   DrawingArea({
     Key? key,
     DrawingAreaController? controller,
+    this.onEdited,
+    this.lines,
   })  : controller = controller ?? DrawingAreaController(),
         super(key: key);
 
   final DrawingAreaController controller;
+  final List<Line>? lines;
+
+  final Function(List<Line> lines)? onEdited;
 
   @override
   State<DrawingArea> createState() => _DrawingAreaState();
@@ -19,13 +24,14 @@ class DrawingArea extends StatefulWidget {
 
 class _DrawingAreaState extends State<DrawingArea> {
   Line line = Line([]);
-  final List<Line> lines = [];
+  late final List<Line> lines;
 
   late final DrawingAreaController controller;
 
   @override
   void initState() {
     controller = widget.controller;
+    lines = List.from(widget.lines ?? []);
     super.initState();
   }
 
@@ -56,6 +62,7 @@ class _DrawingAreaState extends State<DrawingArea> {
           lines.add(line);
           line = Line([]);
         });
+        widget.onEdited?.call(List.from(lines));
         break;
       default:
         break;
@@ -115,5 +122,6 @@ class _DrawingAreaState extends State<DrawingArea> {
         ),
       );
     }
+    widget.onEdited?.call(List.from(lines));
   }
 }

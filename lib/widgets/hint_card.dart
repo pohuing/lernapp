@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ameno_ipsum/flutter_ameno_ipsum.dart';
 
 class HintCard extends StatelessWidget {
-  const HintCard({Key? key}) : super(key: key);
+  final String hint;
+
+  const HintCard({Key? key, required this.hint}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -10,7 +11,7 @@ class HintCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Text(
-          ameno(words: 20),
+          hint,
           style: Theme.of(context).textTheme.bodyLarge,
         ),
       ),

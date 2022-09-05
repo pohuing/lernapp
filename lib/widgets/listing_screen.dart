@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_ameno_ipsum/flutter_ameno_ipsum.dart';
 import 'package:go_router/go_router.dart';
+
+import '../main.dart';
 
 class ListingScreen extends StatelessWidget {
   const ListingScreen({Key? key}) : super(key: key);
@@ -33,17 +34,18 @@ class ListingScreen extends StatelessWidget {
             ),
             SliverList(
               delegate: SliverChildBuilderDelegate(
-                childCount: 40,
+                childCount: taskRepository.tasks.length,
                 (context, index) {
-                  final title = ameno(paragraphs: 1, words: 4);
                   return Hero(
-                    tag: title,
+                    tag: taskRepository.tasks[index].uuid,
                     child: Material(
                       child: ListTile(
-                        title: Text(title),
+                        title: Text(taskRepository.tasks[index].title),
                         onTap: () => context.pushNamed(
                           'Task',
-                          params: {'tid': title},
+                          params: {
+                            'tid': taskRepository.tasks[index].uuid.toString()
+                          },
                         ),
                         trailing: defaultTargetPlatform == TargetPlatform.iOS
                             ? Icon(Icons.adaptive.arrow_forward)

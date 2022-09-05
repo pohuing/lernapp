@@ -1,7 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lernapp/logic/router.dart';
+import 'package:lernapp/repositories/task_repository.dart';
 import 'package:system_theme/system_theme.dart';
+
+final taskRepository = TaskRepository.lorem();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:lernapp/widgets/task_screen.dart';
+import 'package:uuid/uuid.dart';
 
 import '../widgets/listing_screen.dart';
 
@@ -16,7 +17,7 @@ class LernappRouter {
         name: 'task',
         path: '/task:tid',
         builder: (context, state) {
-          return TaskScreen(state.params['tid']!);
+          return TaskScreen(uuid: UuidValue(state.params['tid']!));
         },
       )
     ],

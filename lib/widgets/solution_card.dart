@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class SolutionCard extends StatelessWidget {
-  const SolutionCard({Key? key}) : super(key: key);
+  final String solution;
+
+  const SolutionCard({Key? key, required this.solution}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -9,7 +11,7 @@ class SolutionCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Text(
-          'The solution',
+          solution,
           style: Theme.of(context).textTheme.bodyLarge,
         ),
       ),

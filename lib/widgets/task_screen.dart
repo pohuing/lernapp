@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ameno_ipsum/flutter_ameno_ipsum.dart';
+import 'package:lernapp/main.dart';
 import 'package:lernapp/widgets/drawing_area/drawing_area_controller.dart';
 import 'package:lernapp/widgets/solution_card.dart';
 import 'package:lernapp/widgets/task_card.dart';
+import 'package:uuid/uuid.dart';
 
+import '../model/task.dart';
 import 'drawing_area/drawing_area.dart';
 import 'flippable.dart';
 import 'hint_card.dart';
 
 class TaskScreen extends StatefulWidget {
-  final String title;
+  final UuidValue uuid;
 
-  const TaskScreen(this.title, {super.key});
+  const TaskScreen({super.key, required this.uuid});
 
   @override
   State<TaskScreen> createState() => _TaskScreenState();
@@ -19,8 +21,19 @@ class TaskScreen extends StatefulWidget {
 
 class _TaskScreenState extends State<TaskScreen> {
   DrawingAreaController controller = DrawingAreaController();
-
+  late final Task task;
   final toggleButtonState = [true, false, false];
+
+  @override
+  void initState() {
+    task = taskRepository.findByUuid(widget.uuid);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,17 +48,17 @@ class _TaskScreenState extends State<TaskScreen> {
                 children: [
                   Expanded(
                     child: Hero(
-                      tag: widget.title,
+                      tag: task.uuid,
                       child: TaskCard(
-                        title: widget.title,
-                        description: ameno(paragraphs: 2, words: 20),
+                        title: task.title,
+                        description: task.taskDescription,
                       ),
                     ),
                   ),
-                  const Expanded(
+                  Expanded(
                     child: Flippable(
-                      front: HintCard(),
-                      back: SolutionCard(),
+                      front: HintCard(hint: task.hint),
+                      back: SolutionCard(solution: task.solution),
                     ),
                   ),
                 ],
@@ -58,6 +71,8 @@ class _TaskScreenState extends State<TaskScreen> {
                   ClipRect(
                     child: DrawingArea(
                       controller: controller,
+                      onEdited: (lines) => task.drawnLines = lines,
+                      lines: task.drawnLines,
                     ),
                   ),
                   Positioned(
