@@ -5,6 +5,11 @@ import '../../model/line.dart';
 import 'drawing_area_painter.dart';
 
 class DrawingArea extends StatefulWidget {
+  final DrawingAreaController controller;
+
+  final List<Line>? lines;
+  final Function(List<Line> lines)? onEdited;
+
   DrawingArea({
     Key? key,
     DrawingAreaController? controller,
@@ -12,11 +17,6 @@ class DrawingArea extends StatefulWidget {
     this.lines,
   })  : controller = controller ?? DrawingAreaController(),
         super(key: key);
-
-  final DrawingAreaController controller;
-  final List<Line>? lines;
-
-  final Function(List<Line> lines)? onEdited;
 
   @override
   State<DrawingArea> createState() => _DrawingAreaState();
@@ -27,13 +27,6 @@ class _DrawingAreaState extends State<DrawingArea> {
   late final List<Line> lines;
 
   late final DrawingAreaController controller;
-
-  @override
-  void initState() {
-    controller = widget.controller;
-    lines = List.from(widget.lines ?? []);
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,6 +46,31 @@ class _DrawingAreaState extends State<DrawingArea> {
         ),
       ),
     );
+  }
+
+  void drawAt(Offset localPosition) {
+    final point =
+        localPosition.translate(-controller.xOffset, -controller.yOffset);
+    line.add(point);
+  }
+
+  void eraseAt(Offset localPosition) {
+    for (var i = 0; i < lines.length; ++i) {
+      lines.removeWhere(
+        (line) => line.isInCircle(
+          localPosition.translate(-controller.xOffset, -controller.yOffset),
+          controller.eraserSize,
+        ),
+      );
+    }
+    widget.onEdited?.call(List.from(lines));
+  }
+
+  @override
+  void initState() {
+    controller = widget.controller;
+    lines = List.from(widget.lines ?? []);
+    super.initState();
   }
 
   void onPanEnd(DragEndDetails details) {
@@ -86,12 +104,6 @@ class _DrawingAreaState extends State<DrawingArea> {
     }
   }
 
-  void drawAt(Offset localPosition) {
-    final point =
-        localPosition.translate(-controller.xOffset, -controller.yOffset);
-    line.add(point);
-  }
-
   void onPanUpdate(DragUpdateDetails details) {
     switch (controller.tapMode) {
       case TapMode.pan:
@@ -111,17 +123,5 @@ class _DrawingAreaState extends State<DrawingArea> {
         });
         break;
     }
-  }
-
-  void eraseAt(Offset localPosition) {
-    for (var i = 0; i < lines.length; ++i) {
-      lines.removeWhere(
-        (line) => line.isInCircle(
-          localPosition.translate(-controller.xOffset, -controller.yOffset),
-          controller.eraserSize,
-        ),
-      );
-    }
-    widget.onEdited?.call(List.from(lines));
   }
 }

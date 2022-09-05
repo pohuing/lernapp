@@ -4,8 +4,6 @@ import 'package:lernapp/logic/router.dart';
 import 'package:lernapp/repositories/task_repository.dart';
 import 'package:system_theme/system_theme.dart';
 
-final taskRepository = TaskRepository.lorem();
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -17,6 +15,8 @@ void main() async {
 
   runApp(const MyApp());
 }
+
+final taskRepository = TaskRepository.lorem();
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

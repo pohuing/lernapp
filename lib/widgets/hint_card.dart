@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lernapp/widgets/scrollable_selectable_text.dart';
 
 class HintCard extends StatelessWidget {
   final String hint;
@@ -10,9 +11,20 @@ class HintCard extends StatelessWidget {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: SelectableText(
-          hint,
-          style: Theme.of(context).textTheme.bodyLarge,
+        child: Row(
+          children: [
+            ScrollableSelectableText(text: hint),
+            const VerticalDivider(
+              width: 1,
+            ),
+            IgnorePointer(
+              child: IconButton(
+                // ignore: avoid_returning_null_for_void
+                onPressed: () => null,
+                icon: const Icon(Icons.flip),
+              ),
+            ),
+          ],
         ),
       ),
     );

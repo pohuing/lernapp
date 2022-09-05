@@ -25,17 +25,6 @@ class _TaskScreenState extends State<TaskScreen> {
   final toggleButtonState = [true, false, false];
 
   @override
-  void initState() {
-    task = taskRepository.findByUuid(widget.uuid);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
@@ -100,5 +89,16 @@ class _TaskScreenState extends State<TaskScreen> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    task = taskRepository.findByUuid(widget.uuid);
+    super.initState();
   }
 }

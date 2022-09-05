@@ -46,6 +46,16 @@ class Line {
     }
   }
 
+  bool isInCircle(Offset center, double radius) {
+    return path.any((element) {
+      final xDifference = element.dx - center.dx;
+      final yDifference = element.dy - center.dy;
+
+      return sqrt(xDifference * xDifference + yDifference * yDifference) <
+          radius;
+    });
+  }
+
   bool isPointOnLine({
     required Offset point1,
     required Offset point2,
@@ -97,15 +107,5 @@ class Line {
     }
     log('Pruned points $offsetsToRemove', name: 'Line.prune()');
     return offsetsToRemove.isNotEmpty;
-  }
-
-  bool isInCircle(Offset center, double radius) {
-    return path.any((element) {
-      final xDifference = element.dx - center.dx;
-      final yDifference = element.dy - center.dy;
-
-      return sqrt(xDifference * xDifference + yDifference * yDifference) <
-          radius;
-    });
   }
 }
