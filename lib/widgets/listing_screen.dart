@@ -35,6 +35,9 @@ class ListingScreen extends StatelessWidget {
           return Hero(
             tag: taskRepository.tasks[index].uuid,
             transitionOnUserGestures: true,
+            createRectTween: (begin, end) {
+              return RectTween(begin: begin, end: end);
+            },
             child: Material(
               color: Colors.accents.random(),
               child: ListTile(

@@ -38,6 +38,7 @@ class _TaskScreenState extends State<TaskScreen> {
                   Expanded(
                     child: Hero(
                       tag: task.uuid,
+                      transitionOnUserGestures: true,
                       child: TaskCard(
                         title: task.title,
                         description: task.taskDescription,
