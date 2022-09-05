@@ -5,15 +5,15 @@ import 'package:lernapp/logic/list_extensions.dart';
 
 import '../main.dart';
 
-class ListingScreenNonSliver extends StatelessWidget {
-  const ListingScreenNonSliver({Key? key}) : super(key: key);
+class ListingScreen extends StatelessWidget {
+  const ListingScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       primary: true,
       appBar: AppBar(
-        title: Text('Tasks'),
+        title: const Text('Tasks'),
         actions: [
           IconButton(
             onPressed: () => showAboutDialog(
@@ -34,8 +34,9 @@ class ListingScreenNonSliver extends StatelessWidget {
         itemBuilder: (context, index) {
           return Hero(
             tag: taskRepository.tasks[index].uuid,
+            transitionOnUserGestures: true,
             child: Material(
-              color: Colors.primaries.random(),
+              color: Colors.accents.random(),
               child: ListTile(
                 title: Text(taskRepository.tasks[index].title),
                 onTap: () => context.pushNamed(
