@@ -41,7 +41,11 @@ class ListingScreen extends StatelessWidget {
             child: Material(
               color: Colors.accents.random(),
               child: ListTile(
-                title: Text(taskRepository.tasks[index].title),
+                title: Text(
+                  taskRepository.tasks[index].title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
                 onTap: () => context.pushNamed(
                   'Task',
                   params: {'tid': taskRepository.tasks[index].uuid.toString()},
