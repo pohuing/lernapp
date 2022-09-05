@@ -15,11 +15,12 @@ class TaskCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
+      color: Colors.transparent,
       child: Card(
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               BackButton(
                 onPressed: () {
@@ -31,31 +32,35 @@ class TaskCard extends StatelessWidget {
                 child: Scrollbar(
                   thumbVisibility: true,
                   controller: _scrollController,
-                  child: SingleChildScrollView(
-                    controller: _scrollController,
-                    child: SelectableRegion(
-                      focusNode: FocusNode(),
-                      selectionControls:
-                          defaultTargetPlatform == TargetPlatform.iOS
-                              ? CupertinoTextSelectionControls()
-                              : MaterialTextSelectionControls(),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            title,
-                            style: Theme.of(context).textTheme.titleLarge,
-                            textAlign: TextAlign.start,
+                  child: Padding(
+                      padding: const EdgeInsets.only(
+                        right: 4,
+                      ), // make space to avoid scrollbar and text touching
+                      child: SingleChildScrollView(
+                        controller: _scrollController,
+                        child: SelectableRegion(
+                          focusNode: FocusNode(),
+                          selectionControls:
+                              defaultTargetPlatform == TargetPlatform.iOS
+                                  ? CupertinoTextSelectionControls()
+                                  : MaterialTextSelectionControls(),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                title,
+                                style: Theme.of(context).textTheme.titleLarge,
+                                textAlign: TextAlign.start,
+                              ),
+                              Text(
+                                description,
+                                style: Theme.of(context).textTheme.bodyLarge,
+                                overflow: TextOverflow.fade,
+                              ),
+                            ],
                           ),
-                          Text(
-                            description,
-                            style: Theme.of(context).textTheme.bodyLarge,
-                            overflow: TextOverflow.fade,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                        ),
+                      )),
                 ),
               ),
             ],
