@@ -17,10 +17,8 @@ class ListingScreen extends StatelessWidget {
           IconButton(
             onPressed: () => showAboutDialog(
               context: context,
-              applicationIcon: const SizedBox(
-                width: 100,
-                height: 100,
-                child: Placeholder(),
+              applicationIcon: Image(
+                image: AssetImage('images/dorime.gif'),
               ),
             ),
             icon: const Icon(Icons.info_outline),
