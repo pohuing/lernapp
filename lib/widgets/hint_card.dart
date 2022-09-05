@@ -14,9 +14,7 @@ class HintCard extends StatelessWidget {
         child: Row(
           children: [
             ScrollableSelectableText(text: hint),
-            const VerticalDivider(
-              width: 1,
-            ),
+            const VerticalDivider(width: 8),
             IgnorePointer(
               child: IconButton(
                 // ignore: avoid_returning_null_for_void

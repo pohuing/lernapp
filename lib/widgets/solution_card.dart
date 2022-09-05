@@ -14,7 +14,7 @@ class SolutionCard extends StatelessWidget {
         child: Row(
           children: [
             ScrollableSelectableText(text: solution),
-            const VerticalDivider(width: 1),
+            const VerticalDivider(width: 8),
             IgnorePointer(
               child: IconButton(
                 // ignore: avoid_returning_null_for_void
