@@ -30,20 +30,18 @@ class TaskCard extends StatelessWidget {
               const VerticalDivider(width: 8),
               Expanded(
                 child: Scrollbar(
-                  thumbVisibility: true,
                   controller: _scrollController,
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      right: 4,
-                    ), // make space to avoid scrollbar and text touching
-                    child: SingleChildScrollView(
-                      controller: _scrollController,
-                      child: SelectableRegion(
-                        focusNode: FocusNode(),
-                        selectionControls:
-                            defaultTargetPlatform == TargetPlatform.iOS
-                                ? CupertinoTextSelectionControls()
-                                : MaterialTextSelectionControls(),
+                  thumbVisibility: true,
+                  child: SingleChildScrollView(
+                    controller: _scrollController,
+                    child: SelectableRegion(
+                      focusNode: FocusNode(),
+                      selectionControls:
+                          defaultTargetPlatform == TargetPlatform.iOS
+                              ? CupertinoTextSelectionControls()
+                              : MaterialTextSelectionControls(),
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 8),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
