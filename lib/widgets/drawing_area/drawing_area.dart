@@ -23,10 +23,17 @@ class DrawingArea extends StatefulWidget {
 }
 
 class _DrawingAreaState extends State<DrawingArea> {
-  Line line = Line([]);
+  late final DrawingAreaController controller;
+  late Line line;
   late final List<Line> lines;
 
-  late final DrawingAreaController controller;
+  Paint get defaultPaint {
+    final paint = Paint();
+    paint.strokeCap = StrokeCap.round;
+    paint.strokeWidth = controller.penSize;
+
+    return paint;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +45,7 @@ class _DrawingAreaState extends State<DrawingArea> {
         child: CustomPaint(
           size: MediaQuery.of(context).size,
           painter: DrawingAreaPainter(
-            line: line.path,
+            line: line,
             lines: lines,
             xOffset: controller.xOffset,
             yOffset: controller.yOffset,
@@ -59,7 +66,7 @@ class _DrawingAreaState extends State<DrawingArea> {
       lines.removeWhere(
         (line) => line.isInCircle(
           localPosition.translate(-controller.xOffset, -controller.yOffset),
-          controller.eraserSize,
+          5,
         ),
       );
     }
@@ -69,6 +76,7 @@ class _DrawingAreaState extends State<DrawingArea> {
   @override
   void initState() {
     controller = widget.controller;
+    line = Line([], defaultPaint);
     lines = List.from(widget.lines ?? []);
     super.initState();
   }
@@ -78,7 +86,10 @@ class _DrawingAreaState extends State<DrawingArea> {
       case TapMode.draw:
         setState(() {
           lines.add(line);
-          line = Line([]);
+          line = Line(
+            [],
+            Paint(),
+          );
         });
         widget.onEdited?.call(List.from(lines));
         break;
@@ -91,6 +102,7 @@ class _DrawingAreaState extends State<DrawingArea> {
     switch (controller.tapMode) {
       case TapMode.draw:
         setState(() {
+          line = Line([], defaultPaint);
           drawAt(details.localPosition);
         });
         break;

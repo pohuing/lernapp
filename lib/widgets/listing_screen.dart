@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lernapp/logic/list_extensions.dart';
 
 import '../main.dart';
 
@@ -39,7 +38,6 @@ class ListingScreen extends StatelessWidget {
               return RectTween(begin: begin, end: end);
             },
             child: Material(
-              color: Colors.accents.random(),
               child: ListTile(
                 title: Text(
                   taskRepository.tasks[index].title,

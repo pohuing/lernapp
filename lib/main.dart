@@ -1,12 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:lernapp/logic/router.dart';
 import 'package:lernapp/repositories/task_repository.dart';
 import 'package:system_theme/system_theme.dart';
 
 void main() async {
-  timeDilation = 5;
   WidgetsFlutterBinding.ensureInitialized();
 
   if (kIsWeb ||

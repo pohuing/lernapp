@@ -2,13 +2,23 @@ import 'dart:developer';
 import 'dart:math' hide log;
 
 import 'package:flutter/material.dart';
+import 'package:system_theme/system_theme.dart';
 
 class Line {
   List<Offset> path;
+  Paint _paint;
+
+  Paint get paint {
+    return _paint
+      ..color = paintColor
+      ..isAntiAlias = false;
+  }
+
+  Color get paintColor => SystemTheme.isDarkMode ? Colors.white : Colors.black;
 
   var _savedCounter = 0;
 
-  Line(this.path);
+  Line(this.path, Paint paint) : _paint = paint;
 
   void add(Offset point) {
     if (path.length >= 2 &&

@@ -66,6 +66,17 @@ class _TaskScreenState extends State<TaskScreen> {
                     ),
                   ),
                   Positioned(
+                    right: 0,
+                    child: Slider(
+                      min: 1,
+                      max: 10,
+                      value: controller.penSize,
+                      onChanged: (value) => setState(() {
+                        controller.penSize = value;
+                      }),
+                    ),
+                  ),
+                  Positioned(
                     child: ToggleButtons(
                       isSelected: toggleButtonState,
                       onPressed: (index) {

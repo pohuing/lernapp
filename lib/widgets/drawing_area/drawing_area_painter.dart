@@ -4,18 +4,15 @@ import 'dart:ui';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:lernapp/model/line.dart';
-import 'package:system_theme/system_theme.dart';
 
 class DrawingAreaPainter extends CustomPainter {
-  final linePaint = Paint()
-    ..color = SystemTheme.isDarkMode ? Colors.white : Colors.black;
-  final List<Offset> line;
+  Line line;
   final List<Line> lines;
   double xOffset = 0;
   double yOffset = 0;
 
   DrawingAreaPainter({
-    this.line = const [],
+    required this.line,
     this.lines = const [],
     this.xOffset = 0,
     this.yOffset = 0,
@@ -26,16 +23,16 @@ class DrawingAreaPainter extends CustomPainter {
     canvas.translate(xOffset, yOffset);
     for (var line in lines) {
       for (var i = 0; i < line.path.length - 1; ++i) {
-        canvas.drawLine(line.path[i], line.path[i + 1], linePaint);
+        canvas.drawLine(line.path[i], line.path[i + 1], line.paint);
       }
     }
-    if (line.isEmpty) {
+    if (line.path.isEmpty) {
       return;
-    } else if (line.length == 1) {
-      canvas.drawPoints(PointMode.points, line, linePaint);
+    } else if (line.path.length == 1) {
+      canvas.drawPoints(PointMode.points, line.path, line.paint);
     } else {
-      for (var i = 0; i < line.length - 1; ++i) {
-        canvas.drawLine(line[i], line[i + 1], linePaint);
+      for (var i = 0; i < line.path.length - 1; ++i) {
+        canvas.drawLine(line.path[i], line.path[i + 1], line.paint);
       }
     }
   }
@@ -43,8 +40,7 @@ class DrawingAreaPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     if (oldDelegate is DrawingAreaPainter) {
-      var equals = oldDelegate.line.equals(line);
-      //if (equals) log('Redrawing', name: 'DrawingAreaPainter.shouldRepaint');
+      var equals = oldDelegate.line.path.equals(line.path);
       return equals;
     } else {
       log(
