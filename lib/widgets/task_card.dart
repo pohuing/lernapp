@@ -1,3 +1,5 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -31,20 +33,27 @@ class TaskCard extends StatelessWidget {
                   controller: _scrollController,
                   child: SingleChildScrollView(
                     controller: _scrollController,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          title,
-                          style: Theme.of(context).textTheme.titleLarge,
-                          textAlign: TextAlign.start,
-                        ),
-                        Text(
-                          description,
-                          style: Theme.of(context).textTheme.bodyLarge,
-                          overflow: TextOverflow.fade,
-                        ),
-                      ],
+                    child: SelectableRegion(
+                      focusNode: FocusNode(),
+                      selectionControls:
+                          defaultTargetPlatform == TargetPlatform.iOS
+                              ? CupertinoTextSelectionControls()
+                              : MaterialTextSelectionControls(),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            title,
+                            style: Theme.of(context).textTheme.titleLarge,
+                            textAlign: TextAlign.start,
+                          ),
+                          Text(
+                            description,
+                            style: Theme.of(context).textTheme.bodyLarge,
+                            overflow: TextOverflow.fade,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

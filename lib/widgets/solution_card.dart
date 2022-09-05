@@ -10,7 +10,7 @@ class SolutionCard extends StatelessWidget {
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Text(
+        child: SelectableText(
           solution,
           style: Theme.of(context).textTheme.bodyLarge,
         ),
