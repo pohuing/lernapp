@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:lernapp/widgets/drawing_area/drawing_area_controller.dart';
 
@@ -82,13 +84,14 @@ class _DrawingAreaState extends State<DrawingArea> {
   }
 
   void onPanEnd(DragEndDetails details) {
+    log('pan ended', name: 'DrawingArea.onPanEnd()');
     switch (controller.tapMode) {
       case TapMode.draw:
         setState(() {
           lines.add(line);
           line = Line(
             [],
-            Paint(),
+            defaultPaint,
           );
         });
         widget.onEdited?.call(List.from(lines));

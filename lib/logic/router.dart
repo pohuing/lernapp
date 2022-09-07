@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 import 'package:lernapp/widgets/listing_screen.dart';
+import 'package:lernapp/widgets/scratchpad.dart';
 import 'package:lernapp/widgets/task_screen.dart';
 import 'package:uuid/uuid.dart';
 
@@ -18,7 +19,12 @@ class LernappRouter {
         builder: (context, state) {
           return TaskScreen(uuid: UuidValue(state.params['tid']!));
         },
-      )
+      ),
+      GoRoute(
+        name: 'scratchpad',
+        path: '/scratchpad',
+        builder: (context, state) => Scratchpad(),
+      ),
     ],
   );
 }

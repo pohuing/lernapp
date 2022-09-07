@@ -15,6 +15,9 @@ class ListingScreen extends StatelessWidget {
         title: const Text('Tasks'),
         actions: [
           IconButton(
+              onPressed: () => context.push('/scratchpad'),
+              icon: Icon(Icons.draw_outlined)),
+          IconButton(
             onPressed: () => showAboutDialog(
               context: context,
               applicationIcon: Image(

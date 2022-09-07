@@ -1,7 +1,5 @@
-import 'dart:developer';
 import 'dart:ui';
 
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:lernapp/model/line.dart';
 
@@ -39,15 +37,7 @@ class DrawingAreaPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    if (oldDelegate is DrawingAreaPainter) {
-      var equals = oldDelegate.line.path.equals(line.path);
-      return equals;
-    } else {
-      log(
-        'Got old painter that is not DrawingAreaPainter ${oldDelegate.runtimeType}',
-        name: 'DrawingAreaPainter.shouldRepaint()',
-      );
-      return true;
-    }
+    // TODO figure out a more prudent way to detect redraws
+    return true;
   }
 }
