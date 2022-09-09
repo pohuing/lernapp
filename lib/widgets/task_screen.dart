@@ -67,6 +67,7 @@ class _TaskScreenState extends State<TaskScreen> {
                   ),
                   Positioned(
                     right: 0,
+                    top: 0,
                     child: Slider(
                       min: 1,
                       max: 10,

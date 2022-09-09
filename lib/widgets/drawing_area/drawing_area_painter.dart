@@ -1,5 +1,7 @@
+import 'dart:developer';
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lernapp/model/line.dart';
 
@@ -8,6 +10,8 @@ class DrawingAreaPainter extends CustomPainter {
   final List<Line> lines;
   double xOffset = 0;
   double yOffset = 0;
+
+  int? lastPaintHashCode;
 
   DrawingAreaPainter({
     required this.line,
@@ -19,7 +23,8 @@ class DrawingAreaPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.translate(xOffset, yOffset);
-    for (var line in lines) {
+    for (int i = 0; i < lines.length; i++) {
+      final line = lines[i];
       for (var i = 0; i < line.path.length - 1; ++i) {
         canvas.drawLine(line.path[i], line.path[i + 1], line.paint);
       }
@@ -36,8 +41,21 @@ class DrawingAreaPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    // TODO figure out a more prudent way to detect redraws
-    return true;
+  bool shouldRepaint(covariant DrawingAreaPainter oldDelegate) {
+    lastPaintHashCode = _generateHashCode();
+    var result = oldDelegate.lastPaintHashCode != lastPaintHashCode;
+    if (kDebugMode) {
+      log(result.toString(), name: 'DrawingAreaPainter.shouldRepaint()');
+    }
+    return result;
+  }
+
+  int _generateHashCode() {
+    return lines.fold(
+          line.hashCode,
+          (previousValue, element) => previousValue ^ element.hashCode,
+        ) ^
+        xOffset.hashCode ^
+        yOffset.hashCode;
   }
 }

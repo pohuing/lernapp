@@ -7,7 +7,6 @@ import 'package:uuid/uuid.dart';
 class LernappRouter {
   static final GoRouter router = GoRouter(
     initialLocation: '/listing',
-    redirect: (state) {},
     routes: [
       GoRoute(
         path: '/',
@@ -28,7 +27,7 @@ class LernappRouter {
       GoRoute(
         name: 'scratchpad',
         path: '/scratchpad',
-        builder: (context, state) => Scratchpad(),
+        builder: (context, state) => const Scratchpad(),
       ),
     ],
   );

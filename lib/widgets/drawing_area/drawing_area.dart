@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lernapp/widgets/drawing_area/drawing_area_controller.dart';
 
@@ -84,7 +85,9 @@ class _DrawingAreaState extends State<DrawingArea> {
   }
 
   void onPanEnd(DragEndDetails details) {
-    log('pan ended', name: 'DrawingArea.onPanEnd()');
+    if (kDebugMode) {
+      log('pan ended', name: 'DrawingArea.onPanEnd()');
+    }
     switch (controller.tapMode) {
       case TapMode.draw:
         setState(() {

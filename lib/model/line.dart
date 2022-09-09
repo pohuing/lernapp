@@ -1,24 +1,40 @@
 import 'dart:developer';
 import 'dart:math' hide log;
 
+import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:system_theme/system_theme.dart';
 
 class Line {
   List<Offset> path;
-  Paint _paint;
-
-  Paint get paint {
-    return _paint
-      ..color = paintColor
-      ..isAntiAlias = false;
-  }
-
-  Color get paintColor => SystemTheme.isDarkMode ? Colors.white : Colors.black;
+  final Paint _paint;
 
   var _savedCounter = 0;
 
   Line(this.path, Paint paint) : _paint = paint;
+
+  @override
+  int get hashCode => path.fold(
+        _paint.hashCode,
+        (previousValue, element) => previousValue ^ element.hashCode,
+      );
+
+  Paint get paint {
+    return _paint
+      ..color = paintColor
+      ..isAntiAlias = true;
+  }
+
+  Color get paintColor => SystemTheme.isDarkMode ? Colors.white : Colors.black;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Line &&
+          runtimeType == other.runtimeType &&
+          path.equals(other.path) &&
+          _paint == other._paint;
 
   void add(Offset point) {
     if (path.length >= 2 &&
@@ -29,10 +45,12 @@ class Line {
         )) {
       path.last = point;
       _savedCounter++;
-      log(
-        'Avoided adding redundant point. Saved $_savedCounter points',
-        name: 'Line.add()',
-      );
+      if (kDebugMode) {
+        log(
+          'Avoided adding redundant point. Saved $_savedCounter points',
+          name: 'Line.add()',
+        );
+      }
     } else {
       path.add(point);
     }
@@ -108,14 +126,18 @@ class Line {
         offsetsToRemove.add(i + 1);
       }
     }
-    log(
-      'Pruned ${offsetsToRemove.length} out of ${path.length} offsets(${(offsetsToRemove.length / path.length) * 100}%)',
-      name: 'Line.prune()',
-    );
+    if (kDebugMode) {
+      log(
+        'Pruned ${offsetsToRemove.length} out of ${path.length} offsets(${(offsetsToRemove.length / path.length) * 100}%)',
+        name: 'Line.prune()',
+      );
+    }
     for (var index in offsetsToRemove.reversed) {
       path.removeAt(index);
     }
-    log('Pruned points $offsetsToRemove', name: 'Line.prune()');
+    if (kDebugMode) {
+      log('Pruned points $offsetsToRemove', name: 'Line.prune()');
+    }
     return offsetsToRemove.isNotEmpty;
   }
 }
