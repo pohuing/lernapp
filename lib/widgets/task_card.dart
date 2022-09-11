@@ -6,11 +6,19 @@ import 'package:go_router/go_router.dart';
 class TaskCard extends StatelessWidget {
   final String title;
   final String description;
+  final Function()? secondaryAction;
+
+  bool? isExpanded;
 
   final _scrollController = ScrollController();
 
-  TaskCard({Key? key, required this.title, required this.description})
-      : super(key: key);
+  TaskCard({
+    Key? key,
+    required this.title,
+    required this.description,
+    this.secondaryAction,
+    this.isExpanded,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +30,25 @@ class TaskCard extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              BackButton(
-                onPressed: () {
-                  context.canPop() ? context.pop() : context.goNamed('listing');
-                },
+              Column(
+                children: [
+                  Expanded(
+                    child: BackButton(
+                      onPressed: () {
+                        context.canPop()
+                            ? context.pop()
+                            : context.goNamed('listing');
+                      },
+                    ),
+                  ),
+                  if (secondaryAction != null)
+                    Expanded(
+                      child: ExpandIcon(
+                        onPressed: (v) => secondaryAction!.call(),
+                        isExpanded: isExpanded!,
+                      ),
+                    ),
+                ],
               ),
               const VerticalDivider(width: 8),
               Expanded(

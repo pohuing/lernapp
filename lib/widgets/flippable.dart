@@ -17,7 +17,10 @@ class _FlippableState extends State<Flippable> {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => setState(() => isFlipped = !isFlipped),
-      child: isFlipped ? widget.back : widget.front,
+      child: AnimatedSwitcher(
+        duration: Duration(milliseconds: 200),
+        child: isFlipped ? widget.back : widget.front,
+      ),
     );
   }
 }

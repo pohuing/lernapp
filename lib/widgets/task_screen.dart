@@ -24,14 +24,38 @@ class _TaskScreenState extends State<TaskScreen> {
   late final Task task;
   final toggleButtonState = [true, false, false];
 
+  var expandedTopRow = false;
+
+  double get infoRowHeight {
+    if (expandedTopRow) {
+      return MediaQuery.of(context).size.height / 2;
+    } else {
+      return MediaQuery.of(context).size.height / 6;
+    }
+  }
+
+  double get drawingAreaHeight {
+    if (expandedTopRow) {
+      return MediaQuery.of(context).size.height / 2;
+    } else {
+      return (MediaQuery.of(context).size.height / 6) * 5;
+    }
+  }
+
+  Curve get expandAnimationCurve => Curves.easeInOut;
+
+  Duration expandDuration = Duration(milliseconds: 200);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
-            Flexible(
-              flex: 1,
+            AnimatedContainer(
+              duration: expandDuration,
+              height: infoRowHeight,
+              curve: expandAnimationCurve,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -41,6 +65,9 @@ class _TaskScreenState extends State<TaskScreen> {
                       transitionOnUserGestures: true,
                       child: TaskCard(
                         title: task.title,
+                        secondaryAction: () =>
+                            setState(() => expandedTopRow = !expandedTopRow),
+                        isExpanded: expandedTopRow,
                         description: task.taskDescription,
                       ),
                     ),
@@ -54,8 +81,10 @@ class _TaskScreenState extends State<TaskScreen> {
                 ],
               ),
             ),
-            Flexible(
-              flex: 5,
+            AnimatedContainer(
+              duration: expandDuration,
+              height: drawingAreaHeight,
+              curve: expandAnimationCurve,
               child: Stack(
                 children: [
                   ClipRect(
