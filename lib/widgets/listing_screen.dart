@@ -8,37 +8,35 @@ class ListingScreen extends StatelessWidget {
   const ListingScreen({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      primary: true,
-      appBar: AppBar(
-        title: const Text('Tasks'),
-        actions: [
-          IconButton(
-            onPressed: () => context.push('/scratchpad'),
-            icon: const Icon(Icons.draw_outlined),
-          ),
-          IconButton(
-            onPressed: () => showAboutDialog(
-              context: context,
-              applicationIcon: const Image(
-                image: AssetImage('images/dorime.gif'),
-              ),
-            ),
-            icon: const Icon(Icons.info_outline),
-          )
-        ],
-      ),
-      body: ListView.builder(
-        itemCount: taskRepository.tasks.length,
+  Widget build(BuildContext context) => Scaffold(
         primary: true,
-        itemBuilder: (context, index) {
-          return Hero(
+        appBar: AppBar(
+          title: const Text('Tasks'),
+          actions: [
+            IconButton(
+              onPressed: () => context.push('/scratchpad'),
+              icon: const Icon(Icons.draw_outlined),
+            ),
+            IconButton(
+              onPressed: () => showAboutDialog(
+                context: context,
+                applicationIcon: const Image(
+                  isAntiAlias: false,
+                  width: 200,
+                  image: AssetImage('images/dorime.gif'),
+                ),
+              ),
+              icon: const Icon(Icons.info_outline),
+            )
+          ],
+        ),
+        body: ListView.builder(
+          itemCount: taskRepository.tasks.length,
+          primary: true,
+          itemBuilder: (context, index) => Hero(
             tag: taskRepository.tasks[index].uuid,
             transitionOnUserGestures: true,
-            createRectTween: (begin, end) {
-              return RectTween(begin: begin, end: end);
-            },
+            createRectTween: (begin, end) => RectTween(begin: begin, end: end),
             child: Material(
               child: ListTile(
                 title: Text(
@@ -55,9 +53,7 @@ class ListingScreen extends StatelessWidget {
                     : null,
               ),
             ),
-          );
-        },
-      ),
-    );
-  }
+          ),
+        ),
+      );
 }

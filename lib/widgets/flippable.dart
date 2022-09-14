@@ -18,7 +18,7 @@ class _FlippableState extends State<Flippable> {
     return GestureDetector(
       onTap: () => setState(() => isFlipped = !isFlipped),
       child: AnimatedSwitcher(
-        duration: Duration(milliseconds: 200),
+        duration: const Duration(milliseconds: 200),
         child: isFlipped ? widget.back : widget.front,
       ),
     );

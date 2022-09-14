@@ -44,7 +44,7 @@ class _TaskScreenState extends State<TaskScreen> {
 
   Curve get expandAnimationCurve => Curves.easeInOut;
 
-  Duration expandDuration = Duration(milliseconds: 200);
+  Duration expandDuration = const Duration(milliseconds: 200);
 
   @override
   Widget build(BuildContext context) {

@@ -8,7 +8,7 @@ class TaskCard extends StatelessWidget {
   final String description;
   final Function()? secondaryAction;
 
-  bool? isExpanded;
+  final bool? isExpanded;
 
   final _scrollController = ScrollController();
 
