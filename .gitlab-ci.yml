@@ -1,0 +1,21 @@
+apk:
+  stage: build
+  image: "cirrusci/flutter:stable"
+  before_script:
+  script:
+    - flutter build apk
+  artifacts:
+    name: android
+    paths:
+      - $CI_PROJECT_DIR/build/app/outputs/apk/release/app-release.apk
+
+web:
+  stage: build
+  image: "cirrusci/flutter:stable"
+  script:
+    - flutter build web
+    - tar -cvf web.tar -C ./build/ web
+  artifacts:
+    name: web
+    paths:
+      - $CI_PROJECT_DIR/web.tar
