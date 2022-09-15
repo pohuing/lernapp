@@ -4,10 +4,12 @@ apk:
   before_script:
   script:
     - flutter build apk
+  after_script:
+    - mv $CI_PROJECT_DIR/build/app/outputs/apk/release/app-release.apk $CI_PROJECT_DIR/lernapp.apk
   artifacts:
     name: android
     paths:
-      - $CI_PROJECT_DIR/build/app/outputs/apk/release/app-release.apk
+      - $CI_PROJECT_DIR/lernapp.apk
 
 web:
   stage: build
