@@ -12,7 +12,7 @@ class Line {
 
   var _savedCounter = 0;
 
-  Line(this.path, Paint paint) : _paint = paint;
+  Line(this.path, Paint? paint) : _paint = paint ?? Paint();
 
   @override
   int get hashCode => path.fold(
@@ -75,13 +75,22 @@ class Line {
   }
 
   bool isInCircle(Offset center, double radius) {
-    return path.any((element) {
-      final xDifference = element.dx - center.dx;
-      final yDifference = element.dy - center.dy;
+    for (int i = 0; i < path.length - 1; i++) {
+      if (segmentInCircle(path[i], path[i + 1], center, radius)) {
+        return true;
+      }
+    }
+    return false;
+  }
 
-      return sqrt(xDifference * xDifference + yDifference * yDifference) <
-          radius;
-    });
+  static bool segmentInCircle(
+      Offset p1, Offset p2, Offset center, double radius) {
+    final distance = ((p2.dx - p1.dx) * (p1.dy - center.dy) -
+                (p1.dx - center.dx) * (p2.dy - p1.dy))
+            .abs() /
+        sqrt(pow(p2.dx - p1.dx, 2) + pow(p2.dy - p1.dy, 2));
+
+    return distance <= radius;
   }
 
   bool isPointOnLine({
@@ -113,6 +122,7 @@ class Line {
       return false;
     }
     final List<int> offsetsToRemove = [];
+    // Clean up with retain where
     for (var i = 0; i < path.length - 2; ++i) {
       final centerPoint = path[i + 1];
       final point1 = path[i];
