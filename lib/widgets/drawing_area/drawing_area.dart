@@ -69,7 +69,7 @@ class _DrawingAreaState extends State<DrawingArea> {
       lines.removeWhere(
         (line) => line.isInCircle(
           localPosition.translate(-controller.xOffset, -controller.yOffset),
-          5,
+          2,
         ),
       );
     }
