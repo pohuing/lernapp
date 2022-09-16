@@ -1,9 +1,9 @@
 import 'dart:developer';
-import 'dart:math' hide log;
 
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:lernapp/logic/offset_extensions.dart';
 import 'package:system_theme/system_theme.dart';
 
 class Line {
@@ -83,14 +83,22 @@ class Line {
     return false;
   }
 
+  static double distanceLinePoint(Offset a, Offset b, Offset p) {
+    final pDash = p - a;
+    final bDash = (b - a).normalised();
+    final dot = pDash.dot(bDash);
+    if (dot < 0) {
+      return pDash.distance;
+    } else if (dot > (b - a).distance) {
+      return (p - b).distance;
+    } else {
+      return (pDash - bDash.scalarMul(pDash.dot(bDash))).distance;
+    }
+  }
+
   static bool segmentInCircle(
       Offset p1, Offset p2, Offset center, double radius) {
-    final distance = ((p2.dx - p1.dx) * (p1.dy - center.dy) -
-                (p1.dx - center.dx) * (p2.dy - p1.dy))
-            .abs() /
-        sqrt(pow(p2.dx - p1.dx, 2) + pow(p2.dy - p1.dy, 2));
-
-    return distance <= radius;
+    return distanceLinePoint(p1, p2, center) <= radius;
   }
 
   bool isPointOnLine({

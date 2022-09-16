@@ -27,7 +27,7 @@ void main() {
         const Offset(0, 1),
         1,
       ),
-      true,
+      false,
     );
     expect(
       Line.segmentInCircle(
@@ -59,7 +59,20 @@ void main() {
       null,
     );
 
-    expect(line.isInCircle(const Offset(0, 0), 0.5), false);
-    expect(line.isInCircle(const Offset(0, 0), 0.2), true);
+    expect(
+      line.isInCircle(const Offset(0, 0), 1),
+      false,
+      reason: 'Found line',
+    );
+    expect(
+      line.isInCircle(const Offset(0, 0), 1.5),
+      true,
+      reason: 'Failed to find line',
+    );
+    expect(
+      line.isInCircle(const Offset(-4, -2), 2),
+      false,
+      reason: 'Circle matches infinite line',
+    );
   });
 }
