@@ -1,8 +1,8 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:lernapp/widgets/listing_screen/category_tile.dart';
 
-import '../main.dart';
+import '../../main.dart';
 
 class ListingScreen extends StatelessWidget {
   const ListingScreen({Key? key}) : super(key: key);
@@ -31,28 +31,10 @@ class ListingScreen extends StatelessWidget {
           ],
         ),
         body: ListView.builder(
-          itemCount: taskRepository.tasks.length,
+          itemCount: taskRepository.categories.length,
           primary: true,
-          itemBuilder: (context, index) => Hero(
-            tag: taskRepository.tasks[index].uuid,
-            transitionOnUserGestures: true,
-            createRectTween: (begin, end) => RectTween(begin: begin, end: end),
-            child: Material(
-              child: ListTile(
-                title: Text(
-                  taskRepository.tasks[index].title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                onTap: () => context.pushNamed(
-                  'Task',
-                  params: {'tid': taskRepository.tasks[index].uuid.toString()},
-                ),
-                trailing: defaultTargetPlatform == TargetPlatform.iOS
-                    ? Icon(Icons.adaptive.arrow_forward)
-                    : null,
-              ),
-            ),
+          itemBuilder: (context, index) => CategoryTile(
+            category: taskRepository.categories[index],
           ),
         ),
       );

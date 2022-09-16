@@ -1,15 +1,64 @@
 import 'package:uuid/uuid.dart';
 
 import '../model/task.dart';
+import '../model/task_category.dart';
 
 class TaskRepository {
-  List<Task> tasks;
+  final List<TaskCategory> categories;
 
-  TaskRepository(this.tasks);
+  TaskRepository() : categories = [];
 
-  TaskRepository.lorem() : tasks = List.generate(20, (index) => Task.lorem());
+  TaskRepository.lorem() : categories = _generateCategories();
 
-  Task findByUuid(UuidValue uuid) {
-    return tasks.firstWhere((task) => task.uuid == uuid);
+  static List<TaskCategory> _generateCategories() {
+    return [
+      TaskCategory(
+        title: 'Angewandte Informatik',
+        tasks: [
+          Task(
+            'Allgemeine Aufgabe',
+            'Diese Aufgabe ist eine Aufgabe für die Kategorie Angewandte Informatik',
+            'hint',
+            'solution',
+          ),
+        ],
+        subCategories: [
+          TaskCategory(
+            title: 'Objektorientierte Programmierung',
+            tasks: [
+              Task(
+                'Modellieren eines Kettensägengeschäfts',
+                'This task was created in the second level category',
+                '',
+                'Zeichnung hier',
+              ),
+            ],
+          ),
+          TaskCategory(
+            title: 'Mathematik für Informatiker',
+            tasks: [
+              Task(
+                'Mengen und Abbildungen',
+                'Was ist der Unterschied zwischen = und :=',
+                '',
+                ':= bedeutet "Ist definiert durch" und \n = vergleicht beide Operaten',
+              )
+            ],
+          ),
+        ],
+      ),
+      TaskCategory(title: 'Wasser und Bodenmanagement'),
+    ];
+  }
+
+  Task? findByUuid(UuidValue uuid) {
+    for (var c in categories) {
+      var t = c.findTask(uuid);
+      if (t != null) {
+        return t;
+      }
+    }
+
+    return null;
   }
 }

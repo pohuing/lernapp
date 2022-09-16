@@ -21,7 +21,7 @@ class TaskScreen extends StatefulWidget {
 
 class _TaskScreenState extends State<TaskScreen> {
   DrawingAreaController controller = DrawingAreaController();
-  late final Task task;
+  late final Task? task;
   final toggleButtonState = [true, false, false];
 
   var expandedTopRow = false;
@@ -50,85 +50,90 @@ class _TaskScreenState extends State<TaskScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            AnimatedContainer(
-              duration: expandDuration,
-              height: infoRowHeight,
-              curve: expandAnimationCurve,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: task != null
+            ? Column(
                 children: [
-                  Expanded(
-                    child: Hero(
-                      tag: task.uuid,
-                      transitionOnUserGestures: true,
-                      child: TaskCard(
-                        title: task.title,
-                        secondaryAction: () =>
-                            setState(() => expandedTopRow = !expandedTopRow),
-                        isExpanded: expandedTopRow,
-                        description: task.taskDescription,
-                      ),
+                  AnimatedContainer(
+                    duration: expandDuration,
+                    height: infoRowHeight,
+                    curve: expandAnimationCurve,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Expanded(
+                          child: Hero(
+                            tag: task!.uuid,
+                            transitionOnUserGestures: true,
+                            child: TaskCard(
+                              title: task!.title,
+                              secondaryAction: () => setState(
+                                () => expandedTopRow = !expandedTopRow,
+                              ),
+                              isExpanded: expandedTopRow,
+                              description: task!.taskDescription,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Flippable(
+                            front: HintCard(hint: task!.hint),
+                            back: SolutionCard(solution: task!.solution),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  Expanded(
-                    child: Flippable(
-                      front: HintCard(hint: task.hint),
-                      back: SolutionCard(solution: task.solution),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            AnimatedContainer(
-              duration: expandDuration,
-              height: drawingAreaHeight,
-              curve: expandAnimationCurve,
-              child: Stack(
-                children: [
-                  ClipRect(
-                    child: DrawingArea(
-                      controller: controller,
-                      onEdited: (lines) => task.drawnLines = lines,
-                      lines: task.drawnLines,
-                    ),
-                  ),
-                  Positioned(
-                    right: 0,
-                    top: 0,
-                    child: Slider(
-                      min: 1,
-                      max: 10,
-                      value: controller.penSize,
-                      onChanged: (value) => setState(() {
-                        controller.penSize = value;
-                      }),
-                    ),
-                  ),
-                  Positioned(
-                    child: ToggleButtons(
-                      isSelected: toggleButtonState,
-                      onPressed: (index) {
-                        controller.tapMode = TapMode.values[index];
-                        setState(() {
-                          for (var i = 0; i < toggleButtonState.length; ++i) {
-                            toggleButtonState[i] = i == index;
-                          }
-                        });
-                      },
-                      children: const [
-                        Icon(Icons.draw),
-                        Icon(Icons.pan_tool),
-                        Icon(Icons.undo)
+                  AnimatedContainer(
+                    duration: expandDuration,
+                    height: drawingAreaHeight,
+                    curve: expandAnimationCurve,
+                    child: Stack(
+                      children: [
+                        ClipRect(
+                          child: DrawingArea(
+                            controller: controller,
+                            onEdited: (lines) => task!.drawnLines = lines,
+                            lines: task!.drawnLines,
+                          ),
+                        ),
+                        Positioned(
+                          right: 0,
+                          top: 0,
+                          child: Slider(
+                            min: 1,
+                            max: 10,
+                            value: controller.penSize,
+                            onChanged: (value) => setState(() {
+                              controller.penSize = value;
+                            }),
+                          ),
+                        ),
+                        Positioned(
+                          child: ToggleButtons(
+                            isSelected: toggleButtonState,
+                            onPressed: (index) {
+                              controller.tapMode = TapMode.values[index];
+                              setState(() {
+                                for (var i = 0;
+                                    i < toggleButtonState.length;
+                                    ++i) {
+                                  toggleButtonState[i] = i == index;
+                                }
+                              });
+                            },
+                            children: const [
+                              Icon(Icons.draw),
+                              Icon(Icons.pan_tool),
+                              Icon(Icons.undo)
+                            ],
+                          ),
+                        ),
                       ],
                     ),
                   ),
                 ],
-              ),
-            ),
-          ],
-        ),
+              )
+            : Text('Task with uuid ${widget.uuid} was not found in repository'),
       ),
     );
   }
