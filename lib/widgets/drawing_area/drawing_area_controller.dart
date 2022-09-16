@@ -4,6 +4,7 @@ class DrawingAreaController {
   double yOffset = 0;
 
   double penSize = 1;
+  double eraserSize = 5;
 }
 
 enum TapMode { draw, pan, erase }

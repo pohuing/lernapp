@@ -28,9 +28,11 @@ class _TaskScreenState extends State<TaskScreen> {
 
   double get infoRowHeight {
     final screenHeight = MediaQuery.of(context).size.height;
-    final appHeight = screenHeight - MediaQuery.of(context).padding.bottom - MediaQuery.of(context).padding.top;
+    final appHeight = screenHeight -
+        MediaQuery.of(context).padding.bottom -
+        MediaQuery.of(context).padding.top;
     if (expandedTopRow) {
-      return  appHeight/ 2;
+      return appHeight / 2;
     } else {
       return appHeight / 6;
     }
@@ -38,7 +40,9 @@ class _TaskScreenState extends State<TaskScreen> {
 
   double get drawingAreaHeight {
     final screenHeight = MediaQuery.of(context).size.height;
-    final appHeight = screenHeight - MediaQuery.of(context).padding.bottom - MediaQuery.of(context).padding.top;
+    final appHeight = screenHeight -
+        MediaQuery.of(context).padding.bottom -
+        MediaQuery.of(context).padding.top;
     if (expandedTopRow) {
       return appHeight / 2;
     } else {
@@ -98,6 +102,7 @@ class _TaskScreenState extends State<TaskScreen> {
                             controller: controller,
                             onEdited: (lines) => task!.drawnLines = lines,
                             lines: task!.drawnLines,
+                            showEraser: controller.tapMode == TapMode.erase,
                           ),
                         ),
                         Positioned(
