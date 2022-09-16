@@ -27,18 +27,22 @@ class _TaskScreenState extends State<TaskScreen> {
   var expandedTopRow = false;
 
   double get infoRowHeight {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final appHeight = screenHeight - MediaQuery.of(context).padding.bottom - MediaQuery.of(context).padding.top;
     if (expandedTopRow) {
-      return MediaQuery.of(context).size.height / 2;
+      return  appHeight/ 2;
     } else {
-      return MediaQuery.of(context).size.height / 6;
+      return appHeight / 6;
     }
   }
 
   double get drawingAreaHeight {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final appHeight = screenHeight - MediaQuery.of(context).padding.bottom - MediaQuery.of(context).padding.top;
     if (expandedTopRow) {
-      return MediaQuery.of(context).size.height / 2;
+      return appHeight / 2;
     } else {
-      return (MediaQuery.of(context).size.height / 6) * 5;
+      return (appHeight / 6) * 5;
     }
   }
 
