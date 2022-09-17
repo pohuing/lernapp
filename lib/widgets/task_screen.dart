@@ -23,20 +23,8 @@ class _TaskScreenState extends State<TaskScreen> {
   DrawingAreaController controller = DrawingAreaController();
   late final Task? task;
   final toggleButtonState = [true, false, false];
-
   var expandedTopRow = false;
-
-  double get infoRowHeight {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final appHeight = screenHeight -
-        MediaQuery.of(context).padding.bottom -
-        MediaQuery.of(context).padding.top;
-    if (expandedTopRow) {
-      return appHeight / 2;
-    } else {
-      return appHeight / 6;
-    }
-  }
+  Duration expandDuration = const Duration(milliseconds: 200);
 
   double get drawingAreaHeight {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -52,7 +40,17 @@ class _TaskScreenState extends State<TaskScreen> {
 
   Curve get expandAnimationCurve => Curves.easeInOut;
 
-  Duration expandDuration = const Duration(milliseconds: 200);
+  double get infoRowHeight {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final appHeight = screenHeight -
+        MediaQuery.of(context).padding.bottom -
+        MediaQuery.of(context).padding.top;
+    if (expandedTopRow) {
+      return appHeight / 2;
+    } else {
+      return appHeight / 6;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

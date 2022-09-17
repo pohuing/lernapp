@@ -34,8 +34,6 @@ class _DrawingAreaState extends State<DrawingArea> {
   late final List<Line> lines;
   Offset? lastPosition;
 
-  Offset? get processedLastPosition => widget.showEraser ? lastPosition : null;
-
   Paint get defaultPaint {
     final paint = Paint();
     paint.strokeCap = StrokeCap.round;
@@ -43,6 +41,8 @@ class _DrawingAreaState extends State<DrawingArea> {
 
     return paint;
   }
+
+  Offset? get processedLastPosition => widget.showEraser ? lastPosition : null;
 
   @override
   Widget build(BuildContext context) {

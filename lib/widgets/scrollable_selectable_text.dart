@@ -7,6 +7,7 @@ class ScrollableSelectableText extends StatelessWidget {
 
   final String text;
   final TextStyle? textTheme;
+
   ScrollableSelectableText({Key? key, required this.text, this.textTheme})
       : _controller = ScrollController(),
         super(key: key);

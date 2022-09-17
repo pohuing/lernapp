@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lernapp/widgets/listing_screen/listing_tile.dart';
+import 'package:lernapp/widgets/listing_screen/task_tile.dart';
 
 import '../../model/task_category.dart';
 
@@ -15,12 +15,6 @@ class CategoryTile extends StatefulWidget {
 class _CategoryTileState extends State<CategoryTile> {
   var isExpanded = false;
   late final TaskCategory category;
-
-  @override
-  void initState() {
-    category = widget.category;
-    super.initState();
-  }
 
   EdgeInsetsGeometry get childPadding {
     return const EdgeInsets.only(left: 16);
@@ -60,5 +54,11 @@ class _CategoryTileState extends State<CategoryTile> {
         ],
       ),
     );
+  }
+
+  @override
+  void initState() {
+    category = widget.category;
+    super.initState();
   }
 }
