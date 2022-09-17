@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:lernapp/main.dart';
 import 'package:lernapp/widgets/drawing_area/drawing_area_controller.dart';
-import 'package:lernapp/widgets/solution_card.dart';
-import 'package:lernapp/widgets/task_card.dart';
+import 'package:lernapp/widgets/task_screen/solution_card.dart';
+import 'package:lernapp/widgets/task_screen/task_card.dart';
 import 'package:uuid/uuid.dart';
 
-import '../model/task.dart';
-import 'drawing_area/drawing_area.dart';
-import 'flippable.dart';
+import '../../model/task.dart';
+import '../drawing_area/drawing_area.dart';
+import '../general_purpose/flippable.dart';
 import 'hint_card.dart';
 
 class TaskScreen extends StatefulWidget {
