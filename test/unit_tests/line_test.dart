@@ -1,5 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lernapp/model/line.dart';
+import 'package:lernapp/model/pair.dart';
 
 void main() {
   test('Test line pruning', () {
@@ -9,7 +11,8 @@ void main() {
         const Offset(1, 0),
         const Offset(2, 0),
       ],
-      null,
+      Pair(Colors.white, Colors.black),
+      1,
     );
 
     line.prune();
@@ -54,7 +57,8 @@ void main() {
         const Offset(0, 2),
         const Offset(2, 0),
       ],
-      null,
+      Pair(Colors.black, Colors.white),
+      1,
     );
 
     expect(
