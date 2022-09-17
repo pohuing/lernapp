@@ -22,7 +22,6 @@ class TaskScreen extends StatefulWidget {
 class _TaskScreenState extends State<TaskScreen> {
   DrawingAreaController controller = DrawingAreaController();
   late final Task? task;
-  final toggleButtonState = [true, false, false];
   var expandedTopRow = false;
   Duration expandDuration = const Duration(milliseconds: 200);
 
@@ -104,37 +103,37 @@ class _TaskScreenState extends State<TaskScreen> {
                           ),
                         ),
                         Positioned(
-                          right: 0,
                           top: 0,
-                          child: Slider(
-                            min: 1,
-                            max: 10,
-                            value: controller.penSize,
-                            onChanged: (value) => setState(() {
-                              controller.penSize = value;
-                            }),
+                          left: 0,
+                          child: SizedBox(
+                            child: Row(
+                              children: [
+                                ToggleButtons(
+                                  isSelected: controller.selectionList,
+                                  onPressed: (index) {
+                                    setState(() {
+                                      controller.tapMode =
+                                          TapMode.values[index];
+                                    });
+                                  },
+                                  children: const [
+                                    Icon(Icons.draw),
+                                    Icon(Icons.pan_tool),
+                                    Icon(Icons.undo)
+                                  ],
+                                ),
+                                Slider(
+                                  min: 1,
+                                  max: 10,
+                                  value: controller.penSize,
+                                  onChanged: (value) => setState(() {
+                                    controller.penSize = value;
+                                  }),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                        Positioned(
-                          child: ToggleButtons(
-                            isSelected: toggleButtonState,
-                            onPressed: (index) {
-                              controller.tapMode = TapMode.values[index];
-                              setState(() {
-                                for (var i = 0;
-                                    i < toggleButtonState.length;
-                                    ++i) {
-                                  toggleButtonState[i] = i == index;
-                                }
-                              });
-                            },
-                            children: const [
-                              Icon(Icons.draw),
-                              Icon(Icons.pan_tool),
-                              Icon(Icons.undo)
-                            ],
-                          ),
-                        ),
+                        )
                       ],
                     ),
                   ),
@@ -155,4 +154,9 @@ class _TaskScreenState extends State<TaskScreen> {
     task = taskRepository.findByUuid(widget.uuid);
     super.initState();
   }
+}
+
+extension SelectionList on DrawingAreaController {
+  List<bool> get selectionList =>
+      List.generate(TapMode.values.length, (index) => index == tapMode.index);
 }
