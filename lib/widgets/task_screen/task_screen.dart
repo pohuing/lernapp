@@ -22,6 +22,8 @@ class TaskScreen extends StatefulWidget {
 
 class _TaskScreenState extends State<TaskScreen> {
   DrawingAreaController controller = DrawingAreaController();
+  ColorSelectionController colorController =
+      ColorSelectionController.standardColors();
   late final Task? task;
   var expandedTopRow = false;
   Duration expandDuration = const Duration(milliseconds: 200);
@@ -125,7 +127,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                     Icon(Icons.undo)
                                   ],
                                 ),
-                                const ColorSelectionRow(),
+                                ColorSelectionRow(controller: colorController),
                                 Slider(
                                   min: 1,
                                   max: 10,
@@ -156,6 +158,9 @@ class _TaskScreenState extends State<TaskScreen> {
   @override
   void initState() {
     task = taskRepository.findByUuid(widget.uuid);
+    colorController.colorChanged = (newColor) => setState(() {
+          controller.currentColor = newColor;
+        });
     super.initState();
   }
 }

@@ -15,6 +15,10 @@ class Pair<T> {
           one == other.one &&
           two == other.two;
 
+  Pair<T> copy() {
+    return Pair(one, two);
+  }
+
   @override
   String toString() {
     return 'Pair{one: $one, two: $two}';

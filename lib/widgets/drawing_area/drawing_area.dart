@@ -58,7 +58,7 @@ class _DrawingAreaState extends State<DrawingArea> {
             lines: lines,
             xOffset: controller.xOffset,
             yOffset: controller.yOffset,
-            showEraser: processedLastPosition,
+            eraserPosition: processedLastPosition,
             eraserSize: controller.eraserSize,
           ),
         ),
@@ -87,7 +87,7 @@ class _DrawingAreaState extends State<DrawingArea> {
   @override
   void initState() {
     controller = widget.controller;
-    line = Line([], defaultPaint);
+    line = Line([], controller.currentColor, controller.penSize);
     lines = List.from(widget.lines ?? []);
     super.initState();
   }
@@ -100,10 +100,7 @@ class _DrawingAreaState extends State<DrawingArea> {
       case TapMode.draw:
         setState(() {
           lines.add(line);
-          line = Line(
-            [],
-            defaultPaint,
-          );
+          line = Line([], controller.currentColor.copy(), controller.penSize);
         });
         widget.onEdited?.call(List.from(lines));
         break;
@@ -121,7 +118,7 @@ class _DrawingAreaState extends State<DrawingArea> {
     switch (controller.tapMode) {
       case TapMode.draw:
         setState(() {
-          line = Line([], defaultPaint);
+          line = Line([], controller.currentColor, controller.penSize);
           drawAt(details.localPosition);
         });
         break;
