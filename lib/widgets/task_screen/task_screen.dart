@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lernapp/main.dart';
 import 'package:lernapp/widgets/drawing_area/drawing_area_controller.dart';
+import 'package:lernapp/widgets/general_purpose/color_selection/color_selection.dart';
 import 'package:lernapp/widgets/task_screen/solution_card.dart';
 import 'package:lernapp/widgets/task_screen/task_card.dart';
 import 'package:uuid/uuid.dart';
@@ -117,11 +118,14 @@ class _TaskScreenState extends State<TaskScreen> {
                                     });
                                   },
                                   children: const [
-                                    Icon(Icons.draw),
+                                    Icon(
+                                      Icons.draw,
+                                    ),
                                     Icon(Icons.pan_tool),
                                     Icon(Icons.undo)
                                   ],
                                 ),
+                                const ColorSelectionRow(),
                                 Slider(
                                   min: 1,
                                   max: 10,
