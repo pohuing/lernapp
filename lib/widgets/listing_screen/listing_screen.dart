@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -55,8 +53,11 @@ class ListingScreen extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(8),
                   child: ElevatedButton(
-                    onPressed: () =>
-                        log('Start session with Uuids ${state.selectedUuids}'),
+                    onPressed: state.selectedUuids.isEmpty
+                        ? null
+                        : () => context.goNamed(
+                              'session',
+                            ),
                     child: const Text('Start Session'),
                   ),
                 ),
