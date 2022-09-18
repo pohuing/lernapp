@@ -10,6 +10,17 @@ class TaskRepository {
 
   TaskRepository.lorem() : categories = _generateCategories();
 
+  Task? findByUuid(UuidValue uuid) {
+    for (var c in categories) {
+      var t = c.findTask(uuid);
+      if (t != null) {
+        return t;
+      }
+    }
+
+    return null;
+  }
+
   static List<TaskCategory> _generateCategories() {
     return [
       TaskCategory(
@@ -49,16 +60,5 @@ class TaskRepository {
       ),
       TaskCategory(title: 'Wasser und Bodenmanagement'),
     ];
-  }
-
-  Task? findByUuid(UuidValue uuid) {
-    for (var c in categories) {
-      var t = c.findTask(uuid);
-      if (t != null) {
-        return t;
-      }
-    }
-
-    return null;
   }
 }

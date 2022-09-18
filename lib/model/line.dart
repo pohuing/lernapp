@@ -1,11 +1,12 @@
 import 'dart:developer';
-import 'dart:math' hide log;
 
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:lernapp/logic/offset_extensions.dart';
 import 'package:system_theme/system_theme.dart';
 
+/// A line made up of a series of points and a paint
 class Line {
   List<Offset> path;
   final Paint _paint;
@@ -26,6 +27,7 @@ class Line {
       ..isAntiAlias = true;
   }
 
+  /// Adaptive color based on system theme for good contrast
   Color get paintColor => SystemTheme.isDarkMode ? Colors.white : Colors.black;
 
   @override
@@ -56,24 +58,11 @@ class Line {
     }
   }
 
-  bool isBetweenPoints(
-    double dxl,
-    double dyl,
-    Offset point1,
-    Offset currPoint,
-    Offset point2,
-  ) {
-    if (dxl.abs() >= dyl.abs()) {
-      return dxl > 0
-          ? point1.dx <= currPoint.dx && currPoint.dx <= point2.dx
-          : point2.dx <= currPoint.dx && currPoint.dx <= point1.dx;
-    } else {
-      return dyl > 0
-          ? point1.dy <= currPoint.dy && currPoint.dy <= point2.dy
-          : point2.dy <= currPoint.dy && currPoint.dy <= point1.dy;
-    }
-  }
-
+  /// Test if this Line is within a circle
+  ///
+  /// This includes touching
+  /// [center]: is the center of the circle
+  /// [radius]: is the center of the radius
   bool isInCircle(Offset center, double radius) {
     for (int i = 0; i < path.length - 1; i++) {
       if (segmentInCircle(path[i], path[i + 1], center, radius)) {
@@ -83,40 +72,10 @@ class Line {
     return false;
   }
 
-  static bool segmentInCircle(
-      Offset p1, Offset p2, Offset center, double radius) {
-    final distance = ((p2.dx - p1.dx) * (p1.dy - center.dy) -
-                (p1.dx - center.dx) * (p2.dy - p1.dy))
-            .abs() /
-        sqrt(pow(p2.dx - p1.dx, 2) + pow(p2.dy - p1.dy, 2));
-
-    return distance <= radius;
-  }
-
-  bool isPointOnLine({
-    required Offset point1,
-    required Offset point2,
-    required Offset centerPoint,
-  }) {
-    if (point1 == point2) {
-      if (point1 == centerPoint) {
-        return true;
-      }
-      return false;
-    }
-
-    final dxc = centerPoint.dx - point1.dx;
-    final dyc = centerPoint.dy - point1.dy;
-
-    final dxl = point2.dx - point1.dx;
-    final dyl = point2.dy - point1.dy;
-
-    final cross = dxc * dyl - dyc * dxl;
-
-    return cross.abs() < 0.01 &&
-        isBetweenPoints(dxl, dyl, point1, centerPoint, point2);
-  }
-
+  /// Remove all redundant points from this line
+  ///
+  /// Redundant points are point that are almost exactly on the line drawn from
+  /// their neighbor points
   bool prune() {
     if (path.length < 3) {
       return false;
@@ -149,5 +108,73 @@ class Line {
       log('Pruned points $offsetsToRemove', name: 'Line.prune()');
     }
     return offsetsToRemove.isNotEmpty;
+  }
+
+  /// Calculate the distance of point p from the finite line drawn between a and b
+  static double distanceLinePoint(Offset p1, Offset p2, Offset point) {
+    final pDash = point - p1;
+    final p2Dash = (p2 - p1).normalised();
+    final dot = pDash.dot(p2Dash);
+    if (dot < 0) {
+      return pDash.distance;
+    } else if (dot > (p2 - p1).distance) {
+      return (point - p2).distance;
+    } else {
+      return (pDash - p2Dash.scalarMul(pDash.dot(p2Dash))).distance;
+    }
+  }
+
+  /// Test if center is on a line drawn from [point1] to [point2]
+  static bool isPointOnLine({
+    required Offset point1,
+    required Offset point2,
+    required Offset centerPoint,
+    double error = 0.01,
+  }) {
+    if (point1 == point2) {
+      if (point1 == centerPoint) {
+        return true;
+      }
+      return false;
+    }
+
+    final dxc = centerPoint.dx - point1.dx;
+    final dyc = centerPoint.dy - point1.dy;
+
+    final dxl = point2.dx - point1.dx;
+    final dyl = point2.dy - point1.dy;
+
+    final cross = dxc * dyl - dyc * dxl;
+
+    return cross.abs() < error &&
+        _isBetweenPoints(dxl, dyl, point1, centerPoint, point2);
+  }
+
+  /// Test if finite line is in a circle
+  static bool segmentInCircle(
+    Offset p1,
+    Offset p2,
+    Offset center,
+    double radius,
+  ) {
+    return distanceLinePoint(p1, p2, center) <= radius;
+  }
+
+  static bool _isBetweenPoints(
+    double dxl,
+    double dyl,
+    Offset point1,
+    Offset currPoint,
+    Offset point2,
+  ) {
+    if (dxl.abs() >= dyl.abs()) {
+      return dxl > 0
+          ? point1.dx <= currPoint.dx && currPoint.dx <= point2.dx
+          : point2.dx <= currPoint.dx && currPoint.dx <= point1.dx;
+    } else {
+      return dyl > 0
+          ? point1.dy <= currPoint.dy && currPoint.dy <= point2.dy
+          : point2.dy <= currPoint.dy && currPoint.dy <= point1.dy;
+    }
   }
 }

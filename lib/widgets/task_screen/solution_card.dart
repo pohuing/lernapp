@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:lernapp/widgets/scrollable_selectable_text.dart';
 
-class HintCard extends StatelessWidget {
-  final String hint;
+import '../general_purpose/scrollable_selectable_text.dart';
 
-  const HintCard({Key? key, required this.hint}) : super(key: key);
+class SolutionCard extends StatelessWidget {
+  final String solution;
+
+  const SolutionCard({Key? key, required this.solution}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +14,7 @@ class HintCard extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Row(
           children: [
-            ScrollableSelectableText(text: hint),
+            ScrollableSelectableText(text: solution),
             const VerticalDivider(width: 8),
             IgnorePointer(
               child: IconButton(
@@ -21,7 +22,7 @@ class HintCard extends StatelessWidget {
                 onPressed: () => null,
                 icon: const Icon(Icons.flip),
               ),
-            ),
+            )
           ],
         ),
       ),

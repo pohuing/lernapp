@@ -12,13 +12,16 @@ class DrawingArea extends StatefulWidget {
 
   final List<Line>? lines;
   final Function(List<Line> lines)? onEdited;
+  final bool showEraser;
 
   DrawingArea({
     Key? key,
     DrawingAreaController? controller,
     this.onEdited,
     this.lines,
+    bool? showEraser,
   })  : controller = controller ?? DrawingAreaController(),
+        showEraser = showEraser ?? false,
         super(key: key);
 
   @override
@@ -29,6 +32,7 @@ class _DrawingAreaState extends State<DrawingArea> {
   late final DrawingAreaController controller;
   late Line line;
   late final List<Line> lines;
+  Offset? lastPosition;
 
   Paint get defaultPaint {
     final paint = Paint();
@@ -37,6 +41,8 @@ class _DrawingAreaState extends State<DrawingArea> {
 
     return paint;
   }
+
+  Offset? get processedLastPosition => widget.showEraser ? lastPosition : null;
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +58,8 @@ class _DrawingAreaState extends State<DrawingArea> {
             lines: lines,
             xOffset: controller.xOffset,
             yOffset: controller.yOffset,
+            showEraser: processedLastPosition,
+            eraserSize: controller.eraserSize,
           ),
         ),
       ),
@@ -69,7 +77,7 @@ class _DrawingAreaState extends State<DrawingArea> {
       lines.removeWhere(
         (line) => line.isInCircle(
           localPosition.translate(-controller.xOffset, -controller.yOffset),
-          2,
+          controller.eraserSize,
         ),
       );
     }
@@ -98,6 +106,11 @@ class _DrawingAreaState extends State<DrawingArea> {
           );
         });
         widget.onEdited?.call(List.from(lines));
+        break;
+      case TapMode.erase:
+        setState(() {
+          lastPosition = null;
+        });
         break;
       default:
         break;
@@ -137,6 +150,7 @@ class _DrawingAreaState extends State<DrawingArea> {
         break;
       case TapMode.erase:
         setState(() {
+          lastPosition = details.localPosition;
           eraseAt(details.localPosition);
         });
         break;
