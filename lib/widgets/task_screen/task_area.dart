@@ -29,29 +29,21 @@ class _TaskAreaState extends State<TaskArea> {
   var expandedTopRow = false;
   Duration expandDuration = const Duration(milliseconds: 200);
 
-  double get drawingAreaHeight {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final appHeight = screenHeight -
-        MediaQuery.of(context).padding.bottom -
-        MediaQuery.of(context).padding.top;
+  double getDrawingAreaHeight(double widgetHeight) {
     if (expandedTopRow) {
-      return appHeight / 2;
+      return widgetHeight / 2;
     } else {
-      return (appHeight / 6) * 5;
+      return (widgetHeight / 6) * 5;
     }
   }
 
   Curve get expandAnimationCurve => Curves.easeInOut;
 
-  double get infoRowHeight {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final appHeight = screenHeight -
-        MediaQuery.of(context).padding.bottom -
-        MediaQuery.of(context).padding.top;
+  double getInfoRowHeight(double widgetHeight) {
     if (expandedTopRow) {
-      return appHeight / 2;
+      return widgetHeight / 2;
     } else {
-      return appHeight / 6;
+      return widgetHeight / 6;
     }
   }
 
@@ -59,88 +51,90 @@ class _TaskAreaState extends State<TaskArea> {
   Widget build(BuildContext context) {
     log('Building', name: 'TaskArea');
     log('Task: $task', name: 'TaskArea');
-    return Column(
-      children: [
-        AnimatedContainer(
-          duration: expandDuration,
-          height: infoRowHeight - 60,
-          curve: expandAnimationCurve,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                child: Hero(
-                  tag: task!.uuid,
-                  transitionOnUserGestures: true,
-                  child: TaskCard(
-                    title: task!.title,
-                    secondaryAction: () => setState(
-                      () => expandedTopRow = !expandedTopRow,
-                    ),
-                    isExpanded: expandedTopRow,
-                    description: task!.taskDescription,
-                    showBackButton: widget.showBackButton,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Flippable(
-                  front: HintCard(hint: task!.hint),
-                  back: SolutionCard(solution: task!.solution),
-                ),
-              ),
-            ],
-          ),
-        ),
-        AnimatedContainer(
-          duration: expandDuration,
-          height: drawingAreaHeight - 60,
-          curve: expandAnimationCurve,
-          child: Stack(
-            children: [
-              ClipRect(
-                child: DrawingArea(
-                  controller: controller,
-                  onEdited: (lines) => task!.drawnLines = lines,
-                  lines: task!.drawnLines,
-                  showEraser: controller.tapMode == TapMode.erase,
-                ),
-              ),
-              Positioned(
-                top: 0,
-                left: 0,
-                child: SizedBox(
-                  child: Row(
-                    children: [
-                      ToggleButtons(
-                        isSelected: controller.selectionList,
-                        onPressed: (index) {
-                          setState(() {
-                            controller.tapMode = TapMode.values[index];
-                          });
-                        },
-                        children: const [
-                          Icon(Icons.draw),
-                          Icon(Icons.pan_tool),
-                          Icon(Icons.undo)
-                        ],
+    return LayoutBuilder(
+      builder: (context, constraints) => Column(
+        children: [
+          AnimatedContainer(
+            duration: expandDuration,
+            height: getInfoRowHeight(constraints.maxHeight),
+            curve: expandAnimationCurve,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: Hero(
+                    tag: task!.uuid,
+                    transitionOnUserGestures: true,
+                    child: TaskCard(
+                      title: task!.title,
+                      secondaryAction: () => setState(
+                        () => expandedTopRow = !expandedTopRow,
                       ),
-                      Slider(
-                        min: 1,
-                        max: 10,
-                        value: controller.penSize,
-                        onChanged: (value) => setState(() {
-                          controller.penSize = value;
-                        }),
-                      )
-                    ],
+                      isExpanded: expandedTopRow,
+                      description: task!.taskDescription,
+                      showBackButton: widget.showBackButton,
+                    ),
                   ),
                 ),
-              )
-            ],
+                Expanded(
+                  child: Flippable(
+                    front: HintCard(hint: task!.hint),
+                    back: SolutionCard(solution: task!.solution),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+          AnimatedContainer(
+            duration: expandDuration,
+            height: getDrawingAreaHeight(constraints.maxHeight),
+            curve: expandAnimationCurve,
+            child: Stack(
+              children: [
+                ClipRect(
+                  child: DrawingArea(
+                    controller: controller,
+                    onEdited: (lines) => task!.drawnLines = lines,
+                    lines: task!.drawnLines,
+                    showEraser: controller.tapMode == TapMode.erase,
+                  ),
+                ),
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  child: SizedBox(
+                    child: Row(
+                      children: [
+                        ToggleButtons(
+                          isSelected: controller.selectionList,
+                          onPressed: (index) {
+                            setState(() {
+                              controller.tapMode = TapMode.values[index];
+                            });
+                          },
+                          children: const [
+                            Icon(Icons.draw),
+                            Icon(Icons.pan_tool),
+                            Icon(Icons.undo)
+                          ],
+                        ),
+                        Slider(
+                          min: 1,
+                          max: 10,
+                          value: controller.penSize,
+                          onChanged: (value) => setState(() {
+                            controller.penSize = value;
+                          }),
+                        )
+                      ],
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
