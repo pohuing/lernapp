@@ -22,7 +22,7 @@ class TaskTile extends StatelessWidget {
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
-            trailing: state.isSelecting
+            leading: state.isSelecting
                 ? Checkbox(
                     value: state.selectedUuids.contains(task.uuid),
                     onChanged: (value) => context
@@ -30,8 +30,6 @@ class TaskTile extends StatelessWidget {
                         .toggleSelection(task.uuid),
                   )
                 : null,
-            onLongPress: () =>
-                context.read<SelectionCubit>().enableSelectionMode(),
             onTap: () {
               if (state.isSelecting) {
                 context.read<SelectionCubit>().toggleSelection(task.uuid);

@@ -12,15 +12,6 @@ class TaskCategory {
     return (subCategories?.length ?? 0) + (tasks?.length ?? 0);
   }
 
-  /// Recursively gather Uuids of all children
-  List<UuidValue> gatherUuids() {
-    List<UuidValue> uuids = [];
-    tasks?.forEach((element) => uuids.add(element.uuid));
-    subCategories?.forEach((element) => uuids.addAll(element.gatherUuids()));
-
-    return uuids;
-  }
-
   /// Recursively search if task in tree
   Task? findTask(UuidValue uuid) {
     Task? task;
@@ -38,5 +29,14 @@ class TaskCategory {
       }
     }
     return null;
+  }
+
+  /// Recursively gather Uuids of all children
+  Set<UuidValue> gatherUuids() {
+    Set<UuidValue> uuids = {};
+    tasks?.forEach((element) => uuids.add(element.uuid));
+    subCategories?.forEach((element) => uuids.addAll(element.gatherUuids()));
+
+    return uuids;
   }
 }

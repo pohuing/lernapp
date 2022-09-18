@@ -5,6 +5,17 @@ import 'package:uuid/uuid.dart';
 class SelectionCubit extends Cubit<SelectionState> {
   SelectionCubit() : super(SelectionState(<UuidValue>{}, false));
 
+  void deselectCategory(TaskCategory category) {
+    final selected = Set<UuidValue>.from(state.selectedUuids);
+    selected.removeAll(category.gatherUuids());
+
+    emit(SelectionState(selected, state.isSelecting));
+  }
+
+  void enableSelectionMode() {
+    emit(SelectionState(state.selectedUuids, true));
+  }
+
   void selectCategory(TaskCategory category) {
     final selected = Set<UuidValue>.from(state.selectedUuids);
     selected.addAll(category.gatherUuids());
@@ -12,11 +23,12 @@ class SelectionCubit extends Cubit<SelectionState> {
     emit(SelectionState(selected, state.isSelecting));
   }
 
-  void deselectCategory(TaskCategory category) {
-    final selected = Set<UuidValue>.from(state.selectedUuids);
-    selected.removeAll(category.gatherUuids());
-
-    emit(SelectionState(selected, state.isSelecting));
+  void toggleCategory(TaskCategory category) {
+    if (state.entireCategoryIsSelected(category)) {
+      deselectCategory(category);
+    } else {
+      selectCategory(category);
+    }
   }
 
   void toggleSelection(UuidValue uuid) {
@@ -28,10 +40,6 @@ class SelectionCubit extends Cubit<SelectionState> {
     }
 
     emit(SelectionState(selected, state.isSelecting));
-  }
-
-  void enableSelectionMode() {
-    emit(SelectionState(state.selectedUuids, true));
   }
 
   void toggleSelectionMode() {
@@ -48,4 +56,8 @@ class SelectionState {
   final Set<UuidValue> selectedUuids;
 
   SelectionState(this.selectedUuids, this.isSelecting);
+
+  bool entireCategoryIsSelected(TaskCategory category) {
+    return selectedUuids.containsAll(category.gatherUuids());
+  }
 }

@@ -36,6 +36,12 @@ class ListingScreen extends StatelessWidget {
                   ),
                   icon: const Icon(Icons.info_outline),
                 ),
+              if (!state.isSelecting)
+                IconButton(
+                  onPressed: () =>
+                      context.read<SelectionCubit>().toggleSelectionMode(),
+                  icon: const Icon(Icons.check_box_outlined),
+                ),
               if (state.isSelecting)
                 Container(
                   padding: const EdgeInsets.all(8),

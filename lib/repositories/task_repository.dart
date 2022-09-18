@@ -53,7 +53,13 @@ class TaskRepository {
                 'Was ist der Unterschied zwischen = und :=',
                 '',
                 ':= bedeutet "Ist definiert durch" und \n = vergleicht beide Operaten',
-              )
+              ),
+              Task(
+                'Grundbegriffe der Mengenlehre',
+                'Durchschnitt von A = { x ∊ Q | x b 5 }, B = { x ∊ Q | x r 5 }',
+                '',
+                '',
+              ),
             ],
           ),
         ],
