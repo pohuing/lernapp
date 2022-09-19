@@ -28,4 +28,30 @@ class Task {
         solution = ameno(paragraphs: 1, words: 20),
         uuid = const Uuid().v4obj(),
         drawnLines = [];
+
+  @override
+  int get hashCode =>
+      title.hashCode ^
+      taskDescription.hashCode ^
+      hint.hashCode ^
+      solution.hashCode ^
+      uuid.hashCode ^
+      drawnLines.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Task &&
+          runtimeType == other.runtimeType &&
+          title == other.title &&
+          taskDescription == other.taskDescription &&
+          hint == other.hint &&
+          solution == other.solution &&
+          uuid == other.uuid &&
+          drawnLines == other.drawnLines;
+
+  @override
+  String toString() {
+    return 'Task{title: $title, taskDescription: $taskDescription, hint: $hint, solution: $solution, uuid: $uuid, drawnLines: $drawnLines}';
+  }
 }
