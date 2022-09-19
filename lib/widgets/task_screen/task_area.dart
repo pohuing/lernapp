@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:lernapp/main.dart';
 import 'package:lernapp/widgets/drawing_area/drawing_area_controller.dart';
@@ -49,8 +47,6 @@ class _TaskAreaState extends State<TaskArea> {
 
   @override
   Widget build(BuildContext context) {
-    log('Building', name: 'TaskArea');
-    log('Task: $task', name: 'TaskArea');
     return LayoutBuilder(
       builder: (context, constraints) => Column(
         children: [

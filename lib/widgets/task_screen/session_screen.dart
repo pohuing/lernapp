@@ -8,6 +8,7 @@ import '../../model/task.dart';
 
 class SessionScreen extends StatefulWidget {
   final List<Task> initTasks;
+
   const SessionScreen({Key? key, required List<Task> tasks})
       : initTasks = tasks,
         super(key: key);
@@ -29,13 +30,19 @@ class _SessionScreenState extends State<SessionScreen> {
           },
         ),
         actions: [
-          TextButton(
-            onPressed: () => cubit.previous(),
-            child: const Text('Previous'),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: TextButton(
+              onPressed: () => cubit.previous(),
+              child: const Text('Previous'),
+            ),
           ),
-          ElevatedButton(
-            onPressed: () => cubit.next(),
-            child: const Text('next'),
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: ElevatedButton(
+              onPressed: () => cubit.next(),
+              child: const Text('Next'),
+            ),
           ),
         ],
       ),

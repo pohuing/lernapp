@@ -10,7 +10,7 @@ class TaskScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: TaskArea(uuid: uuid),
+      body: SafeArea(child: TaskArea(uuid: uuid)),
     );
   }
 }
