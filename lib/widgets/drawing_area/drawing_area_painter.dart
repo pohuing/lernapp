@@ -10,7 +10,7 @@ class DrawingAreaPainter extends CustomPainter {
   final List<Line> lines;
   double xOffset = 0;
   double yOffset = 0;
-  Offset? showEraser;
+  Offset? eraserAt;
   double eraserSize;
 
   int? lastPaintHashCode;
@@ -20,7 +20,7 @@ class DrawingAreaPainter extends CustomPainter {
     this.lines = const [],
     this.xOffset = 0,
     this.yOffset = 0,
-    this.showEraser,
+    this.eraserAt,
     double? eraserSize,
   }) : eraserSize = eraserSize ?? 2;
 
@@ -41,8 +41,8 @@ class DrawingAreaPainter extends CustomPainter {
         canvas.drawLine(line.path[i], line.path[i + 1], line.paint);
       }
     }
-    if (showEraser != null) {
-      canvas.drawCircle(showEraser!, eraserSize, line.paint);
+    if (eraserAt != null) {
+      canvas.drawCircle(eraserAt!, eraserSize, line.paint);
     }
   }
 
@@ -50,7 +50,7 @@ class DrawingAreaPainter extends CustomPainter {
   bool shouldRepaint(covariant DrawingAreaPainter oldDelegate) {
     lastPaintHashCode = _generateHashCode();
     var result = oldDelegate.lastPaintHashCode != lastPaintHashCode ||
-        oldDelegate.showEraser != showEraser;
+        oldDelegate.eraserAt != eraserAt;
     if (kDebugMode) {
       log(result.toString(), name: 'DrawingAreaPainter.shouldRepaint()');
     }
