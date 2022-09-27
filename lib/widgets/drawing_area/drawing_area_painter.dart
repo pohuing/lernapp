@@ -42,29 +42,35 @@ class DrawingAreaPainter extends CustomPainter {
     }
 
     canvas.translate(xOffset, yOffset);
-    final paint = Paint()
-      ..isAntiAlias = true
-      ..strokeCap = StrokeCap.round;
+
+    final intransparentPaint = Paint()..strokeCap = StrokeCap.round;
 
     for (int i = 0; i < lines.length; i++) {
-      final line = lines[i];
-      paint
-        ..color = line.paintColor
-        ..strokeWidth = line.size;
-      for (var i = 0; i < line.path.length - 1; ++i) {
-        canvas.drawLine(line.path[i], line.path[i + 1], paint);
+      final blendPaint = Paint();
+      blendPaint.color = lines[i].paintColor;
+      intransparentPaint.strokeWidth = lines[i].size;
+      intransparentPaint.color = lines[i].paintColor.withAlpha(255);
+
+      // Drawing the layer with an intransparent paint and later restoring with
+      // a transparent paint avoids overlaps between start and end of a line
+      // segment
+      canvas.saveLayer(canvas.getLocalClipBounds(), blendPaint);
+      for (var line in lines[i].windowed) {
+        canvas.drawLine(line.one, line.two, intransparentPaint);
       }
+      canvas.restore();
     }
-    paint
-      ..color = line.paintColor
-      ..strokeWidth = line.size;
+
     if (line.path.isEmpty) {
     } else if (line.path.length == 1) {
-      canvas.drawPoints(PointMode.points, line.path, paint);
+      canvas.drawPoints(PointMode.points, line.path, Paint());
     } else {
-      for (var i = 0; i < line.path.length - 1; ++i) {
-        canvas.drawLine(line.path[i], line.path[i + 1], paint);
+      canvas.saveLayer(
+          canvas.getLocalClipBounds(), Paint()..color = line.paintColor);
+      for (var pair in line.windowed) {
+        canvas.drawLine(pair.one, pair.two, intransparentPaint);
       }
+      canvas.restore();
     }
   }
 

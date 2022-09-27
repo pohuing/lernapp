@@ -28,6 +28,17 @@ class Line {
   /// Adaptive color based on system theme for good contrast
   Color get paintColor => SystemTheme.isDarkMode ? colors.one : colors.two;
 
+  Iterable<Pair<Offset>> get windowed sync* {
+    if (path.length == 1) {
+      yield Pair(path[0], path[0]);
+      return;
+    }
+    for (int i = 0; i < path.length - 1; i++) {
+      yield Pair(path[i], path[i + 1]);
+    }
+    return;
+  }
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -36,6 +47,10 @@ class Line {
           path.equals(other.path) &&
           colors == other.colors;
 
+  /// Adds a point to this line
+  ///
+  /// This removes the last point if it lies on a point between the second to
+  /// last and the new point
   void add(Offset point) {
     if (path.length >= 2 &&
         isPointOnLine(
