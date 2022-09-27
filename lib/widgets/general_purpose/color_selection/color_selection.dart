@@ -80,15 +80,30 @@ class _ColorSelectionRowState extends State<ColorSelectionRow> {
 
   @override
   Widget build(BuildContext context) {
-    return ToggleButtons(
-      isSelected: controller.selectionList,
-      onPressed: (i) => setState(() => controller.selectedIndex = i),
+    return ButtonBar(
       children: [
-        ...controller.colors.map(
-          (e) => Container(
-            height: widget.height ?? 24,
-            margin: const EdgeInsets.all(8),
-            child: HalvedCircle(a: e.one, b: e.two),
+        ...controller.colors.mapIndexed(
+          (i, color) => Container(
+            decoration: i == controller.selectedIndex
+                ? BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
+                      colors: [color.one, color.two],
+                      begin: const FractionalOffset(-1, -1),
+                      end: const FractionalOffset(1, 1),
+                    ),
+                  )
+                : null,
+            child: GestureDetector(
+              onTap: () {
+                setState(() => controller.selectedIndex = i);
+              },
+              child: Container(
+                height: widget.height ?? 24,
+                margin: const EdgeInsets.all(8),
+                child: HalvedCircle(a: color.one, b: color.two),
+              ),
+            ),
           ),
         ),
       ],
