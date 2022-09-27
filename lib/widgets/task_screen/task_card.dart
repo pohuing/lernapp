@@ -7,7 +7,7 @@ class TaskCard extends StatelessWidget {
   final String title;
   final String description;
   final Function()? secondaryAction;
-
+  final bool showBackButton;
   final bool? isExpanded;
 
   final _scrollController = ScrollController();
@@ -18,7 +18,9 @@ class TaskCard extends StatelessWidget {
     required this.description,
     this.secondaryAction,
     this.isExpanded,
-  }) : super(key: key);
+    bool? showBackButton,
+  })  : showBackButton = showBackButton ?? true,
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,15 +34,16 @@ class TaskCard extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  Expanded(
-                    child: BackButton(
-                      onPressed: () {
-                        context.canPop()
-                            ? context.pop()
-                            : context.goNamed('listing');
-                      },
+                  if (showBackButton)
+                    Expanded(
+                      child: BackButton(
+                        onPressed: () {
+                          context.canPop()
+                              ? context.pop()
+                              : context.goNamed('listing');
+                        },
+                      ),
                     ),
-                  ),
                   if (secondaryAction != null)
                     Expanded(
                       child: ExpandIcon(

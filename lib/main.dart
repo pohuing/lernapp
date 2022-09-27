@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lernapp/blocs/selection_cubit.dart';
 import 'package:lernapp/logic/router.dart';
 import 'package:lernapp/repositories/task_repository.dart';
 import 'package:system_theme/system_theme.dart';
@@ -45,14 +47,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Lernapp',
-      themeMode: ThemeMode.system,
-      theme: brightTheme,
-      darkTheme: darkTheme,
-      routeInformationParser: LernappRouter.router.routeInformationParser,
-      routeInformationProvider: LernappRouter.router.routeInformationProvider,
-      routerDelegate: LernappRouter.router.routerDelegate,
+    return BlocProvider(
+      create: (BuildContext context) {
+        return SelectionCubit();
+      },
+      child: MaterialApp.router(
+        title: 'Lernapp',
+        themeMode: ThemeMode.system,
+        theme: brightTheme,
+        darkTheme: darkTheme,
+        routeInformationParser: LernappRouter.router.routeInformationParser,
+        routeInformationProvider: LernappRouter.router.routeInformationProvider,
+        routerDelegate: LernappRouter.router.routerDelegate,
+      ),
     );
   }
 }

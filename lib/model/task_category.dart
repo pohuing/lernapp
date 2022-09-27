@@ -30,4 +30,13 @@ class TaskCategory {
     }
     return null;
   }
+
+  /// Recursively gather Uuids of all children
+  Set<UuidValue> gatherUuids() {
+    Set<UuidValue> uuids = {};
+    tasks?.forEach((element) => uuids.add(element.uuid));
+    subCategories?.forEach((element) => uuids.addAll(element.gatherUuids()));
+
+    return uuids;
+  }
 }

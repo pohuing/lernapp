@@ -32,7 +32,8 @@ class _DrawingAreaState extends State<DrawingArea> {
   late final DrawingAreaController controller;
   late Line line;
   late final List<Line> lines;
-  Offset? lastPosition;
+  Offset? _eraserPosition;
+  int? activePointerId;
 
   Paint get defaultPaint {
     final paint = Paint();
@@ -42,15 +43,15 @@ class _DrawingAreaState extends State<DrawingArea> {
     return paint;
   }
 
-  Offset? get processedLastPosition => widget.showEraser ? lastPosition : null;
+  Offset? get eraserAt => widget.showEraser ? _eraserPosition : null;
 
   @override
   Widget build(BuildContext context) {
     return RepaintBoundary(
-      child: GestureDetector(
-        onPanStart: onPanStart,
-        onPanUpdate: onPanUpdate,
-        onPanEnd: onPanEnd,
+      child: Listener(
+        onPointerDown: onPointerDown,
+        onPointerMove: onPointerMove,
+        onPointerUp: onPointerUp,
         child: CustomPaint(
           size: MediaQuery.of(context).size,
           painter: DrawingAreaPainter(
@@ -58,7 +59,7 @@ class _DrawingAreaState extends State<DrawingArea> {
             lines: lines,
             xOffset: controller.xOffset,
             yOffset: controller.yOffset,
-            eraserPosition: processedLastPosition,
+            eraserAt: eraserAt,
             eraserSize: controller.eraserSize,
           ),
         ),
@@ -92,7 +93,7 @@ class _DrawingAreaState extends State<DrawingArea> {
     super.initState();
   }
 
-  void onPanEnd(DragEndDetails details) {
+  void onPanEnd(Offset localPosition) {
     if (kDebugMode) {
       log('pan ended', name: 'DrawingArea.onPanEnd()');
     }
@@ -100,13 +101,17 @@ class _DrawingAreaState extends State<DrawingArea> {
       case TapMode.draw:
         setState(() {
           lines.add(line);
-          line = Line([], controller.currentColor.copy(), controller.penSize);
+          line = Line(
+            [],
+            controller.currentColor.copy(),
+            controller.penSize,
+          );
         });
         widget.onEdited?.call(List.from(lines));
         break;
       case TapMode.erase:
         setState(() {
-          lastPosition = null;
+          _eraserPosition = null;
         });
         break;
       default:
@@ -114,17 +119,21 @@ class _DrawingAreaState extends State<DrawingArea> {
     }
   }
 
-  void onPanStart(DragStartDetails details) {
+  void onPanStart(Offset localPosition) {
     switch (controller.tapMode) {
       case TapMode.draw:
         setState(() {
-          line = Line([], controller.currentColor, controller.penSize);
-          drawAt(details.localPosition);
+          line = Line(
+            [],
+            controller.currentColor,
+            controller.penSize,
+          );
+          drawAt(localPosition);
         });
         break;
       case TapMode.erase:
         setState(() {
-          eraseAt(details.localPosition);
+          eraseAt(localPosition);
         });
         break;
       default:
@@ -132,25 +141,45 @@ class _DrawingAreaState extends State<DrawingArea> {
     }
   }
 
-  void onPanUpdate(DragUpdateDetails details) {
+  void onPanUpdate(Offset localPosition, Offset delta) {
     switch (controller.tapMode) {
       case TapMode.pan:
         setState(() {
-          controller.xOffset += details.delta.dx;
-          controller.yOffset += details.delta.dy;
+          controller.xOffset += delta.dx;
+          controller.yOffset += delta.dy;
         });
         break;
       case TapMode.draw:
         setState(() {
-          drawAt(details.localPosition);
+          drawAt(localPosition);
         });
         break;
       case TapMode.erase:
         setState(() {
-          lastPosition = details.localPosition;
-          eraseAt(details.localPosition);
+          _eraserPosition = localPosition;
+          eraseAt(localPosition);
         });
         break;
+    }
+  }
+
+  void onPointerDown(PointerDownEvent event) {
+    if (activePointerId == null) {
+      activePointerId = event.pointer;
+      onPanStart(event.localPosition);
+    }
+  }
+
+  void onPointerMove(PointerMoveEvent event) {
+    if (event.pointer == activePointerId) {
+      onPanUpdate(event.localPosition, event.delta);
+    }
+  }
+
+  void onPointerUp(PointerUpEvent event) {
+    if (event.pointer == activePointerId) {
+      activePointerId = null;
+      onPanEnd(event.localPosition);
     }
   }
 }

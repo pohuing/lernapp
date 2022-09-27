@@ -11,7 +11,7 @@ class DrawingAreaPainter extends CustomPainter {
   final List<Line> lines;
   double xOffset = 0;
   double yOffset = 0;
-  Offset? eraserPosition;
+  Offset? eraserAt;
   double eraserSize;
 
   bool? lastPaintTheme;
@@ -22,7 +22,7 @@ class DrawingAreaPainter extends CustomPainter {
     this.lines = const [],
     this.xOffset = 0,
     this.yOffset = 0,
-    this.eraserPosition,
+    this.eraserAt,
     double? eraserSize,
   }) : eraserSize = eraserSize ?? 2;
 
@@ -33,9 +33,9 @@ class DrawingAreaPainter extends CustomPainter {
     final eraserPaint = Paint()
       ..color = isDarkMode ? Colors.white : Colors.black;
 
-    if (eraserPosition != null) {
+    if (eraserAt != null) {
       canvas.drawCircle(
-        eraserPosition!,
+        eraserAt!,
         eraserSize,
         eraserPaint,
       );
@@ -72,7 +72,7 @@ class DrawingAreaPainter extends CustomPainter {
   bool shouldRepaint(covariant DrawingAreaPainter oldDelegate) {
     lastPaintHashCode = _generateHashCode();
     var result = oldDelegate.lastPaintHashCode != lastPaintHashCode ||
-        oldDelegate.eraserPosition != eraserPosition ||
+        oldDelegate.eraserAt != eraserAt ||
         oldDelegate.lastPaintTheme != lastPaintTheme;
     if (kDebugMode) {
       log(result.toString(), name: 'DrawingAreaPainter.shouldRepaint()');

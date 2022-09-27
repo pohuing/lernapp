@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lernapp/blocs/selection_cubit.dart';
 import 'package:lernapp/widgets/listing_screen/task_tile.dart';
 
 import '../../model/task_category.dart';
@@ -33,25 +35,31 @@ class _CategoryTileState extends State<CategoryTile> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: BorderDirectional(
-          start: BorderSide(color: Theme.of(context).dividerColor, width: 1),
+    return IgnorePointer(
+      ignoring: category.numberOfChildren == 0,
+      child: Container(
+        decoration: BoxDecoration(
+          border: BorderDirectional(
+            start: BorderSide(color: Theme.of(context).dividerColor, width: 1),
+          ),
         ),
-      ),
-      child: ExpansionTile(
-        title: Text(widget.category.title),
-        childrenPadding: childPadding,
-        maintainState: true,
-        trailing: trailingElement,
-        children: [
-          ...?category.subCategories
-              ?.map((e) => CategoryTile(category: e))
-              .toList(),
-          ...?category.tasks?.map(
-            (e) => TaskTile(task: e),
-          )
-        ],
+        child: BlocBuilder<SelectionCubit, SelectionState>(
+          builder: (context, state) => ExpansionTile(
+            title: Text(widget.category.title),
+            childrenPadding: childPadding,
+            maintainState: true,
+            leading: leading(state),
+            trailing: trailingElement,
+            children: [
+              ...?category.subCategories
+                  ?.map((e) => CategoryTile(category: e))
+                  .toList(),
+              ...?category.tasks?.map(
+                (e) => TaskTile(task: e),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -60,5 +68,16 @@ class _CategoryTileState extends State<CategoryTile> {
   void initState() {
     category = widget.category;
     super.initState();
+  }
+
+  Widget? leading(SelectionState state) {
+    if (!state.isSelecting || category.numberOfChildren == 0) {
+      return null;
+    }
+    return Checkbox(
+      value: state.entireCategoryIsSelected(category),
+      onChanged: (value) =>
+          context.read<SelectionCubit>().toggleCategory(category),
+    );
   }
 }
