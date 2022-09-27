@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:lernapp/model/pair.dart';
 import 'package:system_theme/system_theme.dart';
@@ -38,7 +39,6 @@ class ColorSelectionController {
         _selectedIndex = 0 {
     colors = [
       ColorPair(Colors.white, Colors.black),
-      ColorPair(Colors.red, Colors.green)
     ];
     selectedIndex = 0;
   }
@@ -65,6 +65,17 @@ class ColorSelectionController {
 
   List<bool> get selectionList =>
       List.generate(colors.length, (index) => index == selectedIndex);
+
+  /// Adds a new colour pair
+  ///
+  /// Does nothing if [pair] is already in [colors]
+  void addColorPair(ColorPair pair) {
+    if (colors.none(
+      (p0) => p0 == pair,
+    )) {
+      colors.add(pair.copy());
+    }
+  }
 }
 
 class ColorSelectionRow extends StatefulWidget {

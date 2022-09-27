@@ -159,9 +159,11 @@ class _TaskAreaState extends State<TaskArea> {
   @override
   void initState() {
     task = taskRepository.findByUuid(widget.uuid);
-    colorController.colorChanged = (newColor) => setState(() {
-          controller.currentColor = newColor;
-        });
+    for (var line in task!.drawnLines) {
+      colorController.addColorPair(line.colors);
+    }
+    colorController.colorChanged =
+        (newColor) => setState(() => controller.currentColor = newColor);
     super.initState();
   }
 }
