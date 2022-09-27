@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lernapp/main.dart';
 import 'package:lernapp/widgets/drawing_area/drawing_area_controller.dart';
+import 'package:lernapp/widgets/general_purpose/color_selection/color_picker_dialogue.dart';
 import 'package:lernapp/widgets/general_purpose/color_selection/color_selection.dart';
 import 'package:lernapp/widgets/task_screen/solution_card.dart';
 import 'package:lernapp/widgets/task_screen/task_card.dart';
@@ -118,6 +119,18 @@ class _TaskAreaState extends State<TaskArea> {
                           ],
                         ),
                         ColorSelectionRow(controller: colorController),
+                        IconButton(
+                          onPressed: () async {
+                            await showDialog(
+                              context: context,
+                              builder: (context) => ColorPickerDialogue(
+                                colorController: colorController,
+                              ),
+                            );
+                            setState(() {});
+                          },
+                          icon: const Icon(Icons.add),
+                        ),
                         Slider(
                           min: 1,
                           max: 10,
