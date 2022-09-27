@@ -64,6 +64,7 @@ class DrawingAreaPainter extends CustomPainter {
     }
 
     intransparentPaint.color = line.paintColor.withAlpha(255);
+    intransparentPaint.strokeWidth = line.size;
     if (line.path.isEmpty) {
     } else if (line.path.length == 1) {
       canvas.drawPoints(PointMode.points, line.path, intransparentPaint);
