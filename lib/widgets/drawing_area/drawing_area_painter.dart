@@ -14,6 +14,7 @@ class DrawingAreaPainter extends CustomPainter {
   Offset? eraserAt;
   double eraserSize;
 
+  // used for redraw testing for when system theme has changed since last paint
   bool? lastPaintTheme;
   int? lastPaintHashCode;
 

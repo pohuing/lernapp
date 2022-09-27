@@ -13,28 +13,34 @@ class ColorPickerDialogue extends StatefulWidget {
 }
 
 class _ColorPickerDialogueState extends State<ColorPickerDialogue> {
-  Color color = Colors.white;
+  Color color = Colors.red;
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      scrollable: true,
       actions: [
         ElevatedButton(
           onPressed: () {
             widget.colorController.colors.add(ColorPair(color, color));
-            Navigator.of(context, rootNavigator: false).pop();
+            Navigator.of(context, rootNavigator: false).pop(true);
           },
           child: const Text('Confirm'),
         )
       ],
-      content: ColorPicker(
-        portraitOnly: true,
-        pickerColor: color,
-        onColorChanged: (Color value) {
-          setState(() {
-            color = value;
-          });
-        },
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ColorPicker(
+            portraitOnly: true,
+            pickerColor: color,
+            onColorChanged: (Color value) {
+              setState(() {
+                color = value;
+              });
+            },
+          )
+        ],
       ),
     );
   }

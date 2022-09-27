@@ -121,13 +121,18 @@ class _TaskAreaState extends State<TaskArea> {
                         ColorSelectionRow(controller: colorController),
                         IconButton(
                           onPressed: () async {
-                            await showDialog(
+                            final colourChanged = await showDialog(
                               context: context,
                               builder: (context) => ColorPickerDialogue(
                                 colorController: colorController,
                               ),
                             );
-                            setState(() {});
+                            if (colourChanged is bool && colourChanged) {
+                              setState(() {
+                                colorController.selectedIndex =
+                                    colorController.colors.length - 1;
+                              });
+                            }
                           },
                           icon: const Icon(Icons.add),
                         ),
