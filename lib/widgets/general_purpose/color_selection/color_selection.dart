@@ -3,23 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:lernapp/model/pair.dart';
 import 'package:system_theme/system_theme.dart';
 
+import '../halved_circle.dart';
+
 typedef ColorPair = Pair<Color>;
-
-class Circle extends StatelessWidget {
-  final Color color;
-
-  const Circle({Key? key, required this.color}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 1,
-      child: Container(
-        decoration: BoxDecoration(shape: BoxShape.circle, color: color),
-      ),
-    );
-  }
-}
 
 class ColorSelectionController {
   void Function(ColorPair newColor)? colorChanged;
@@ -98,11 +84,11 @@ class _ColorSelectionRowState extends State<ColorSelectionRow> {
       isSelected: controller.selectionList,
       onPressed: (i) => setState(() => controller.selectedIndex = i),
       children: [
-        ...controller.activePalette.map(
+        ...controller.colors.map(
           (e) => Container(
             height: widget.height ?? 24,
             margin: const EdgeInsets.all(8),
-            child: Circle(color: e),
+            child: HalvedCircle(a: e.one, b: e.two),
           ),
         ),
       ],
