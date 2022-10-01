@@ -85,6 +85,7 @@ class _ColorPickerDialogueState extends State<ColorPickerDialogue> {
                   ],
                 ),
               ),
+              if (dualColours) const SizedBox(height: 8, width: 8),
               if (dualColours)
                 SizedBox(
                   width: 300,

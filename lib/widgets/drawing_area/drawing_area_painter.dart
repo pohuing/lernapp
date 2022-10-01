@@ -49,10 +49,10 @@ class DrawingAreaPainter extends CustomPainter {
     for (int i = 0; i < lines.length; i++) {
       final blendPaint = Paint();
       blendPaint.color = lines[i].paintColor;
-      blendPaint.isAntiAlias = true;
+      blendPaint.isAntiAlias = false;
       intransparentPaint.strokeWidth = lines[i].size;
       intransparentPaint.color = lines[i].paintColor.withAlpha(255);
-      intransparentPaint.isAntiAlias = false;
+      intransparentPaint.isAntiAlias = true;
 
       // Drawing the layer with an intransparent paint and later restoring with
       // a transparent paint avoids overlaps between start and end of a line
@@ -72,7 +72,7 @@ class DrawingAreaPainter extends CustomPainter {
     } else {
       final blendPaint = Paint();
       blendPaint.color = line.paintColor;
-      blendPaint.isAntiAlias = true;
+      blendPaint.isAntiAlias = false;
       canvas.saveLayer(canvas.getLocalClipBounds(), blendPaint);
       for (var pair in line.windowed) {
         canvas.drawLine(pair.one, pair.two, intransparentPaint);

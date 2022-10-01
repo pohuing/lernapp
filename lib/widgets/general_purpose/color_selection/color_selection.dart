@@ -24,7 +24,7 @@ class ColorSelectionController {
     Iterable<ColorPair>? colors,
   })  : colors = [],
         _selectedIndex = 0 {
-    colors = [
+    this.colors = [
       const ColorPair(darkTheme: Colors.white, brightTheme: Colors.black),
       ...?colors,
     ];
