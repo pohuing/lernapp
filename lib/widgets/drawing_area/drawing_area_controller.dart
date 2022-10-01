@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../../model/pair.dart';
+import 'package:lernapp/model/color_pair.dart';
 
 class DrawingAreaController {
   TapMode tapMode = TapMode.draw;
@@ -10,7 +9,8 @@ class DrawingAreaController {
   double penSize = 1;
   double eraserSize = 5;
 
-  Pair<Color> currentColor = Pair(Colors.white, Colors.black);
+  ColorPair currentColor =
+      const ColorPair(brightTheme: Colors.black, darkTheme: Colors.white);
 }
 
 enum TapMode { draw, pan, erase }

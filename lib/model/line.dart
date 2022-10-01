@@ -4,12 +4,11 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lernapp/logic/offset_extensions.dart';
+import 'package:lernapp/model/color_pair.dart';
 import 'package:lernapp/model/pair.dart';
 import 'package:system_theme/system_theme.dart';
 
-typedef ColorPair = Pair<Color>;
-
-/// A line made up of a series of points and a paint
+/// A line made up of a series of points and a [ColorPair] and a thickness
 class Line {
   List<Offset> path;
   final ColorPair colors;
@@ -26,7 +25,8 @@ class Line {
       );
 
   /// Adaptive color based on system theme for good contrast
-  Color get paintColor => SystemTheme.isDarkMode ? colors.one : colors.two;
+  Color get paintColor =>
+      SystemTheme.isDarkMode ? colors.darkTheme : colors.brightTheme;
 
   Iterable<Pair<Offset>> get windowed sync* {
     if (path.length == 1) {

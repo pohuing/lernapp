@@ -4,24 +4,28 @@ import 'package:lernapp/widgets/general_purpose/triangle_clipper.dart';
 import 'circle.dart';
 
 class HalvedCircle extends StatelessWidget {
-  final Color a, b;
+  final Color topLeft, bottomRight;
 
-  const HalvedCircle({super.key, required this.a, required this.b});
+  const HalvedCircle({
+    super.key,
+    required this.topLeft,
+    required this.bottomRight,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         ClipPath(
-          clipper: TriangleClipper(TriangleClipDirection.topLeft),
+          clipper: const TriangleClipper(TriangleClipDirection.topLeft),
           child: Circle(
-            color: a,
+            color: topLeft,
           ),
         ),
         ClipPath(
-          clipper: TriangleClipper(TriangleClipDirection.bottomRight),
+          clipper: const TriangleClipper(TriangleClipDirection.bottomRight),
           child: Circle(
-            color: b,
+            color: bottomRight,
           ),
         )
       ],

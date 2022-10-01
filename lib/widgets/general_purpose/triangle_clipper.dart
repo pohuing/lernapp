@@ -5,7 +5,7 @@ enum TriangleClipDirection { bottomLeft, topRight, topLeft, bottomRight }
 class TriangleClipper extends CustomClipper<Path> {
   final TriangleClipDirection direction;
 
-  TriangleClipper(this.direction);
+  const TriangleClipper(this.direction);
 
   @override
   Path getClip(Size size) {

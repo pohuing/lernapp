@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:lernapp/model/color_pair.dart';
 import 'package:lernapp/widgets/general_purpose/color_selection/color_selection.dart';
 
 class ColorPickerDialogue extends StatefulWidget {
@@ -10,6 +11,21 @@ class ColorPickerDialogue extends StatefulWidget {
 
   @override
   State<ColorPickerDialogue> createState() => _ColorPickerDialogueState();
+}
+
+class _AdaptiveRowColumn extends StatelessWidget {
+  final List<Widget> children;
+
+  const _AdaptiveRowColumn({required this.children});
+
+  @override
+  Widget build(BuildContext context) {
+    if (MediaQuery.of(context).size.width > 750) {
+      return Row(children: children);
+    } else {
+      return Column(children: children);
+    }
+  }
 }
 
 class _ColorPickerDialogueState extends State<ColorPickerDialogue> {
@@ -26,8 +42,10 @@ class _ColorPickerDialogueState extends State<ColorPickerDialogue> {
         ElevatedButton(
           onPressed: () {
             widget.colorController.colors.add(
-              ColorPair(darkThemeColor,
-                  !dualColours ? darkThemeColor : brightThemeColor),
+              ColorPair(
+                darkTheme: darkThemeColor,
+                brightTheme: dualColours ? brightThemeColor : darkThemeColor,
+              ),
             );
             Navigator.of(context, rootNavigator: false).pop(true);
           },
@@ -94,20 +112,5 @@ class _ColorPickerDialogueState extends State<ColorPickerDialogue> {
         ],
       ),
     );
-  }
-}
-
-class _AdaptiveRowColumn extends StatelessWidget {
-  final List<Widget> children;
-
-  const _AdaptiveRowColumn({required this.children});
-
-  @override
-  Widget build(BuildContext context) {
-    if (MediaQuery.of(context).size.width > 750) {
-      return Row(children: children);
-    } else {
-      return Column(children: children);
-    }
   }
 }

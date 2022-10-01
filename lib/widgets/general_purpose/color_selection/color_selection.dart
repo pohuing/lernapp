@@ -1,11 +1,11 @@
+import 'dart:developer';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:lernapp/model/pair.dart';
+import 'package:lernapp/model/color_pair.dart';
 import 'package:system_theme/system_theme.dart';
 
 import '../halved_circle.dart';
-
-typedef ColorPair = Pair<Color>;
 
 class ColorSelectionController {
   void Function(ColorPair newColor)? colorChanged;
@@ -21,22 +21,25 @@ class ColorSelectionController {
   /// A selection of color pairs
   ColorSelectionController.standardColors({
     this.colorChanged,
+    Iterable<ColorPair>? colors,
   })  : colors = [],
         _selectedIndex = 0 {
     colors = [
-      ColorPair(Colors.white, Colors.black),
+      const ColorPair(darkTheme: Colors.white, brightTheme: Colors.black),
+      ...?colors,
     ];
     selectedIndex = 0;
   }
 
-  List<Color> get activePalette =>
-      colors.map((e) => SystemTheme.isDarkMode ? e.one : e.two).toList();
+  List<Color> get activePalette => colors
+      .map((e) => SystemTheme.isDarkMode ? e.darkTheme : e.brightTheme)
+      .toList();
 
   Color get selectedColor {
     if (SystemTheme.isDarkMode) {
-      return colors[selectedIndex].one;
+      return colors[selectedIndex].darkTheme;
     } else {
-      return colors[selectedIndex].two;
+      return colors[selectedIndex].brightTheme;
     }
   }
 
@@ -54,12 +57,28 @@ class ColorSelectionController {
 
   /// Adds a new colour pair
   ///
-  /// Does nothing if [pair] is already in [colors]
+  /// Does nothing if [pair] with equal colours is already in [colors]
   void addColorPair(ColorPair pair) {
     if (colors.none(
       (p0) => p0 == pair,
     )) {
       colors.add(pair.copy());
+    }
+  }
+
+  /// Removes a [ColorPair] at index [i]
+  ///
+  /// Returns the removed pair
+  /// Returns null if [i] is out of range for [colors]
+  ColorPair? removeColorPairAt(int i) {
+    if (i < colors.length && i >= 0) {
+      return colors.removeAt(i);
+    } else {
+      log(
+        'Tried to remove out of index colour: Index $i, length: ${colors.length}',
+        name: '$runtimeType.removeColorPairAt',
+      );
+      return null;
     }
   }
 }
@@ -88,9 +107,9 @@ class _ColorSelectionRowState extends State<ColorSelectionRow> {
                 ? BoxDecoration(
                     shape: BoxShape.circle,
                     gradient: LinearGradient(
-                      colors: [color.one, color.two],
-                      begin: const FractionalOffset(-1, -1),
-                      end: const FractionalOffset(1, 1),
+                      colors: [color.darkTheme, color.brightTheme],
+                      begin: const FractionalOffset(-0.9, -0.9),
+                      end: const FractionalOffset(0.9, 0.9),
                     ),
                   )
                 : null,
@@ -98,10 +117,15 @@ class _ColorSelectionRowState extends State<ColorSelectionRow> {
               onTap: () {
                 setState(() => controller.selectedIndex = i);
               },
+              onLongPress: () =>
+                  setState(() => controller.removeColorPairAt(i)),
               child: Container(
                 height: widget.height ?? 24,
                 margin: const EdgeInsets.all(8),
-                child: HalvedCircle(a: color.one, b: color.two),
+                child: HalvedCircle(
+                  topLeft: color.darkTheme,
+                  bottomRight: color.brightTheme,
+                ),
               ),
             ),
           ),
