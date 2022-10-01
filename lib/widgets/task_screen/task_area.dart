@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lernapp/main.dart';
 import 'package:lernapp/widgets/drawing_area/drawing_area_controller.dart';
+import 'package:lernapp/widgets/general_purpose/color_selection/color_picker_dialogue.dart';
+import 'package:lernapp/widgets/general_purpose/color_selection/color_selection.dart';
 import 'package:lernapp/widgets/task_screen/solution_card.dart';
 import 'package:lernapp/widgets/task_screen/task_card.dart';
 import 'package:uuid/uuid.dart';
@@ -25,6 +27,8 @@ class _TaskAreaState extends State<TaskArea> {
   DrawingAreaController controller = DrawingAreaController();
   late final Task? task;
   var expandedTopRow = false;
+  ColorSelectionController colorController =
+      ColorSelectionController.standardColors();
   Duration expandDuration = const Duration(milliseconds: 200);
 
   double getDrawingAreaHeight(double widgetHeight) {
@@ -114,6 +118,24 @@ class _TaskAreaState extends State<TaskArea> {
                             Icon(Icons.undo)
                           ],
                         ),
+                        ColorSelectionRow(controller: colorController),
+                        IconButton(
+                          onPressed: () async {
+                            final colourChanged = await showDialog(
+                              context: context,
+                              builder: (context) => ColorPickerDialogue(
+                                colorController: colorController,
+                              ),
+                            );
+                            if (colourChanged is bool && colourChanged) {
+                              setState(() {
+                                colorController.selectedIndex =
+                                    colorController.colors.length - 1;
+                              });
+                            }
+                          },
+                          icon: const Icon(Icons.add),
+                        ),
                         Slider(
                           min: 1,
                           max: 10,
@@ -142,6 +164,11 @@ class _TaskAreaState extends State<TaskArea> {
   @override
   void initState() {
     task = taskRepository.findByUuid(widget.uuid);
+    for (var line in task!.drawnLines) {
+      colorController.addColorPair(line.colors);
+    }
+    colorController.colorChanged =
+        (newColor) => setState(() => controller.currentColor = newColor);
     super.initState();
   }
 }

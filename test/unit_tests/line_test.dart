@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:lernapp/model/color_pair.dart';
 import 'package:lernapp/model/line.dart';
 
 void main() {
@@ -9,7 +11,8 @@ void main() {
         const Offset(1, 0),
         const Offset(2, 0),
       ],
-      null,
+      const ColorPair(brightTheme: Colors.black, darkTheme: Colors.white),
+      1,
     );
 
     line.prune();
@@ -54,7 +57,8 @@ void main() {
         const Offset(0, 2),
         const Offset(2, 0),
       ],
-      null,
+      const ColorPair(brightTheme: Colors.black, darkTheme: Colors.white),
+      1,
     );
 
     expect(

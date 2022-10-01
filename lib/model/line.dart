@@ -4,31 +4,40 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lernapp/logic/offset_extensions.dart';
+import 'package:lernapp/model/color_pair.dart';
+import 'package:lernapp/model/pair.dart';
 import 'package:system_theme/system_theme.dart';
 
-/// A line made up of a series of points and a paint
+/// A line made up of a series of points and a [ColorPair] and a thickness
 class Line {
   List<Offset> path;
-  final Paint _paint;
+  final ColorPair colors;
+  final double size;
 
   var _savedCounter = 0;
 
-  Line(this.path, Paint? paint) : _paint = paint ?? Paint();
+  Line(this.path, this.colors, this.size);
 
   @override
   int get hashCode => path.fold(
-        _paint.hashCode,
+        colors.hashCode,
         (previousValue, element) => previousValue ^ element.hashCode,
       );
 
-  Paint get paint {
-    return _paint
-      ..color = paintColor
-      ..isAntiAlias = true;
-  }
-
   /// Adaptive color based on system theme for good contrast
-  Color get paintColor => SystemTheme.isDarkMode ? Colors.white : Colors.black;
+  Color get paintColor =>
+      SystemTheme.isDarkMode ? colors.darkTheme : colors.brightTheme;
+
+  Iterable<Pair<Offset>> get windowed sync* {
+    if (path.length == 1) {
+      yield Pair(path[0], path[0]);
+      return;
+    }
+    for (int i = 0; i < path.length - 1; i++) {
+      yield Pair(path[i], path[i + 1]);
+    }
+    return;
+  }
 
   @override
   bool operator ==(Object other) =>
@@ -36,8 +45,12 @@ class Line {
       other is Line &&
           runtimeType == other.runtimeType &&
           path.equals(other.path) &&
-          _paint == other._paint;
+          colors == other.colors;
 
+  /// Adds a point to this line
+  ///
+  /// This removes the last point if it lies on a point between the second to
+  /// last and the new point
   void add(Offset point) {
     if (path.length >= 2 &&
         isPointOnLine(
@@ -81,7 +94,6 @@ class Line {
       return false;
     }
     final List<int> offsetsToRemove = [];
-    // Clean up with retain where
     for (var i = 0; i < path.length - 2; ++i) {
       final centerPoint = path[i + 1];
       final point1 = path[i];
