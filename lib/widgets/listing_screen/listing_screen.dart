@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lernapp/blocs/selection_cubit.dart';
-import 'package:lernapp/widgets/listing_screen/category_tile.dart';
-
-import '../../main.dart';
+import 'package:lernapp/widgets/high_perf_listing_screen/high_perf_listing_screen.dart';
 
 class ListingScreen extends StatelessWidget {
   const ListingScreen({Key? key}) : super(key: key);
@@ -63,13 +61,7 @@ class ListingScreen extends StatelessWidget {
                 ),
             ],
           ),
-          body: ListView.builder(
-            itemCount: taskRepository.categories.length,
-            primary: true,
-            itemBuilder: (context, index) => CategoryTile(
-              category: taskRepository.categories[index],
-            ),
-          ),
+          body: const HighPerfListingScreen(),
         ),
       );
 }
