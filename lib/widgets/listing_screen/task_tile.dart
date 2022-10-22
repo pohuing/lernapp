@@ -20,31 +20,41 @@ class TaskTile extends StatelessWidget {
           builder: (context, state) => Padding(
             padding:
                 EdgeInsets.only(left: depth != null ? (depth! + 1) * 16 : 0),
-            child: ListTile(
-              title: Text(
-                task.title,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: Theme.of(context).textTheme.bodyMedium,
+            child: Container(
+              decoration: BoxDecoration(
+                border: BorderDirectional(
+                  start: BorderSide(
+                    color: Theme.of(context).dividerColor,
+                    width: 1,
+                  ),
+                ),
               ),
-              leading: state.isSelecting
-                  ? Checkbox(
-                      value: state.selectedUuids.contains(task.uuid),
-                      onChanged: (value) => context
-                          .read<SelectionCubit>()
-                          .toggleSelection(task.uuid),
-                    )
-                  : null,
-              onTap: () {
-                if (state.isSelecting) {
-                  context.read<SelectionCubit>().toggleSelection(task.uuid);
-                } else {
-                  context.pushNamed(
-                    'Task',
-                    params: {'tid': task.uuid.toString()},
-                  );
-                }
-              },
+              child: ListTile(
+                title: Text(
+                  task.title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                leading: state.isSelecting
+                    ? Checkbox(
+                        value: state.selectedUuids.contains(task.uuid),
+                        onChanged: (value) => context
+                            .read<SelectionCubit>()
+                            .toggleSelection(task.uuid),
+                      )
+                    : null,
+                onTap: () {
+                  if (state.isSelecting) {
+                    context.read<SelectionCubit>().toggleSelection(task.uuid);
+                  } else {
+                    context.pushNamed(
+                      'Task',
+                      params: {'tid': task.uuid.toString()},
+                    );
+                  }
+                },
+              ),
             ),
           ),
         ),

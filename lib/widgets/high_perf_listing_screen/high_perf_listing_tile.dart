@@ -16,25 +16,57 @@ class HighPerfListingTile extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(left: entry.depth * 16),
       child: BlocBuilder<SelectionCubit, SelectionState>(
-        builder: (context, state) => ListTile(
-          onTap: () {
-            onTap?.call();
-          },
-          leading: leading(context, state),
-          trailing: IgnorePointer(
-            child: ExpandIcon(
-              onPressed: (_) => onTap?.call(),
-              isExpanded: entry.isExpanded,
-            ),
-          ),
-          title: Text(
-            entry.category.title,
-            style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                  color: entry.isExpanded
-                      ? Theme.of(context).colorScheme.primary
-                      : null,
+        builder: (context, state) => Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                border: BorderDirectional(
+                  start: BorderSide(
+                    color: Theme.of(context).dividerColor,
+                  ),
+                  bottom: entry.isExpanded
+                      ? BorderSide.none
+                      : BorderSide(color: Theme.of(context).dividerColor),
                 ),
-          ),
+              ),
+              child: ListTile(
+                onTap: () {
+                  onTap?.call();
+                },
+                leading: leading(context, state),
+                trailing: IgnorePointer(
+                  child: ExpandIcon(
+                    onPressed: (_) => onTap?.call(),
+                    isExpanded: entry.isExpanded,
+                  ),
+                ),
+                title: Text(
+                  entry.category.title,
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: entry.isExpanded
+                            ? Theme.of(context).colorScheme.primary
+                            : null,
+                      ),
+                ),
+              ),
+            ),
+            if (entry.isExpanded)
+              Positioned(
+                bottom: 0,
+                left: 0,
+                child: Container(
+                  width: 16,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        width: 1,
+                        color: Theme.of(context).dividerColor,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+          ],
         ),
       ),
     );
