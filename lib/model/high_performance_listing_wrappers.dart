@@ -13,6 +13,17 @@ class ListingEntryTask extends ListingEntryBase {
 
   @override
   int depth = 0;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ListingEntryTask &&
+          runtimeType == other.runtimeType &&
+          task == other.task &&
+          depth == other.depth;
+
+  @override
+  int get hashCode => task.hashCode ^ depth.hashCode;
 }
 
 class ListingEntryCategory extends ListingEntryBase {
@@ -49,4 +60,21 @@ class ListingEntryCategory extends ListingEntryBase {
       }
     }
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ListingEntryCategory &&
+          runtimeType == other.runtimeType &&
+          childCategories == other.childCategories &&
+          category == other.category &&
+          isExpanded == other.isExpanded &&
+          depth == other.depth;
+
+  @override
+  int get hashCode =>
+      childCategories.hashCode ^
+      category.hashCode ^
+      isExpanded.hashCode ^
+      depth.hashCode;
 }

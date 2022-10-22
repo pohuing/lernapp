@@ -23,7 +23,7 @@ class HighPerfListingTile extends StatelessWidget {
           leading: leading(context, state),
           trailing: IgnorePointer(
             child: ExpandIcon(
-              onPressed: (_) => null,
+              onPressed: (_) => onTap?.call(),
               isExpanded: entry.isExpanded,
             ),
           ),

@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:implicitly_animated_list/implicitly_animated_list.dart';
 import 'package:lernapp/main.dart';
 import 'package:lernapp/model/high_performance_listing_wrappers.dart';
 import 'package:lernapp/widgets/high_perf_listing_screen/high_perf_listing_tile.dart';
@@ -25,12 +26,9 @@ class _HighPerfListingScreenState extends State<HighPerfListingScreen> {
       flattened.addAll(c);
     }
 
-    return ListView.builder(
-      itemCount: flattened.length,
-      prototypeItem: DummyHighPerfListingTile(),
-      itemBuilder: (context, index) {
-        final entry = flattened[index];
-
+    return ImplicitlyAnimatedList(
+      itemData: flattened,
+      itemBuilder: (context, entry) {
         if (entry is ListingEntryCategory) {
           return HighPerfListingTile(
             key: Key(entry.category.uuid.toString()),
