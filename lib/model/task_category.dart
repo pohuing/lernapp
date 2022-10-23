@@ -2,6 +2,7 @@ import 'package:lernapp/model/task.dart';
 import 'package:uuid/uuid.dart';
 
 class TaskCategory {
+  UuidValue uuid = const Uuid().v4obj();
   List<TaskCategory>? subCategories;
   List<Task>? tasks;
   String title;

@@ -15,7 +15,7 @@ class LernappRouter {
     routes: [
       GoRoute(
         path: '/',
-        redirect: (state) => '/listing',
+        redirect: (context, state) async => '/listing',
       ),
       GoRoute(
         name: 'listing',
