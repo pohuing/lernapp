@@ -28,6 +28,7 @@ class _HighPerfListingScreenState extends State<HighPerfListingScreen> {
 
     return ImplicitlyAnimatedList(
       itemData: flattened,
+      primary: true,
       itemBuilder: (context, entry) {
         if (entry is ListingEntryCategory) {
           return HighPerfListingTile(

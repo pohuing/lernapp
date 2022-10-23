@@ -21,12 +21,10 @@ class HighPerfListingTile extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 border: BorderDirectional(
+                  top: BorderSide(color: Theme.of(context).dividerColor),
                   start: BorderSide(
                     color: Theme.of(context).dividerColor,
                   ),
-                  bottom: entry.isExpanded
-                      ? BorderSide.none
-                      : BorderSide(color: Theme.of(context).dividerColor),
                 ),
               ),
               child: ListTile(
