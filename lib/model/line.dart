@@ -77,6 +77,9 @@ class Line {
   /// [center]: is the center of the circle
   /// [radius]: is the center of the radius
   bool isInCircle(Offset center, double radius) {
+    if (path.length == 1) {
+      return (path.first - center).distance <= radius;
+    }
     for (int i = 0; i < path.length - 1; i++) {
       if (segmentInCircle(path[i], path[i + 1], center, radius)) {
         return true;

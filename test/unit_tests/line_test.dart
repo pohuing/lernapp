@@ -77,4 +77,31 @@ void main() {
       reason: 'Circle matches infinite line',
     );
   });
+
+  test(
+    'Test dot hit test',
+    () {
+      final line = Line(
+        [const Offset(0, 0)],
+        const ColorPair(brightTheme: Colors.black, darkTheme: Colors.white),
+        1,
+      );
+
+      expect(
+        line.isInCircle(const Offset(0, 0), 1),
+        true,
+        reason: 'Line with one segment is not in circle',
+      );
+      expect(
+        line.isInCircle(const Offset(1, 0), 1),
+        true,
+        reason: 'Line with one segment does not touch circle',
+      );
+      expect(
+        line.isInCircle(const Offset(1, 1), 1),
+        false,
+        reason: 'Line with one segment is in circle',
+      );
+    },
+  );
 }
