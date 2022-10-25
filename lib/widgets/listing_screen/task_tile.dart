@@ -34,7 +34,10 @@ class TaskTile extends StatelessWidget {
                   task.title,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.bodyMedium,
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                        color:
+                            Theme.of(context).colorScheme.onSecondaryContainer,
+                      ),
                 ),
                 leading: state.isSelecting
                     ? Checkbox(

@@ -7,7 +7,11 @@ import 'package:lernapp/widgets/high_perf_listing_screen/high_perf_listing_tile.
 import 'package:lernapp/widgets/listing_screen/task_tile.dart';
 
 class HighPerfListingScreen extends StatefulWidget {
-  const HighPerfListingScreen({Key? key}) : super(key: key);
+  final bool withNavBarStyle;
+
+  const HighPerfListingScreen({Key? key, bool? withNavBarStyle})
+      : withNavBarStyle = withNavBarStyle ?? false,
+        super(key: key);
 
   @override
   State<HighPerfListingScreen> createState() => _HighPerfListingScreenState();
@@ -34,6 +38,7 @@ class _HighPerfListingScreenState extends State<HighPerfListingScreen> {
           return HighPerfListingTile(
             key: Key(entry.category.uuid.toString()),
             entry: entry,
+            asNavigationBarItem: widget.withNavBarStyle,
             onTap: () {
               setState(() {
                 entry.isExpanded = !entry.isExpanded;

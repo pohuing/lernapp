@@ -7,9 +7,36 @@ import '../../blocs/selection_cubit.dart';
 class HighPerfListingTile extends StatelessWidget {
   final ListingEntryCategory entry;
   final Function()? onTap;
+  final bool asNavigationBarItem;
 
-  const HighPerfListingTile({Key? key, required this.entry, this.onTap})
-      : super(key: key);
+  const HighPerfListingTile({
+    Key? key,
+    required this.entry,
+    this.onTap,
+    bool? asNavigationBarItem,
+  })  : asNavigationBarItem = asNavigationBarItem ?? false,
+        super(key: key);
+
+  Widget decoration(BuildContext context, {required Widget child}) {
+    if (asNavigationBarItem) {
+      return Padding(
+        padding: const EdgeInsets.all(2),
+        child: child,
+      );
+    } else {
+      return Container(
+        decoration: BoxDecoration(
+          border: BorderDirectional(
+            top: BorderSide(color: Theme.of(context).dividerColor),
+            start: BorderSide(
+              color: Theme.of(context).dividerColor,
+            ),
+          ),
+        ),
+        child: child,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,19 +45,20 @@ class HighPerfListingTile extends StatelessWidget {
       child: BlocBuilder<SelectionCubit, SelectionState>(
         builder: (context, state) => Stack(
           children: [
-            Container(
-              decoration: BoxDecoration(
-                border: BorderDirectional(
-                  top: BorderSide(color: Theme.of(context).dividerColor),
-                  start: BorderSide(
-                    color: Theme.of(context).dividerColor,
-                  ),
-                ),
-              ),
+            decoration(
+              context,
               child: ListTile(
+                shape: asNavigationBarItem
+                    ? RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      )
+                    : null,
                 onTap: () {
                   onTap?.call();
                 },
+                tileColor: entry.isExpanded && asNavigationBarItem
+                    ? Theme.of(context).colorScheme.secondaryContainer
+                    : null,
                 leading: leading(context, state),
                 trailing: IgnorePointer(
                   child: ExpandIcon(
@@ -42,13 +70,13 @@ class HighPerfListingTile extends StatelessWidget {
                   entry.category.title,
                   style: Theme.of(context).textTheme.titleMedium!.copyWith(
                         color: entry.isExpanded
-                            ? Theme.of(context).colorScheme.primary
-                            : null,
+                            ? Theme.of(context).colorScheme.onSecondaryContainer
+                            : Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                 ),
               ),
             ),
-            if (entry.isExpanded)
+            if (entry.isExpanded && !asNavigationBarItem)
               Positioned(
                 bottom: 0,
                 left: 0,
