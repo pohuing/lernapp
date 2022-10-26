@@ -1,7 +1,6 @@
-import 'dart:developer';
-
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:lernapp/logic/logging.dart';
 import 'package:lernapp/model/color_pair.dart';
 import 'package:system_theme/system_theme.dart';
 

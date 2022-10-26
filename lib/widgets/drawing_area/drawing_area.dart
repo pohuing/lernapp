@@ -1,7 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:lernapp/logic/logging.dart';
 import 'package:lernapp/widgets/drawing_area/drawing_area_controller.dart';
 
 import '../../model/line.dart';

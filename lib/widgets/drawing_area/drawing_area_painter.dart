@@ -1,8 +1,8 @@
-import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:lernapp/logic/logging.dart';
 import 'package:lernapp/model/line.dart';
 import 'package:system_theme/system_theme.dart';
 

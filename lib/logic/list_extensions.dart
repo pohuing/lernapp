@@ -1,6 +1,6 @@
-import 'dart:developer';
 import 'dart:math' hide log;
 
+import 'package:lernapp/logic/logging.dart';
 import 'package:lernapp/model/pair.dart';
 
 extension RandomEntry<E> on List<E> {

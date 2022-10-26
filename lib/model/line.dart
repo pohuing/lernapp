@@ -1,9 +1,8 @@
-import 'dart:developer';
-
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lernapp/logic/list_extensions.dart';
+import 'package:lernapp/logic/logging.dart';
 import 'package:lernapp/logic/offset_extensions.dart';
 import 'package:lernapp/model/color_pair.dart';
 import 'package:lernapp/model/pair.dart';

@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter_ameno_ipsum/flutter_ameno_ipsum.dart';
+import 'package:lernapp/logic/logging.dart';
 import 'package:uuid/uuid.dart';
 
 import 'line.dart';

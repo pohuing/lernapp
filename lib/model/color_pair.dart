@@ -1,5 +1,6 @@
-import 'dart:developer';
 import 'dart:ui';
+
+import 'package:lernapp/logic/logging.dart';
 
 /// A pair of colours used for drawing on a canvas with colors fitting to the
 /// current system theme
