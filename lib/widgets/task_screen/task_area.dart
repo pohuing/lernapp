@@ -71,7 +71,7 @@ class _TaskAreaState extends State<TaskArea> {
                         () => expandedTopRow = !expandedTopRow,
                       ),
                       isExpanded: expandedTopRow,
-                      description: task!.taskDescription,
+                      description: task!.description,
                       showBackButton: widget.showBackButton,
                     ),
                   ),
