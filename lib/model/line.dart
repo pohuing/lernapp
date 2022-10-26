@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:lernapp/logic/list_extensions.dart';
 import 'package:lernapp/logic/offset_extensions.dart';
 import 'package:lernapp/model/color_pair.dart';
 import 'package:lernapp/model/pair.dart';
@@ -10,11 +11,15 @@ import 'package:system_theme/system_theme.dart';
 
 /// A line made up of a series of points and a [ColorPair] and a thickness
 class Line {
-  List<Offset> path;
+  final List<Offset> path;
   final ColorPair colors;
   final double size;
 
   var _savedCounter = 0;
+
+  static const colorsKey = 'colors';
+  static const String sizeKey = 'size';
+  static const pathKey = 'path';
 
   Line(this.path, this.colors, this.size);
 
@@ -191,5 +196,34 @@ class Line {
           ? point1.dy <= currPoint.dy && currPoint.dy <= point2.dy
           : point2.dy <= currPoint.dy && currPoint.dy <= point1.dy;
     }
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      sizeKey: size,
+      colorsKey: colors.toMap(),
+      pathKey: path.map((e) => [e.dx, e.dy]).flattened.toList(),
+    };
+  }
+
+  static Line? fromMap(Map<String, dynamic> map) {
+    try {
+      final size = (map[sizeKey] as num).toDouble();
+      final colors = ColorPair.fromMap(map[colorsKey])!;
+      final offsets = List<double>.from(map[pathKey]);
+      assert(offsets.length % 2 == 0);
+      final path = offsets.pairwise().map((e) => Offset(e.one, e.two)).toList();
+      return Line(
+        path,
+        colors,
+        size,
+      );
+    } catch (e) {
+      log(
+        'Failed to create Line, error ${e.toString()}',
+        name: 'Line.fromMap()',
+      );
+    }
+    return null;
   }
 }
