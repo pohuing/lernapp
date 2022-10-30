@@ -61,7 +61,7 @@ class ListingScreen extends StatelessWidget {
                 ),
             ],
           ),
-          body: const HighPerfListingScreen(),
+          body: const HighPerfListingScreen(withNavBarStyle: true),
         ),
       );
 }

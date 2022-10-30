@@ -1,8 +1,6 @@
-import 'dart:ui';
-
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lernapp/model/color_pair.dart';
 import 'package:lernapp/model/line.dart';
+import 'package:lernapp/model/solution_state.dart';
 import 'package:lernapp/model/task.dart';
 import 'package:uuid/uuid.dart';
 
@@ -43,10 +41,10 @@ void main() {
           'mismatch, original: ${original.solution}, serialized: ${serialized[Task.solutionKey]}',
     );
     expect(
-      serialized[Task.linesKey],
-      original.drawnLines.map((e) => e.toMap()).toList(),
+      serialized[Task.solutionsKey],
+      original.solutions.map((e) => e.toMap()).toList(),
       reason:
-          'mismatch, original: ${original.drawnLines}, serialized: ${serialized[Task.linesKey]}',
+          'mismatch, original: ${original.solutions}, serialized: ${serialized[Task.solutionsKey]}',
     );
   });
 
@@ -56,23 +54,11 @@ void main() {
     const description = 'description';
     const hint = 'hint';
     const solution = 'solution';
-    final lines = [
-      Line(
-        [const Offset(0, 0)],
-        const ColorPair(
-          brightTheme: Color.fromARGB(1, 2, 3, 4),
-          darkTheme: Color.fromARGB(9, 8, 7, 6),
-        ),
-        1,
-      ),
-      Line(
-        [const Offset(0, 0)],
-        const ColorPair(
-          brightTheme: Color.fromARGB(1, 2, 3, 4),
-          darkTheme: Color.fromARGB(9, 8, 7, 6),
-        ),
-        1,
-      ),
+    final solutionStates = [
+      SolutionState([
+        Line.withDefaultProperties([const Offset(0, 0)]),
+        Line.withDefaultProperties([const Offset(0, 0)]),
+      ]),
     ];
 
     final original = {
@@ -81,7 +67,7 @@ void main() {
       Task.descriptionKey: description,
       Task.hintKey: hint,
       Task.solutionKey: solution,
-      Task.linesKey: lines.map((e) => e.toMap()).toList(),
+      Task.solutionsKey: solutionStates.map((e) => e.toMap()).toList(),
     };
 
     final deserialized = Task.fromMap(original)!;
@@ -116,10 +102,10 @@ void main() {
           'solution mismatch, original: $solution, deserialized: ${deserialized.solution}',
     );
     expect(
-      deserialized.drawnLines,
-      lines,
+      deserialized.solutions,
+      solutionStates,
       reason:
-          'lines mismatch, original: $lines, deserialized: ${deserialized.drawnLines}',
+          'lines mismatch, original: $solutionStates, deserialized: ${deserialized.solutions}',
     );
   });
 

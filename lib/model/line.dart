@@ -21,6 +21,11 @@ class Line {
   static const pathKey = 'path';
 
   Line(this.path, this.colors, this.size);
+  Line.withDefaultProperties(this.path)
+      : colors =
+            const ColorPair(brightTheme: Colors.black, darkTheme: Colors.white)
+                .copy(),
+        size = 1;
 
   @override
   int get hashCode => path.fold(
