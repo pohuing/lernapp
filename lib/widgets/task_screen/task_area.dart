@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:lernapp/main.dart';
 import 'package:lernapp/widgets/drawing_area/drawing_area_controller.dart';
@@ -7,6 +8,8 @@ import 'package:lernapp/widgets/task_screen/solution_card.dart';
 import 'package:lernapp/widgets/task_screen/task_card.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../model/line.dart';
+import '../../model/solution_state.dart';
 import '../../model/task.dart';
 import '../drawing_area/drawing_area.dart';
 import '../general_purpose/flippable.dart';
@@ -30,6 +33,7 @@ class _TaskAreaState extends State<TaskArea> {
   ColorSelectionController colorController =
       ColorSelectionController.standardColors();
   Duration expandDuration = const Duration(milliseconds: 200);
+  List<Line> lines = [];
 
   double getDrawingAreaHeight(double widgetHeight) {
     if (expandedTopRow) {
@@ -94,8 +98,8 @@ class _TaskAreaState extends State<TaskArea> {
                 ClipRect(
                   child: DrawingArea(
                     controller: controller,
-                    onEdited: (lines) => task!.drawnLines = lines,
-                    lines: task!.drawnLines,
+                    onEdited: (lines) => this.lines = lines,
+                    lines: lines,
                     showEraser: controller.tapMode == TapMode.erase,
                   ),
                 ),
@@ -158,14 +162,20 @@ class _TaskAreaState extends State<TaskArea> {
 
   @override
   void dispose() {
+    if (task?.solutions.lastOrNull?.lines.equals(lines) ?? false) {
+      task?.solutions.add(SolutionState(lines));
+    }
     super.dispose();
   }
 
   @override
   void initState() {
     task = taskRepository.findByUuid(widget.uuid);
-    for (var line in task!.drawnLines) {
-      colorController.addColorPair(line.colors);
+    if (task!.solutions.isNotEmpty) {
+      for (var line in task!.solutions.last.lines) {
+        colorController.addColorPair(line.colors);
+        lines.add(line);
+      }
     }
     colorController.colorChanged =
         (newColor) => setState(() => controller.currentColor = newColor);
