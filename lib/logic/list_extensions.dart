@@ -28,4 +28,8 @@ extension RandomEntry<E> on List<E> {
       yield Pair(this[i * 2], this[i * 2 + 1]);
     }
   }
+
+  List<E> copy() {
+    return map((e) => e).toList();
+  }
 }

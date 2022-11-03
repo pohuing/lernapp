@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:lernapp/logic/list_extensions.dart';
 import 'package:lernapp/main.dart';
 import 'package:lernapp/widgets/drawing_area/drawing_area_controller.dart';
 import 'package:lernapp/widgets/general_purpose/color_selection/color_picker_dialogue.dart';
@@ -34,6 +35,7 @@ class _TaskAreaState extends State<TaskArea> {
       ColorSelectionController.standardColors();
   Duration expandDuration = const Duration(milliseconds: 200);
   List<Line> lines = [];
+  bool showsHistory = false;
 
   double getDrawingAreaHeight(double widgetHeight) {
     if (expandedTopRow) {
@@ -51,6 +53,14 @@ class _TaskAreaState extends State<TaskArea> {
     } else {
       return widgetHeight / 6;
     }
+  }
+
+  double getMediaAreaWidth(double widgetWidth) {
+    return widgetWidth - getHistoryWidth();
+  }
+
+  double getHistoryWidth() {
+    return showsHistory ? 150 : 0;
   }
 
   @override
@@ -89,71 +99,122 @@ class _TaskAreaState extends State<TaskArea> {
               ],
             ),
           ),
-          AnimatedContainer(
-            duration: expandDuration,
-            height: getDrawingAreaHeight(constraints.maxHeight),
-            curve: expandAnimationCurve,
-            child: Stack(
-              children: [
-                ClipRect(
-                  child: DrawingArea(
-                    controller: controller,
-                    onEdited: (lines) => this.lines = lines,
-                    lines: lines,
-                    showEraser: controller.tapMode == TapMode.erase,
+          Row(
+            children: [
+              if (showsHistory)
+                SizedBox(
+                  width: getHistoryWidth(),
+                  height: getDrawingAreaHeight(constraints.maxHeight),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: task?.solutions.length ?? 0,
+                    primary: false,
+                    prototypeItem: const ListTile(
+                      title: Text('dummy'),
+                      subtitle: Text('dummysub'),
+                    ),
+                    itemBuilder: (context, index) {
+                      var solution = task!.solutions[index];
+                      var subtitle =
+                          '${solution.timestamp.hour}:${solution.timestamp.minute} ${solution.timestamp.day}.${solution.timestamp.month}.${solution.timestamp.year}';
+                      return ListTile(
+                        title: StreamBuilder(
+                          stream: Stream.periodic(const Duration(minutes: 1)),
+                          builder: (context, snapshot) => Text(
+                            getHistoryTileTitle(solution),
+                          ),
+                        ),
+                        onTap: () {
+                          setState(() {
+                            lines = solution.lines.copy();
+                            updateColorController();
+                          });
+                        },
+                        subtitle: Text(subtitle),
+                      );
+                    },
                   ),
                 ),
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  child: SizedBox(
-                    child: Row(
-                      children: [
-                        ToggleButtons(
-                          isSelected: controller.selectionList,
-                          onPressed: (index) {
-                            setState(() {
-                              controller.tapMode = TapMode.values[index];
-                            });
-                          },
-                          children: const [
-                            Icon(Icons.draw),
-                            Icon(Icons.pan_tool),
-                            Icon(Icons.undo)
+              AnimatedContainer(
+                duration: expandDuration,
+                height: getDrawingAreaHeight(constraints.maxHeight),
+                width: getMediaAreaWidth(constraints.maxWidth),
+                curve: expandAnimationCurve,
+                child: Stack(
+                  children: [
+                    ClipRect(
+                      child: DrawingArea(
+                        controller: controller,
+                        onEdited: (lines) => this.lines = lines,
+                        lines: lines,
+                        showEraser: controller.tapMode == TapMode.erase,
+                      ),
+                    ),
+                    Positioned(
+                      top: 0,
+                      left: 4,
+                      child: SizedBox(
+                        child: Row(
+                          children: [
+                            ToggleButtons(
+                              isSelected: controller.selectionList,
+                              onPressed: (index) {
+                                setState(() {
+                                  controller.tapMode = TapMode.values[index];
+                                });
+                              },
+                              children: const [
+                                Icon(Icons.draw),
+                                Icon(Icons.pan_tool),
+                                Icon(Icons.undo)
+                              ],
+                            ),
+                            ColorSelectionRow(controller: colorController),
+                            IconButton(
+                              onPressed: () async {
+                                final colourChanged = await showDialog(
+                                  context: context,
+                                  builder: (context) => ColorPickerDialogue(
+                                    colorController: colorController,
+                                  ),
+                                );
+                                if (colourChanged is bool && colourChanged) {
+                                  setState(() {
+                                    colorController.selectedIndex =
+                                        colorController.colors.length - 1;
+                                  });
+                                }
+                              },
+                              icon: const Icon(Icons.add),
+                            ),
+                            Slider(
+                              min: 1,
+                              max: 10,
+                              value: controller.penSize,
+                              onChanged: (value) => setState(() {
+                                controller.penSize = value;
+                              }),
+                            )
                           ],
                         ),
-                        ColorSelectionRow(controller: colorController),
-                        IconButton(
-                          onPressed: () async {
-                            final colourChanged = await showDialog(
-                              context: context,
-                              builder: (context) => ColorPickerDialogue(
-                                colorController: colorController,
-                              ),
-                            );
-                            if (colourChanged is bool && colourChanged) {
-                              setState(() {
-                                colorController.selectedIndex =
-                                    colorController.colors.length - 1;
-                              });
-                            }
-                          },
-                          icon: const Icon(Icons.add),
-                        ),
-                        Slider(
-                          min: 1,
-                          max: 10,
-                          value: controller.penSize,
-                          onChanged: (value) => setState(() {
-                            controller.penSize = value;
-                          }),
-                        )
-                      ],
+                      ),
                     ),
-                  ),
-                )
-              ],
-            ),
+                    Positioned(
+                      bottom: 0,
+                      left: 4,
+                      child: IconButton(
+                        icon: const Icon(Icons.menu),
+                        onPressed: () {
+                          setState(() {
+                            showsHistory = !showsHistory;
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -162,7 +223,7 @@ class _TaskAreaState extends State<TaskArea> {
 
   @override
   void dispose() {
-    if (task?.solutions.lastOrNull?.lines.equals(lines) ?? false) {
+    if (!(task?.solutions.lastOrNull?.lines.equals(lines) ?? false)) {
       task?.solutions.add(SolutionState(lines));
     }
     super.dispose();
@@ -173,13 +234,34 @@ class _TaskAreaState extends State<TaskArea> {
     task = taskRepository.findByUuid(widget.uuid);
     if (task!.solutions.isNotEmpty) {
       for (var line in task!.solutions.last.lines) {
-        colorController.addColorPair(line.colors);
         lines.add(line);
       }
     }
+    updateColorController();
     colorController.colorChanged =
         (newColor) => setState(() => controller.currentColor = newColor);
     super.initState();
+  }
+
+  void updateColorController() {
+    colorController.removeNonDefaultColors();
+    for (final line in lines) {
+      colorController.addColorPair(line.colors);
+    }
+  }
+
+  String getHistoryTileTitle(SolutionState solution) {
+    final now = DateTime.now();
+    final difference = now.difference(solution.timestamp);
+    if (difference < const Duration(hours: 1)) {
+      return '${difference.inMinutes} Minutes ago';
+    } else if (difference < const Duration(days: 1)) {
+      return '${difference.inHours} Hours ago';
+    } else if (difference < const Duration(days: 365)) {
+      return '${difference.inDays} Days ago';
+    } else {
+      return '${difference.inDays / 365} Years ago';
+    }
   }
 }
 
