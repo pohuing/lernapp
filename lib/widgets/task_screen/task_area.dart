@@ -36,6 +36,8 @@ class _TaskAreaState extends State<TaskArea> {
   Duration expandDuration = const Duration(milliseconds: 200);
   List<Line> lines = [];
   bool showsHistory = false;
+  final double historyWidth = 180;
+  int? selectedHistoryIndex;
 
   double getDrawingAreaHeight(double widgetHeight) {
     if (expandedTopRow) {
@@ -53,14 +55,6 @@ class _TaskAreaState extends State<TaskArea> {
     } else {
       return widgetHeight / 6;
     }
-  }
-
-  double getMediaAreaWidth(double widgetWidth) {
-    return widgetWidth - getHistoryWidth();
-  }
-
-  double getHistoryWidth() {
-    return showsHistory ? 150 : 0;
   }
 
   @override
@@ -99,122 +93,147 @@ class _TaskAreaState extends State<TaskArea> {
               ],
             ),
           ),
-          Row(
-            children: [
-              if (showsHistory)
-                SizedBox(
-                  width: getHistoryWidth(),
-                  height: getDrawingAreaHeight(constraints.maxHeight),
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: task?.solutions.length ?? 0,
-                    primary: false,
-                    prototypeItem: const ListTile(
-                      title: Text('dummy'),
-                      subtitle: Text('dummysub'),
-                    ),
-                    itemBuilder: (context, index) {
-                      var solution = task!.solutions[index];
-                      var subtitle =
-                          '${solution.timestamp.hour}:${solution.timestamp.minute} ${solution.timestamp.day}.${solution.timestamp.month}.${solution.timestamp.year}';
-                      return ListTile(
-                        title: StreamBuilder(
-                          stream: Stream.periodic(const Duration(minutes: 1)),
-                          builder: (context, snapshot) => Text(
-                            getHistoryTileTitle(solution),
-                          ),
+          AnimatedContainer(
+            duration: expandDuration,
+            height: getDrawingAreaHeight(constraints.maxHeight),
+            curve: expandAnimationCurve,
+            child: Stack(
+              children: [
+                ClipRect(
+                  child: DrawingArea(
+                    controller: controller,
+                    onEdited: (lines) => this.lines = lines,
+                    lines: lines,
+                    showEraser: controller.tapMode == TapMode.erase,
+                  ),
+                ),
+                AnimatedPositioned(
+                  duration: expandDuration,
+                  curve: expandAnimationCurve,
+                  top: 0,
+                  left: 4 + (showsHistory ? historyWidth : 0),
+                  child: SizedBox(
+                    child: Row(
+                      children: [
+                        ToggleButtons(
+                          borderRadius: BorderRadius.circular(12),
+                          isSelected: controller.selectionList,
+                          onPressed: (index) {
+                            setState(() {
+                              controller.tapMode = TapMode.values[index];
+                            });
+                          },
+                          children: const [
+                            Icon(Icons.draw),
+                            Icon(Icons.pan_tool),
+                            Icon(Icons.undo)
+                          ],
                         ),
-                        onTap: () {
-                          setState(() {
-                            lines = solution.lines.copy();
-                            updateColorController();
-                          });
+                        ColorSelectionRow(controller: colorController),
+                        IconButton(
+                          onPressed: () async {
+                            final colourChanged = await showDialog(
+                              context: context,
+                              builder: (context) => ColorPickerDialogue(
+                                colorController: colorController,
+                              ),
+                            );
+                            if (colourChanged is bool && colourChanged) {
+                              setState(() {
+                                colorController.selectedIndex =
+                                    colorController.colors.length - 1;
+                              });
+                            }
+                          },
+                          icon: const Icon(Icons.add),
+                        ),
+                        Slider(
+                          min: 1,
+                          max: 10,
+                          value: controller.penSize,
+                          onChanged: (value) => setState(() {
+                            controller.penSize = value;
+                          }),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+                AnimatedPositioned(
+                  duration: expandDuration,
+                  curve: expandAnimationCurve,
+                  top: 0,
+                  left: showsHistory ? 0 : -historyWidth,
+                  width: historyWidth,
+                  height: getDrawingAreaHeight(constraints.maxHeight),
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(left: 4, bottom: 8.0, top: 0),
+                    child: Material(
+                      color: Theme.of(context).colorScheme.secondaryContainer,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: task?.solutions.length ?? 0,
+                        primary: false,
+                        itemBuilder: (context, index) {
+                          var solution = task!.solutions[index];
+                          var subtitle =
+                              '${solution.timestamp.hour}:${solution.timestamp.minute} ${solution.timestamp.day}.${solution.timestamp.month}.${solution.timestamp.year}';
+                          return Container(
+                            margin: const EdgeInsets.all(4),
+                            child: ListTile(
+                              tileColor: index == selectedHistoryIndex
+                                  ? Theme.of(context).colorScheme.secondary
+                                  : null,
+                              textColor: index == selectedHistoryIndex
+                                  ? Theme.of(context).colorScheme.onSecondary
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .onSecondaryContainer,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              title: StreamBuilder(
+                                stream:
+                                    Stream.periodic(const Duration(minutes: 1)),
+                                builder: (context, snapshot) => Text(
+                                  getHistoryTileTitle(solution),
+                                ),
+                              ),
+                              subtitle: Text(subtitle),
+                              onTap: () {
+                                setState(() {
+                                  lines = solution.lines.copy();
+                                  selectedHistoryIndex = index;
+                                  updateColorController();
+                                });
+                              },
+                            ),
+                          );
                         },
-                        subtitle: Text(subtitle),
-                      );
+                      ),
+                    ),
+                  ),
+                ),
+                AnimatedPositioned(
+                  duration: expandDuration,
+                  curve: expandAnimationCurve,
+                  bottom: 4,
+                  left: 4 + (showsHistory ? historyWidth : 0),
+                  child: IconButton(
+                    icon: const Icon(Icons.menu),
+                    onPressed: () {
+                      setState(() {
+                        showsHistory = !showsHistory;
+                      });
                     },
                   ),
                 ),
-              AnimatedContainer(
-                duration: expandDuration,
-                height: getDrawingAreaHeight(constraints.maxHeight),
-                width: getMediaAreaWidth(constraints.maxWidth),
-                curve: expandAnimationCurve,
-                child: Stack(
-                  children: [
-                    ClipRect(
-                      child: DrawingArea(
-                        controller: controller,
-                        onEdited: (lines) => this.lines = lines,
-                        lines: lines,
-                        showEraser: controller.tapMode == TapMode.erase,
-                      ),
-                    ),
-                    Positioned(
-                      top: 0,
-                      left: 4,
-                      child: SizedBox(
-                        child: Row(
-                          children: [
-                            ToggleButtons(
-                              isSelected: controller.selectionList,
-                              onPressed: (index) {
-                                setState(() {
-                                  controller.tapMode = TapMode.values[index];
-                                });
-                              },
-                              children: const [
-                                Icon(Icons.draw),
-                                Icon(Icons.pan_tool),
-                                Icon(Icons.undo)
-                              ],
-                            ),
-                            ColorSelectionRow(controller: colorController),
-                            IconButton(
-                              onPressed: () async {
-                                final colourChanged = await showDialog(
-                                  context: context,
-                                  builder: (context) => ColorPickerDialogue(
-                                    colorController: colorController,
-                                  ),
-                                );
-                                if (colourChanged is bool && colourChanged) {
-                                  setState(() {
-                                    colorController.selectedIndex =
-                                        colorController.colors.length - 1;
-                                  });
-                                }
-                              },
-                              icon: const Icon(Icons.add),
-                            ),
-                            Slider(
-                              min: 1,
-                              max: 10,
-                              value: controller.penSize,
-                              onChanged: (value) => setState(() {
-                                controller.penSize = value;
-                              }),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      left: 4,
-                      child: IconButton(
-                        icon: const Icon(Icons.menu),
-                        onPressed: () {
-                          setState(() {
-                            showsHistory = !showsHistory;
-                          });
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
