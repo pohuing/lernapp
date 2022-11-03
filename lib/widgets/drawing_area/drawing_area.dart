@@ -30,7 +30,6 @@ class DrawingArea extends StatefulWidget {
 class _DrawingAreaState extends State<DrawingArea> {
   late final DrawingAreaController controller;
   late Line line;
-  late final List<Line> lines;
   Offset? _eraserPosition;
   int? activePointerId;
 
@@ -55,7 +54,7 @@ class _DrawingAreaState extends State<DrawingArea> {
           size: MediaQuery.of(context).size,
           painter: DrawingAreaPainter(
             line: line,
-            lines: lines,
+            lines: widget.lines!,
             xOffset: controller.xOffset,
             yOffset: controller.yOffset,
             eraserAt: eraserAt,
@@ -73,22 +72,21 @@ class _DrawingAreaState extends State<DrawingArea> {
   }
 
   void eraseAt(Offset localPosition) {
-    for (var i = 0; i < lines.length; ++i) {
-      lines.removeWhere(
+    for (var i = 0; i < widget.lines!.length; ++i) {
+      widget.lines!.removeWhere(
         (line) => line.isInCircle(
           localPosition.translate(-controller.xOffset, -controller.yOffset),
           controller.eraserSize,
         ),
       );
     }
-    widget.onEdited?.call(List.from(lines));
+    widget.onEdited?.call(List.from(widget.lines!));
   }
 
   @override
   void initState() {
     controller = widget.controller;
     line = Line([], controller.currentColor, controller.penSize);
-    lines = List.from(widget.lines ?? []);
     super.initState();
   }
 
@@ -99,14 +97,14 @@ class _DrawingAreaState extends State<DrawingArea> {
     switch (controller.tapMode) {
       case TapMode.draw:
         setState(() {
-          lines.add(line);
+          widget.lines!.add(line);
           line = Line(
             [],
             controller.currentColor.copy(),
             controller.penSize,
           );
         });
-        widget.onEdited?.call(List.from(lines));
+        widget.onEdited?.call(List.from(widget.lines!));
         break;
       case TapMode.erase:
         setState(() {
