@@ -1,3 +1,5 @@
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:lernapp/logic/logging.dart';
 import 'package:uuid/uuid.dart';
 
 import '../model/task.dart';
@@ -5,10 +7,35 @@ import '../model/task_category.dart';
 
 class TaskRepository {
   final List<TaskCategory> categories;
+  final Box<List<dynamic>>? box;
+  static const tasksKey = 'tasks';
 
-  TaskRepository() : categories = [];
+  TaskRepository({this.box}) : categories = _loadCategories(box);
 
-  TaskRepository.lorem() : categories = _generateCategories();
+  static List<TaskCategory> _loadCategories([Box<List<dynamic>>? box]) {
+    final start = DateTime.now();
+    final List<TaskCategory> categories = [];
+    log('initialising load', name:'TaskRepository._loadCategories');
+    if ((box?.isNotEmpty ?? false) && box!.containsKey(tasksKey)) {
+      final list = List<Map>.from(box.get(tasksKey) ?? [])
+          .map((e) => Map<String, dynamic>.from(e));
+      for (final categoryMap in list) {
+        final category = TaskCategory.fromMap(categoryMap);
+        if (category is TaskCategory) {
+          categories.add(category);
+        } else {
+          log(
+            'Category Map is not well formed: ${categoryMap.toString()}',
+            name: 'TaskRepository._loadCategories',
+          );
+        }
+      }
+    }else{
+      categories.addAll(_generateCategories());
+    }
+    log('Finished load, duration: ${DateTime.now().difference(start).inMilliseconds}ms');
+    return categories;
+  }
 
   Task? findByUuid(UuidValue uuid) {
     for (var c in categories) {
@@ -19,6 +46,14 @@ class TaskRepository {
     }
 
     return null;
+  }
+
+  void save() async {
+    final start = DateTime.now();
+    log('Starting save', name: 'TaskRepository.save');
+    await box?.delete(tasksKey);
+    await box?.put(tasksKey, categories.map((e) => e.toMap()).toList());
+    log('Finished save, duration: ${DateTime.now().difference(start).inMilliseconds}ms');
   }
 
   static List<TaskCategory> _generateCategories() {

@@ -40,14 +40,16 @@ class ColorPair {
     return 'ColorPair{brightTheme: $brightTheme, darkTheme: $darkTheme}';
   }
 
-  static ColorPair? fromMap(Map<String, dynamic> map) {
+  static ColorPair? fromMap(Map map) {
     try {
       final brightTheme = Color(map['brightTheme'] as int);
       final darkTheme = Color(map['darkTheme'] as int);
       return ColorPair(brightTheme: brightTheme, darkTheme: darkTheme);
     } catch (e) {
-      log('Failed to create ColorPair, ${e.toString()}',
-          name: 'ColorPair.fromMap()');
+      log(
+        'Failed to create ColorPair, ${e.toString()}',
+        name: 'ColorPair.fromMap()',
+      );
     }
     return null;
   }

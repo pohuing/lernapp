@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:lernapp/blocs/selection_cubit.dart';
 import 'package:lernapp/logic/router.dart';
 import 'package:lernapp/repositories/task_repository.dart';
@@ -14,11 +15,13 @@ void main() async {
           .contains(defaultTargetPlatform)) {
     await SystemTheme.accentColor.load();
   }
+  await Hive.initFlutter();
+  taskRepository = TaskRepository(box: await Hive.openBox('tcbox'));
 
   runApp(const MyApp());
 }
 
-final taskRepository = TaskRepository.lorem();
+late final taskRepository;
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

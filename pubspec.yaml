@@ -46,6 +46,8 @@ dependencies:
   flutter_colorpicker: ^1.0.3
   list_diff: ^2.0.1
   implicitly_animated_list: ^2.1.0
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
 
 dev_dependencies:
   flutter_test:

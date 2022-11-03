@@ -210,7 +210,7 @@ class Line {
     };
   }
 
-  static Line? fromMap(Map<String, dynamic> map) {
+  static Line? fromMap(Map map) {
     try {
       final size = (map[sizeKey] as num).toDouble();
       final colors = ColorPair.fromMap(map[colorsKey])!;

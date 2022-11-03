@@ -1,8 +1,9 @@
+import 'package:lernapp/logic/logging.dart';
 import 'package:lernapp/model/task.dart';
 import 'package:uuid/uuid.dart';
 
 class TaskCategory {
-  UuidValue uuid = const Uuid().v4obj();
+  UuidValue uuid;
   List<TaskCategory> subCategories;
   List<Task> tasks;
   String title;
@@ -16,7 +17,9 @@ class TaskCategory {
     required this.title,
     List<TaskCategory>? subCategories,
     List<Task>? tasks,
-  })  : subCategories = subCategories ?? [],
+    UuidValue? id,
+  })  : uuid = id ?? const Uuid().v4obj(),
+        subCategories = subCategories ?? [],
         tasks = tasks ?? [];
 
   int get numberOfChildren {
@@ -58,5 +61,26 @@ class TaskCategory {
       subCategoriesKey: subCategories.map((e) => e.toMap()).toList(),
       tasksKey: tasks.map((e) => e.toMap()).toList(),
     };
+  }
+
+  static TaskCategory? fromMap(Map map) {
+    try {
+      final uuid = UuidValue(map[uuidKey]);
+      final title = map[titleKey] as String;
+      final subCategories = List<Map>.from(map[subCategoriesKey])
+          .map((e) => TaskCategory.fromMap(e))
+          .whereType<TaskCategory>()
+          .toList();
+      final tasks = List<Map>.from(map[tasksKey])
+          .map((e) => Task.fromMap(e))
+          .whereType<Task>()
+          .toList();
+      return TaskCategory(
+          id: uuid, title: title, subCategories: subCategories, tasks: tasks);
+    } catch (e) {
+      log('Failed to deserialise TaskCategory: $e',
+          name: 'TaskCategory.fromMap');
+      return null;
+    }
   }
 }

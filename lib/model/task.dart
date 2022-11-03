@@ -74,14 +74,14 @@ class Task {
     };
   }
 
-  static Task? fromMap(Map<String, dynamic> map) {
+  static Task? fromMap(Map map) {
     try {
       final title = map[titleKey] as String;
       final uuid = UuidValue(map[uuidKey]);
       final description = map[descriptionKey] as String;
       final hint = map[hintKey] as String;
       final solution = map[solutionKey] as String;
-      final solutions = List<Map<String, dynamic>>.from(map[solutionsKey])
+      final solutions = List<Map>.from(map[solutionsKey])
           .map((e) => SolutionState.fromMap(e))
           .whereType<SolutionState>()
           .toList();

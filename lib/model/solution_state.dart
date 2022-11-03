@@ -18,11 +18,11 @@ class SolutionState {
       : id = id ?? _uuidGenerator.v4obj(),
         timestamp = timestamp ?? DateTime.now();
 
-  static SolutionState? fromMap(Map<String, dynamic> map) {
+  static SolutionState? fromMap(Map map) {
     try {
       final id = UuidValue(map[idKey]);
       final timestamp = DateTime.parse(map[timestampKey]);
-      final lines = List<Map<String, dynamic>>.from(map[linesKey])
+      final lines = List<Map>.from(map[linesKey])
           .map((e) => Line.fromMap(e))
           .whereType<Line>()
           .toList();

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lernapp/blocs/selection_cubit.dart';
+import 'package:lernapp/main.dart';
 import 'package:lernapp/widgets/high_perf_listing_screen/high_perf_listing_screen.dart';
 
 class ListingScreen extends StatelessWidget {
@@ -15,6 +16,10 @@ class ListingScreen extends StatelessWidget {
           appBar: AppBar(
             title: const Text('Tasks'),
             actions: [
+              IconButton(
+                onPressed: taskRepository.save,
+                icon: const Icon(Icons.save),
+              ),
               if (!state.isSelecting)
                 IconButton(
                   onPressed: () => context.push('/scratchpad'),

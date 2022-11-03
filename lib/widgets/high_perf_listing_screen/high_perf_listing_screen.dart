@@ -62,6 +62,7 @@ class _HighPerfListingScreenState extends State<HighPerfListingScreen> {
     super.initState();
     entries = taskRepository.categories
         .map((e) => ListingEntryCategory.fromCategory(e, 0))
+        .whereType<ListingEntryCategory>()
         .toList();
   }
 }
