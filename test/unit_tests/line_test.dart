@@ -150,8 +150,9 @@ void main() {
     var originalPath = <double>[1, 1, 2, 2, 2, 0];
     var originalSize = 1;
     const originalColors = ColorPair(
-        brightTheme: Color.fromARGB(1, 2, 3, 4),
-        darkTheme: Color.fromARGB(0, 9, 8, 7));
+      brightTheme: Color.fromARGB(1, 2, 3, 4),
+      darkTheme: Color.fromARGB(0, 9, 8, 7),
+    );
     final original = {
       Line.pathKey: originalPath,
       Line.colorsKey: originalColors.toMap(),

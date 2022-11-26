@@ -51,10 +51,10 @@ class _CategoryTileState extends State<CategoryTile> {
             leading: leading(state),
             trailing: trailingElement,
             children: [
-              ...?category.subCategories
-                  ?.map((e) => CategoryTile(category: e))
+              ...category.subCategories
+                  .map((e) => CategoryTile(category: e))
                   .toList(),
-              ...?category.tasks?.map(
+              ...category.tasks.map(
                 (e) => TaskTile(task: e),
               )
             ],

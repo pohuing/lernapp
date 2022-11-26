@@ -1,13 +1,14 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lernapp/blocs/tasks/events.dart';
+import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
 import 'package:lernapp/logic/list_extensions.dart';
-import 'package:lernapp/main.dart';
 import 'package:lernapp/widgets/drawing_area/drawing_area_controller.dart';
 import 'package:lernapp/widgets/general_purpose/color_selection/color_picker_dialogue.dart';
 import 'package:lernapp/widgets/general_purpose/color_selection/color_selection.dart';
 import 'package:lernapp/widgets/task_screen/solution_card.dart';
 import 'package:lernapp/widgets/task_screen/task_card.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../model/line.dart';
 import '../../model/solution_state.dart';
@@ -17,11 +18,10 @@ import '../general_purpose/flippable.dart';
 import 'hint_card.dart';
 
 class TaskArea extends StatefulWidget {
-  final UuidValue uuid;
-
   final bool? showBackButton;
+  final Task? task;
 
-  const TaskArea({super.key, required this.uuid, this.showBackButton});
+  const TaskArea({super.key, this.showBackButton, this.task});
 
   @override
   State<TaskArea> createState() => _TaskAreaState();
@@ -70,18 +70,14 @@ class _TaskAreaState extends State<TaskArea> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Expanded(
-                  child: Hero(
-                    tag: task!.uuid,
-                    transitionOnUserGestures: true,
-                    child: TaskCard(
-                      title: task!.title,
-                      secondaryAction: () => setState(
-                        () => expandedTopRow = !expandedTopRow,
-                      ),
-                      isExpanded: expandedTopRow,
-                      description: task!.description,
-                      showBackButton: widget.showBackButton,
+                  child: TaskCard(
+                    title: task!.title,
+                    secondaryAction: () => setState(
+                      () => expandedTopRow = !expandedTopRow,
                     ),
+                    isExpanded: expandedTopRow,
+                    description: task!.description,
+                    showBackButton: widget.showBackButton,
                   ),
                 ),
                 Expanded(
@@ -244,13 +240,14 @@ class _TaskAreaState extends State<TaskArea> {
   void dispose() {
     if (!(task?.solutions.lastOrNull?.lines.equals(lines) ?? false)) {
       task?.solutions.add(SolutionState(lines));
+      context.read<TasksBloc>().add(TaskStorageSaveTask(task!));
     }
     super.dispose();
   }
 
   @override
   void initState() {
-    task = taskRepository.findByUuid(widget.uuid);
+    task = widget.task;
     if (task!.solutions.isNotEmpty) {
       for (var line in task!.solutions.last.lines) {
         lines.add(line);

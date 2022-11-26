@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:lernapp/blocs/selection_cubit.dart';
+import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
 import 'package:lernapp/logic/router.dart';
 import 'package:lernapp/repositories/task_repository.dart';
+import 'package:provider/provider.dart';
 import 'package:system_theme/system_theme.dart';
 
 void main() async {
@@ -16,12 +18,18 @@ void main() async {
     await SystemTheme.accentColor.load();
   }
   await Hive.initFlutter();
-  taskRepository = TaskRepository(box: await Hive.openBox('tcbox'));
+  final repository = HiveTaskRepository(box: await Hive.openBox('tcbox'));
 
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        Provider<TaskRepositoryBase>.value(value: repository),
+        BlocProvider<TasksBloc>(create: (context) => TasksBloc(repository)),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
-
-late final taskRepository;
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

@@ -40,11 +40,10 @@ class ListingEntryCategory extends ListingEntryBase {
 
   ListingEntryCategory.fromCategory(this.category, this.depth)
       : childCategories = category.subCategories
-                ?.map(
-                  (e) => ListingEntryCategory.fromCategory(e, depth + 1),
-                )
-                .toList() ??
-            [],
+            .map(
+              (e) => ListingEntryCategory.fromCategory(e, depth + 1),
+            )
+            .toList(),
         isExpanded = false;
 
   Iterable<Iterable<ListingEntryBase>> getVisibleChildren() sync* {
@@ -55,9 +54,7 @@ class ListingEntryCategory extends ListingEntryBase {
           ...childCategories[i].getVisibleChildren().flattened,
         ];
       }
-      if (category.tasks != null) {
-        yield category.tasks!.map((e) => ListingEntryTask(e, depth));
-      }
+      yield category.tasks.map((e) => ListingEntryTask(e, depth));
     }
   }
 

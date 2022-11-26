@@ -76,10 +76,16 @@ class TaskCategory {
           .whereType<Task>()
           .toList();
       return TaskCategory(
-          id: uuid, title: title, subCategories: subCategories, tasks: tasks);
+        id: uuid,
+        title: title,
+        subCategories: subCategories,
+        tasks: tasks,
+      );
     } catch (e) {
-      log('Failed to deserialise TaskCategory: $e',
-          name: 'TaskCategory.fromMap');
+      log(
+        'Failed to deserialise TaskCategory: $e',
+        name: 'TaskCategory.fromMap',
+      );
       return null;
     }
   }

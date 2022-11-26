@@ -1,8 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lernapp/blocs/selection_cubit.dart';
-import 'package:lernapp/main.dart';
-import 'package:lernapp/model/task.dart';
 import 'package:lernapp/widgets/general_purpose/scratchpad.dart';
 import 'package:lernapp/widgets/listing_screen/listing_screen.dart';
 import 'package:lernapp/widgets/task_screen/session_screen.dart';
@@ -42,8 +40,6 @@ class LernappRouter {
               .read<SelectionCubit>()
               .state
               .selectedUuids
-              .map((e) => taskRepository.findByUuid(e))
-              .whereType<Task>()
               .toList(),
         ),
       ),

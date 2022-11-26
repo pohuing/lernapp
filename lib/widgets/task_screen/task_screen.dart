@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lernapp/repositories/task_repository.dart';
 import 'package:lernapp/widgets/task_screen/task_area.dart';
 import 'package:uuid/uuid.dart';
 
@@ -10,7 +12,26 @@ class TaskScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(child: TaskArea(uuid: uuid)),
+      body: SafeArea(
+        child: FutureBuilder(
+          future: context.read<TaskRepositoryBase>().findByUuid(uuid),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return TaskArea(
+                task: snapshot.data!,
+              );
+            } else if (snapshot.connectionState == ConnectionState.done) {
+              return const Center(
+                child: Text(
+                  'Something went wrong, could not find any data for that task id',
+                ),
+              );
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          },
+        ),
+      ),
     );
   }
 }

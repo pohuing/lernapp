@@ -1,12 +1,11 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:implicitly_animated_list/implicitly_animated_list.dart';
-import 'package:lernapp/main.dart';
-import 'package:lernapp/model/high_performance_listing_wrappers.dart';
-import 'package:lernapp/widgets/high_perf_listing_screen/high_perf_listing_tile.dart';
-import 'package:lernapp/widgets/listing_screen/task_tile.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lernapp/blocs/tasks/events.dart';
+import 'package:lernapp/blocs/tasks/states.dart';
+import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
+import 'package:lernapp/widgets/high_perf_listing_screen/high_perf_listing.dart';
 
-class HighPerfListingScreen extends StatefulWidget {
+class HighPerfListingScreen extends StatelessWidget {
   final bool withNavBarStyle;
 
   const HighPerfListingScreen({Key? key, bool? withNavBarStyle})
@@ -14,55 +13,29 @@ class HighPerfListingScreen extends StatefulWidget {
         super(key: key);
 
   @override
-  State<HighPerfListingScreen> createState() => _HighPerfListingScreenState();
-}
-
-class _HighPerfListingScreenState extends State<HighPerfListingScreen> {
-  late final List<ListingEntryCategory> entries;
-
-  @override
   Widget build(BuildContext context) {
-    final flattened = <ListingEntryBase>[];
-
-    for (int i = 0; i < entries.length; i++) {
-      flattened.add(entries[i]);
-      final c = entries[i].getVisibleChildren().flattened.toList();
-      flattened.addAll(c);
-    }
-
-    return ImplicitlyAnimatedList(
-      itemData: flattened,
-      primary: true,
-      itemBuilder: (context, entry) {
-        if (entry is ListingEntryCategory) {
-          return HighPerfListingTile(
-            key: Key(entry.category.uuid.toString()),
-            entry: entry,
-            asNavigationBarItem: widget.withNavBarStyle,
-            onTap: () {
-              setState(() {
-                entry.isExpanded = !entry.isExpanded;
-              });
-            },
+    return BlocBuilder<TasksBloc, TaskStorageStateBase>(
+      buildWhen: (previous, current) =>
+          current is TaskStorageLoaded ||
+          current is TaskStorageLoading ||
+          current is TaskStorageUninitialized,
+      builder: (context, state) {
+        if (state is TaskStorageUninitialized) {
+          context.read<TasksBloc>().add(TaskStorageLoad());
+          return const Center(child: Text('Storage is uninitialized'));
+        } else if (state is TaskStorageLoaded) {
+          return HighPerfListing(
+            categories: state.contents,
+            withNavBarStyle: withNavBarStyle,
           );
-        } else if (entry is ListingEntryTask) {
-          return TaskTile(
-            key: Key(entry.task.uuid.toString()),
-            task: entry.task,
-            depth: entry.depth,
+        } else if (state is TaskStorageLoading) {
+          return const Center(
+            child: CircularProgressIndicator(),
           );
+        } else {
+          return Text(state.toString());
         }
-        return DummyHighPerfListingTile();
       },
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    entries = taskRepository.categories
-        .map((e) => ListingEntryCategory.fromCategory(e, 0))
-        .whereType<ListingEntryCategory>()
-        .toList();
   }
 }

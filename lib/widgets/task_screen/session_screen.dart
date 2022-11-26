@@ -2,16 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lernapp/blocs/session_cubit.dart';
+import 'package:lernapp/repositories/task_repository.dart';
 import 'package:lernapp/widgets/task_screen/task_area.dart';
-
-import '../../model/task.dart';
+import 'package:uuid/uuid.dart';
 
 class SessionScreen extends StatefulWidget {
-  final List<Task> initTasks;
+  final List<UuidValue> tasks;
 
-  const SessionScreen({Key? key, required List<Task> tasks})
-      : initTasks = tasks,
-        super(key: key);
+  const SessionScreen({Key? key, required this.tasks}) : super(key: key);
 
   @override
   State<SessionScreen> createState() => _SessionScreenState();
@@ -49,10 +47,28 @@ class _SessionScreenState extends State<SessionScreen> {
       body: BlocBuilder<SessionCubit, SessionState>(
         bloc: cubit,
         builder: (context, state) {
-          return TaskArea(
-            key: Key(state.currentTask!.uuid.toString()),
-            showBackButton: false,
-            uuid: state.currentTask!.uuid,
+          return FutureBuilder(
+            key: Key(state.currentTask.toString()),
+            future: context
+                .read<TaskRepositoryBase>()
+                .findByUuid(state.currentTask!),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return TaskArea(
+                  key: Key(state.currentTask!.uuid.toString()),
+                  showBackButton: false,
+                  task: snapshot.data!,
+                );
+              } else if (snapshot.connectionState == ConnectionState.done) {
+                return const Center(
+                  child: Text(
+                    'Something went wrong, could not find any data for that task id',
+                  ),
+                );
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            },
           );
         },
       ),
@@ -61,7 +77,7 @@ class _SessionScreenState extends State<SessionScreen> {
 
   @override
   void initState() {
-    cubit = SessionCubit(widget.initTasks);
+    cubit = SessionCubit(widget.tasks);
     cubit.next();
     super.initState();
   }
