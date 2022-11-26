@@ -1,42 +1,50 @@
+import 'package:collection/collection.dart';
 import 'package:flutter_ameno_ipsum/flutter_ameno_ipsum.dart';
+import 'package:lernapp/logic/logging.dart';
+import 'package:lernapp/model/solution_state.dart';
 import 'package:uuid/uuid.dart';
 
-import 'line.dart';
-
 class Task {
+  static const uuidKey = 'uuid';
+  static const solutionKey = 'solution';
+  static const hintKey = 'hint';
+  static const descriptionKey = 'description';
+  static const titleKey = 'title';
+  static const solutionsKey = 'solutions';
+
   String title;
-  String taskDescription;
+  String description;
   String hint;
   String solution;
   UuidValue uuid;
-  List<Line> drawnLines;
+  List<SolutionState> solutions;
 
   Task(
     this.title,
-    this.taskDescription,
+    this.description,
     this.hint,
     this.solution, {
-    List<Line>? drawnLines,
     UuidValue? uuid,
-  })  : drawnLines = drawnLines ?? [],
+    List<SolutionState>? solutions,
+  })  : solutions = solutions ?? [],
         uuid = uuid ?? const Uuid().v4obj();
 
   Task.lorem()
       : title = ameno(paragraphs: 1, words: 4),
-        taskDescription = ameno(paragraphs: 2, words: 20),
+        description = ameno(paragraphs: 2, words: 20),
         hint = ameno(paragraphs: 1, words: 10),
         solution = ameno(paragraphs: 1, words: 20),
         uuid = const Uuid().v4obj(),
-        drawnLines = [];
+        solutions = [];
 
   @override
   int get hashCode =>
       title.hashCode ^
-      taskDescription.hashCode ^
+      description.hashCode ^
       hint.hashCode ^
       solution.hashCode ^
       uuid.hashCode ^
-      drawnLines.hashCode;
+      solutions.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -44,14 +52,54 @@ class Task {
       other is Task &&
           runtimeType == other.runtimeType &&
           title == other.title &&
-          taskDescription == other.taskDescription &&
+          description == other.description &&
           hint == other.hint &&
           solution == other.solution &&
           uuid == other.uuid &&
-          drawnLines == other.drawnLines;
+          solutions.equals(other.solutions);
 
   @override
   String toString() {
-    return 'Task{title: $title, taskDescription: $taskDescription, hint: $hint, solution: $solution, uuid: $uuid, drawnLines: $drawnLines}';
+    return 'Task{title: $title, description: $description, hint: $hint, solution: $solution, uuid: $uuid, solutions: $solutions}';
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      uuidKey: uuid.toString(),
+      titleKey: title,
+      descriptionKey: description,
+      hintKey: hint,
+      solutionKey: solution,
+      solutionsKey: solutions.map((e) => e.toMap()).toList(),
+    };
+  }
+
+  static Task? fromMap(Map map) {
+    try {
+      final title = map[titleKey] as String;
+      final uuid = UuidValue(map[uuidKey]);
+      final description = map[descriptionKey] as String;
+      final hint = map[hintKey] as String;
+      final solution = map[solutionKey] as String;
+      final solutions = List<Map>.from(map[solutionsKey])
+          .map((e) => SolutionState.fromMap(e))
+          .whereType<SolutionState>()
+          .toList();
+
+      return Task(
+        title,
+        description,
+        hint,
+        solution,
+        solutions: solutions,
+        uuid: uuid,
+      );
+    } catch (e) {
+      log(
+        'Failed to create Task, error: ${e.toString()}',
+        name: 'Task.fromMap',
+      );
+    }
+    return null;
   }
 }

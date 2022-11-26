@@ -4,12 +4,12 @@ import 'package:lernapp/model/high_performance_listing_wrappers.dart';
 
 import '../../blocs/selection_cubit.dart';
 
-class HighPerfListingTile extends StatelessWidget {
+class HighPerfCategoryTile extends StatelessWidget {
   final ListingEntryCategory entry;
   final Function()? onTap;
   final bool asNavigationBarItem;
 
-  const HighPerfListingTile({
+  const HighPerfCategoryTile({
     Key? key,
     required this.entry,
     this.onTap,
@@ -110,7 +110,7 @@ class HighPerfListingTile extends StatelessWidget {
   }
 }
 
-class DummyHighPerfListingTile extends HighPerfListingTile {
+class DummyHighPerfListingTile extends HighPerfCategoryTile {
   DummyHighPerfListingTile({Key? key})
       : super(key: key, entry: ListingEntryCategory());
 }

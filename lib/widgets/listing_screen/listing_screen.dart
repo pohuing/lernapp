@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lernapp/blocs/selection_cubit.dart';
+import 'package:lernapp/blocs/tasks/events.dart';
+import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
 import 'package:lernapp/widgets/high_perf_listing_screen/high_perf_listing_screen.dart';
 
 class ListingScreen extends StatelessWidget {
@@ -15,23 +17,6 @@ class ListingScreen extends StatelessWidget {
           appBar: AppBar(
             title: const Text('Tasks'),
             actions: [
-              if (!state.isSelecting)
-                IconButton(
-                  onPressed: () => context.push('/scratchpad'),
-                  icon: const Icon(Icons.draw_outlined),
-                ),
-              if (!state.isSelecting)
-                IconButton(
-                  onPressed: () => showAboutDialog(
-                    context: context,
-                    applicationIcon: const Image(
-                      isAntiAlias: false,
-                      width: 200,
-                      image: AssetImage('images/dorime.gif'),
-                    ),
-                  ),
-                  icon: const Icon(Icons.info_outline),
-                ),
               if (!state.isSelecting)
                 IconButton(
                   onPressed: () =>
@@ -53,15 +38,56 @@ class ListingScreen extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: state.selectedUuids.isEmpty
                         ? null
-                        : () => context.goNamed(
-                              'session',
-                            ),
+                        : () => context.goNamed('session'),
                     child: const Text('Start Session'),
                   ),
                 ),
+              if (!state.isSelecting)
+                PopupMenuButton(
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      onTap: () =>
+                          context.read<TasksBloc>().add(TaskStorageSave()),
+                      child: const ListTile(
+                        leading: Icon(Icons.save),
+                        title: Text('Save'),
+                      ),
+                    ),
+                    PopupMenuItem(
+                      onTap: () async {
+                        context.read<TasksBloc>().add(TaskStorageWipe());
+                      },
+                      child: const ListTile(
+                        leading: Icon(Icons.delete_forever),
+                        title: Text('Reset storage'),
+                      ),
+                    ),
+                    PopupMenuItem(
+                      onTap: () => context.push('/scratchpad'),
+                      child: const ListTile(
+                        leading: Icon(Icons.draw_outlined),
+                        title: Text('Scribble'),
+                      ),
+                    ),
+                    PopupMenuItem(
+                      child: const ListTile(
+                        leading: Icon(Icons.info_outline),
+                        title: Text('About'),
+                      ),
+                      onTap: () => showAboutDialog(
+                        context: context,
+                        applicationIcon: const Image(
+                          isAntiAlias: false,
+                          width: 200,
+                          image: AssetImage('images/dorime.gif'),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
             ],
           ),
-          body: const HighPerfListingScreen(),
+          body: const HighPerfListingScreen(withNavBarStyle: true),
         ),
       );
 }

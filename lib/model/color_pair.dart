@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:lernapp/logic/logging.dart';
+
 /// A pair of colours used for drawing on a canvas with colors fitting to the
 /// current system theme
 class ColorPair {
@@ -8,6 +10,9 @@ class ColorPair {
 
   /// Color to be use when using the dark theme
   final Color darkTheme;
+
+  static const brightThemeKey = 'brightTheme';
+  static const darkThemeKey = 'darkTheme';
 
   const ColorPair({required this.brightTheme, required this.darkTheme});
 
@@ -33,5 +38,26 @@ class ColorPair {
   @override
   String toString() {
     return 'ColorPair{brightTheme: $brightTheme, darkTheme: $darkTheme}';
+  }
+
+  static ColorPair? fromMap(Map map) {
+    try {
+      final brightTheme = Color(map['brightTheme'] as int);
+      final darkTheme = Color(map['darkTheme'] as int);
+      return ColorPair(brightTheme: brightTheme, darkTheme: darkTheme);
+    } catch (e) {
+      log(
+        'Failed to create ColorPair, ${e.toString()}',
+        name: 'ColorPair.fromMap()',
+      );
+    }
+    return null;
+  }
+
+  Map<String, int> toMap() {
+    return {
+      brightThemeKey: brightTheme.value,
+      darkThemeKey: darkTheme.value,
+    };
   }
 }

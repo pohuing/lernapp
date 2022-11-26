@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
+import 'package:uuid/uuid.dart';
 
-import '../model/task.dart';
 
 class SessionCubit extends Cubit<SessionState> {
-  SessionCubit(List<Task> tasks) : super(SessionState(tasks, null, -1));
+  SessionCubit(List<UuidValue> tasks) : super(SessionState(tasks, null, -1));
 
   void next() {
     var index = (state.index + 1) % state.tasks.length;
@@ -27,8 +27,8 @@ class SessionCubit extends Cubit<SessionState> {
 }
 
 class SessionState {
-  final List<Task> tasks;
-  final Task? currentTask;
+  final List<UuidValue> tasks;
+  final UuidValue? currentTask;
   final int index;
 
   SessionState(this.tasks, this.currentTask, this.index);

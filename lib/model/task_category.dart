@@ -1,28 +1,41 @@
+import 'package:lernapp/logic/logging.dart';
 import 'package:lernapp/model/task.dart';
 import 'package:uuid/uuid.dart';
 
 class TaskCategory {
-  UuidValue uuid = const Uuid().v4obj();
-  List<TaskCategory>? subCategories;
-  List<Task>? tasks;
+  UuidValue uuid;
+  List<TaskCategory> subCategories;
+  List<Task> tasks;
   String title;
 
-  TaskCategory({required this.title, this.subCategories, this.tasks});
+  static const String tasksKey = 'tasks';
+  static const String subCategoriesKey = 'subCategories';
+  static const String titleKey = 'title';
+  static const String uuidKey = 'uuid';
+
+  TaskCategory({
+    required this.title,
+    List<TaskCategory>? subCategories,
+    List<Task>? tasks,
+    UuidValue? id,
+  })  : uuid = id ?? const Uuid().v4obj(),
+        subCategories = subCategories ?? [],
+        tasks = tasks ?? [];
 
   int get numberOfChildren {
-    return (subCategories?.length ?? 0) + (tasks?.length ?? 0);
+    return subCategories.length + tasks.length;
   }
 
   /// Recursively search if task in tree
   Task? findTask(UuidValue uuid) {
     Task? task;
-    for (var t in tasks ?? <Task>[]) {
+    for (var t in tasks) {
       if (t.uuid == uuid) {
         return t;
       }
     }
     if (task == null) {
-      for (var c in subCategories ?? <TaskCategory>[]) {
+      for (var c in subCategories) {
         var t = c.findTask(uuid);
         if (t != null) {
           return t;
@@ -35,9 +48,45 @@ class TaskCategory {
   /// Recursively gather Uuids of all children
   Set<UuidValue> gatherUuids() {
     Set<UuidValue> uuids = {};
-    tasks?.forEach((element) => uuids.add(element.uuid));
-    subCategories?.forEach((element) => uuids.addAll(element.gatherUuids()));
+    tasks.forEach((element) => uuids.add(element.uuid));
+    subCategories.forEach((element) => uuids.addAll(element.gatherUuids()));
 
     return uuids;
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      uuidKey: uuid.uuid,
+      titleKey: title,
+      subCategoriesKey: subCategories.map((e) => e.toMap()).toList(),
+      tasksKey: tasks.map((e) => e.toMap()).toList(),
+    };
+  }
+
+  static TaskCategory? fromMap(Map map) {
+    try {
+      final uuid = UuidValue(map[uuidKey]);
+      final title = map[titleKey] as String;
+      final subCategories = List<Map>.from(map[subCategoriesKey])
+          .map((e) => TaskCategory.fromMap(e))
+          .whereType<TaskCategory>()
+          .toList();
+      final tasks = List<Map>.from(map[tasksKey])
+          .map((e) => Task.fromMap(e))
+          .whereType<Task>()
+          .toList();
+      return TaskCategory(
+        id: uuid,
+        title: title,
+        subCategories: subCategories,
+        tasks: tasks,
+      );
+    } catch (e) {
+      log(
+        'Failed to deserialise TaskCategory: $e',
+        name: 'TaskCategory.fromMap',
+      );
+      return null;
+    }
   }
 }

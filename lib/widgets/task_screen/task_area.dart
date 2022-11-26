@@ -1,23 +1,27 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:lernapp/main.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lernapp/blocs/tasks/events.dart';
+import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
+import 'package:lernapp/logic/list_extensions.dart';
 import 'package:lernapp/widgets/drawing_area/drawing_area_controller.dart';
 import 'package:lernapp/widgets/general_purpose/color_selection/color_picker_dialogue.dart';
 import 'package:lernapp/widgets/general_purpose/color_selection/color_selection.dart';
 import 'package:lernapp/widgets/task_screen/solution_card.dart';
 import 'package:lernapp/widgets/task_screen/task_card.dart';
-import 'package:uuid/uuid.dart';
 
+import '../../model/line.dart';
+import '../../model/solution_state.dart';
 import '../../model/task.dart';
 import '../drawing_area/drawing_area.dart';
 import '../general_purpose/flippable.dart';
 import 'hint_card.dart';
 
 class TaskArea extends StatefulWidget {
-  final UuidValue uuid;
-
   final bool? showBackButton;
+  final Task? task;
 
-  const TaskArea({super.key, required this.uuid, this.showBackButton});
+  const TaskArea({super.key, this.showBackButton, this.task});
 
   @override
   State<TaskArea> createState() => _TaskAreaState();
@@ -30,6 +34,10 @@ class _TaskAreaState extends State<TaskArea> {
   ColorSelectionController colorController =
       ColorSelectionController.standardColors();
   Duration expandDuration = const Duration(milliseconds: 200);
+  List<Line> lines = [];
+  bool showsHistory = false;
+  final double historyWidth = 180;
+  int? selectedHistoryIndex;
 
   double getDrawingAreaHeight(double widgetHeight) {
     if (expandedTopRow) {
@@ -62,18 +70,14 @@ class _TaskAreaState extends State<TaskArea> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Expanded(
-                  child: Hero(
-                    tag: task!.uuid,
-                    transitionOnUserGestures: true,
-                    child: TaskCard(
-                      title: task!.title,
-                      secondaryAction: () => setState(
-                        () => expandedTopRow = !expandedTopRow,
-                      ),
-                      isExpanded: expandedTopRow,
-                      description: task!.taskDescription,
-                      showBackButton: widget.showBackButton,
+                  child: TaskCard(
+                    title: task!.title,
+                    secondaryAction: () => setState(
+                      () => expandedTopRow = !expandedTopRow,
                     ),
+                    isExpanded: expandedTopRow,
+                    description: task!.description,
+                    showBackButton: widget.showBackButton,
                   ),
                 ),
                 Expanded(
@@ -94,18 +98,21 @@ class _TaskAreaState extends State<TaskArea> {
                 ClipRect(
                   child: DrawingArea(
                     controller: controller,
-                    onEdited: (lines) => task!.drawnLines = lines,
-                    lines: task!.drawnLines,
+                    onEdited: (lines) => this.lines = lines,
+                    lines: lines,
                     showEraser: controller.tapMode == TapMode.erase,
                   ),
                 ),
-                Positioned(
+                AnimatedPositioned(
+                  duration: expandDuration,
+                  curve: expandAnimationCurve,
                   top: 0,
-                  left: 0,
+                  left: 4 + (showsHistory ? historyWidth : 0),
                   child: SizedBox(
                     child: Row(
                       children: [
                         ToggleButtons(
+                          borderRadius: BorderRadius.circular(12),
                           isSelected: controller.selectionList,
                           onPressed: (index) {
                             setState(() {
@@ -147,7 +154,80 @@ class _TaskAreaState extends State<TaskArea> {
                       ],
                     ),
                   ),
-                )
+                ),
+                AnimatedPositioned(
+                  duration: expandDuration,
+                  curve: expandAnimationCurve,
+                  top: 0,
+                  left: showsHistory ? 0 : -historyWidth,
+                  width: historyWidth,
+                  height: getDrawingAreaHeight(constraints.maxHeight),
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.only(left: 4, bottom: 8.0, top: 0),
+                    child: Material(
+                      color: Theme.of(context).colorScheme.secondaryContainer,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: task?.solutions.length ?? 0,
+                        primary: false,
+                        itemBuilder: (context, index) {
+                          var solution = task!.solutions[index];
+                          var subtitle =
+                              '${solution.timestamp.hour}:${solution.timestamp.minute} ${solution.timestamp.day}.${solution.timestamp.month}.${solution.timestamp.year}';
+                          return Container(
+                            margin: const EdgeInsets.all(4),
+                            child: ListTile(
+                              tileColor: index == selectedHistoryIndex
+                                  ? Theme.of(context).colorScheme.secondary
+                                  : null,
+                              textColor: index == selectedHistoryIndex
+                                  ? Theme.of(context).colorScheme.onSecondary
+                                  : Theme.of(context)
+                                      .colorScheme
+                                      .onSecondaryContainer,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              title: StreamBuilder(
+                                stream:
+                                    Stream.periodic(const Duration(minutes: 1)),
+                                builder: (context, snapshot) => Text(
+                                  getHistoryTileTitle(solution),
+                                ),
+                              ),
+                              subtitle: Text(subtitle),
+                              onTap: () {
+                                setState(() {
+                                  lines = solution.lines.copy();
+                                  selectedHistoryIndex = index;
+                                  updateColorController();
+                                });
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                AnimatedPositioned(
+                  duration: expandDuration,
+                  curve: expandAnimationCurve,
+                  bottom: 4,
+                  left: 4 + (showsHistory ? historyWidth : 0),
+                  child: IconButton(
+                    icon: const Icon(Icons.menu),
+                    onPressed: () {
+                      setState(() {
+                        showsHistory = !showsHistory;
+                      });
+                    },
+                  ),
+                ),
               ],
             ),
           ),
@@ -158,18 +238,46 @@ class _TaskAreaState extends State<TaskArea> {
 
   @override
   void dispose() {
+    if (!(task?.solutions.lastOrNull?.lines.equals(lines) ?? false)) {
+      task?.solutions.add(SolutionState(lines));
+      context.read<TasksBloc>().add(TaskStorageSaveTask(task!));
+    }
     super.dispose();
   }
 
   @override
   void initState() {
-    task = taskRepository.findByUuid(widget.uuid);
-    for (var line in task!.drawnLines) {
-      colorController.addColorPair(line.colors);
+    task = widget.task;
+    if (task!.solutions.isNotEmpty) {
+      for (var line in task!.solutions.last.lines) {
+        lines.add(line);
+      }
     }
+    updateColorController();
     colorController.colorChanged =
         (newColor) => setState(() => controller.currentColor = newColor);
     super.initState();
+  }
+
+  void updateColorController() {
+    colorController.removeNonDefaultColors();
+    for (final line in lines) {
+      colorController.addColorPair(line.colors);
+    }
+  }
+
+  String getHistoryTileTitle(SolutionState solution) {
+    final now = DateTime.now();
+    final difference = now.difference(solution.timestamp);
+    if (difference < const Duration(hours: 1)) {
+      return '${difference.inMinutes} Minutes ago';
+    } else if (difference < const Duration(days: 1)) {
+      return '${difference.inHours} Hours ago';
+    } else if (difference < const Duration(days: 365)) {
+      return '${difference.inDays} Days ago';
+    } else {
+      return '${difference.inDays / 365} Years ago';
+    }
   }
 }
 
