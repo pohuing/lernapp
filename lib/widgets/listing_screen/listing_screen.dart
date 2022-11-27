@@ -14,79 +14,7 @@ class ListingScreen extends StatelessWidget {
       BlocBuilder<SelectionCubit, SelectionState>(
         builder: (context, state) => Scaffold(
           primary: true,
-          appBar: AppBar(
-            title: const Text('Tasks'),
-            actions: [
-              if (!state.isSelecting)
-                IconButton(
-                  onPressed: () =>
-                      context.read<SelectionCubit>().toggleSelectionMode(),
-                  icon: const Icon(Icons.check_box_outlined),
-                ),
-              if (state.isSelecting)
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  child: TextButton(
-                    onPressed: () =>
-                        context.read<SelectionCubit>().toggleSelectionMode(),
-                    child: const Text('Cancel selection'),
-                  ),
-                ),
-              if (state.isSelecting)
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  child: ElevatedButton(
-                    onPressed: state.selectedUuids.isEmpty
-                        ? null
-                        : () => context.goNamed('session'),
-                    child: const Text('Start Session'),
-                  ),
-                ),
-              if (!state.isSelecting)
-                PopupMenuButton(
-                  itemBuilder: (context) => [
-                    PopupMenuItem(
-                      onTap: () =>
-                          context.read<TasksBloc>().add(TaskStorageSave()),
-                      child: const ListTile(
-                        leading: Icon(Icons.save),
-                        title: Text('Save'),
-                      ),
-                    ),
-                    PopupMenuItem(
-                      onTap: () async {
-                        context.read<TasksBloc>().add(TaskStorageWipe());
-                      },
-                      child: const ListTile(
-                        leading: Icon(Icons.delete_forever),
-                        title: Text('Reset storage'),
-                      ),
-                    ),
-                    PopupMenuItem(
-                      onTap: () => context.push('/scratchpad'),
-                      child: const ListTile(
-                        leading: Icon(Icons.draw_outlined),
-                        title: Text('Scribble'),
-                      ),
-                    ),
-                    PopupMenuItem(
-                      child: const ListTile(
-                        leading: Icon(Icons.info_outline),
-                        title: Text('About'),
-                      ),
-                      onTap: () => showAboutDialog(
-                        context: context,
-                        applicationIcon: const Image(
-                          isAntiAlias: false,
-                          width: 200,
-                          image: AssetImage('images/dorime.gif'),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-            ],
-          ),
+          appBar: _buildAppBar(state, context),
           body: BlocBuilder<TasksBloc, TaskStorageStateBase>(
             buildWhen: (previous, current) =>
                 current is TaskStorageLoaded ||
@@ -115,4 +43,84 @@ class ListingScreen extends StatelessWidget {
           ),
         ),
       );
+
+  AppBar _buildAppBar(SelectionState state, BuildContext context) {
+    return AppBar(
+      title: const Text('Tasks'),
+      actions: [
+        if (!state.isSelecting)
+          IconButton(
+            onPressed: () =>
+                context.read<SelectionCubit>().toggleSelectionMode(),
+            icon: const Icon(Icons.check_box_outlined),
+          ),
+        if (state.isSelecting)
+          Container(
+            padding: const EdgeInsets.all(8),
+            child: TextButton(
+              onPressed: () =>
+                  context.read<SelectionCubit>().toggleSelectionMode(),
+              child: const Text('Cancel selection'),
+            ),
+          ),
+        if (state.isSelecting)
+          Container(
+            padding: const EdgeInsets.all(8),
+            child: ElevatedButton(
+              onPressed: state.selectedUuids.isEmpty
+                  ? null
+                  : () => context.goNamed('session'),
+              child: const Text('Start Session'),
+            ),
+          ),
+        if (!state.isSelecting)
+          PopupMenuButton(
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                padding: EdgeInsets.zero,
+                onTap: () => context.read<TasksBloc>().add(TaskStorageSave()),
+                child: const IgnorePointer(
+                  child: ListTile(
+                    leading: Icon(Icons.save),
+                    title: Text('Save'),
+                  ),
+                ),
+              ),
+              PopupMenuItem(
+                padding: EdgeInsets.zero,
+                onTap: () async =>
+                    context.read<TasksBloc>().add(TaskStorageWipe()),
+                child: const IgnorePointer(
+                  child: ListTile(
+                    leading: Icon(Icons.delete_forever),
+                    title: Text('Reset storage'),
+                  ),
+                ),
+              ),
+              PopupMenuItem(
+                padding: EdgeInsets.zero,
+                onTap: () => context.push('/scratchpad'),
+                child: const IgnorePointer(
+                  child: ListTile(
+                    leading: Icon(Icons.draw),
+                    title: Text('Scribble'),
+                  ),
+                ),
+              ),
+              const PopupMenuItem(
+                padding: EdgeInsets.zero,
+                child: AboutListTile(
+                  icon: Icon(Icons.info),
+                  applicationIcon: Image(
+                    isAntiAlias: false,
+                    width: 200,
+                    image: AssetImage('images/dorime.gif'),
+                  ),
+                ),
+              )
+            ],
+          ),
+      ],
+    );
+  }
 }
