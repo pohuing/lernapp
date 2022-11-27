@@ -30,6 +30,7 @@ class TaskArea extends StatefulWidget {
 class _TaskAreaState extends State<TaskArea> {
   DrawingAreaController controller = DrawingAreaController();
   late final Task? task;
+  late final TasksBloc tasksBloc;
   var expandedTopRow = false;
   ColorSelectionController colorController =
       ColorSelectionController.standardColors();
@@ -240,7 +241,7 @@ class _TaskAreaState extends State<TaskArea> {
   void dispose() {
     if (!(task?.solutions.lastOrNull?.lines.equals(lines) ?? false)) {
       task?.solutions.add(SolutionState(lines));
-      context.read<TasksBloc>().add(TaskStorageSaveTask(task!));
+      tasksBloc.add(TaskStorageSaveTask(task!));
     }
     super.dispose();
   }
@@ -248,6 +249,7 @@ class _TaskAreaState extends State<TaskArea> {
   @override
   void initState() {
     task = widget.task;
+    tasksBloc = context.read<TasksBloc>();
     if (task!.solutions.isNotEmpty) {
       for (var line in task!.solutions.last.lines) {
         lines.add(line);

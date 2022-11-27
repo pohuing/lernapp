@@ -23,9 +23,10 @@ class HighPerfListingScreen extends StatelessWidget {
         if (state is TaskStorageUninitialized) {
           context.read<TasksBloc>().add(TaskStorageLoad());
           return const Center(child: Text('Storage is uninitialized'));
-        } else if (state is TaskStorageLoaded) {
+        } else if (state is TaskStorageLoaded ||
+            state is TaskStorageRepositoryFinishedSaving) {
           return HighPerfListing(
-            categories: state.contents,
+            categories: (state as dynamic).contents,
             withNavBarStyle: withNavBarStyle,
           );
         } else if (state is TaskStorageLoading) {
