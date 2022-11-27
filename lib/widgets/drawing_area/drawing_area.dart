@@ -9,7 +9,7 @@ import 'drawing_area_painter.dart';
 class DrawingArea extends StatefulWidget {
   final DrawingAreaController controller;
 
-  final List<Line>? lines;
+  final List<Line> lines;
   final Function(List<Line> lines)? onEdited;
   final bool showEraser;
 
@@ -17,7 +17,7 @@ class DrawingArea extends StatefulWidget {
     Key? key,
     DrawingAreaController? controller,
     this.onEdited,
-    this.lines,
+    required this.lines,
     bool? showEraser,
   })  : controller = controller ?? DrawingAreaController(),
         showEraser = showEraser ?? false,
@@ -54,7 +54,7 @@ class _DrawingAreaState extends State<DrawingArea> {
           size: MediaQuery.of(context).size,
           painter: DrawingAreaPainter(
             line: line,
-            lines: widget.lines!,
+            lines: widget.lines,
             xOffset: controller.xOffset,
             yOffset: controller.yOffset,
             eraserAt: eraserAt,
@@ -72,15 +72,15 @@ class _DrawingAreaState extends State<DrawingArea> {
   }
 
   void eraseAt(Offset localPosition) {
-    for (var i = 0; i < widget.lines!.length; ++i) {
-      widget.lines!.removeWhere(
+    for (var i = 0; i < widget.lines.length; ++i) {
+      widget.lines.removeWhere(
         (line) => line.isInCircle(
           localPosition.translate(-controller.xOffset, -controller.yOffset),
           controller.eraserSize,
         ),
       );
     }
-    widget.onEdited?.call(List.from(widget.lines!));
+    widget.onEdited?.call(List.from(widget.lines));
   }
 
   @override
@@ -97,14 +97,14 @@ class _DrawingAreaState extends State<DrawingArea> {
     switch (controller.tapMode) {
       case TapMode.draw:
         setState(() {
-          widget.lines!.add(line);
+          widget.lines.add(line);
           line = Line(
             [],
             controller.currentColor.copy(),
             controller.penSize,
           );
         });
-        widget.onEdited?.call(List.from(widget.lines!));
+        widget.onEdited?.call(List.from(widget.lines));
         break;
       case TapMode.erase:
         setState(() {
