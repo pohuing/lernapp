@@ -1,5 +1,6 @@
 import 'package:lernapp/model/task.dart';
 import 'package:lernapp/model/task_category.dart';
+import 'package:lernapp/repositories/task_repository.dart';
 
 abstract class TaskStorageEventBase {}
 
@@ -24,4 +25,10 @@ class TaskStorageSaveTask implements TaskStorageEventBase {
   final Task task;
 
   TaskStorageSaveTask(this.task);
+}
+
+class TaskStorageChanged implements TaskStorageEventBase{
+  final TaskRepositoryBase newRepository;
+
+  TaskStorageChanged(this.newRepository);
 }

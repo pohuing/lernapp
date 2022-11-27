@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:lernapp/blocs/preferences/preferences_bloc.dart';
+import 'package:lernapp/logic/logging.dart';
 import 'package:lernapp/repositories/task_repository.dart';
 
 import 'events.dart';
@@ -11,13 +13,49 @@ export 'states.dart';
 
 class TasksBloc extends Bloc<TaskStorageEventBase, TaskStorageStateBase> {
   TaskRepositoryBase repository;
+  PreferencesBloc preferencesBloc;
+  StreamSubscription<PreferencesStateBase>? _listen;
+  StreamSubscription<TaskStorageStateBase>? _loggingSubscription;
 
-  TasksBloc(this.repository) : super(TaskStorageUninitialized()) {
+  TasksBloc(this.repository, this.preferencesBloc)
+      : super(TaskStorageUninitialized()) {
     on<TaskStorageLoad>(_onLoad);
     on<TaskStorageSave>(_onSave);
     on<TaskStorageWipe>(_onWipe);
     on<TaskStorageSaveCategory>(_onSaveCategory);
     on<TaskStorageSaveTask>(_onSaveTask);
+    on<TaskStorageChanged>(_onStorageChanged);
+
+    _loggingSubscription =
+        stream.listen((event) => log(event.toString(), name: 'TasksBloc'));
+
+    _listen = preferencesBloc.stream.listen((event) async {
+      if (event is RepositoryConfigurationChanged) {
+        var newRepository = await event.repositorySettings.currentConfiguration
+            ?.createRepository();
+        if (newRepository != null) {
+          add(TaskStorageChanged(newRepository));
+          return;
+        }
+      }
+      log(
+        'Failed setting new Task storage. Incoming event: ${event.toString()}',
+        name: 'TasksBloc',
+      );
+    });
+  }
+
+  @override
+  void onEvent(TaskStorageEventBase event) {
+    super.onEvent(event);
+    log('New event: ${event.toString()}', name: 'TasksBloc');
+  }
+
+  Future<void> _onStorageChanged(event, emit) async {
+    repository = event.newRepository;
+    emit(TaskStorageLoading());
+    await repository.reload();
+    emit(TaskStorageLoaded(repository.categories));
   }
 
   FutureOr<void> _onSaveTask(event, emit) async {
@@ -47,5 +85,10 @@ class TasksBloc extends Bloc<TaskStorageEventBase, TaskStorageStateBase> {
     emit(TaskStorageLoading());
     await repository.reload();
     emit(TaskStorageLoaded(repository.categories));
+  }
+
+  void dispose() {
+    _listen?.cancel();
+    _loggingSubscription?.cancel();
   }
 }

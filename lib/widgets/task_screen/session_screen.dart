@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lernapp/blocs/session_cubit.dart';
-import 'package:lernapp/repositories/task_repository.dart';
+import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
 import 'package:lernapp/widgets/task_screen/task_area.dart';
 import 'package:uuid/uuid.dart';
 
@@ -50,7 +50,8 @@ class _SessionScreenState extends State<SessionScreen> {
           return FutureBuilder(
             key: Key(state.currentTask.toString()),
             future: context
-                .read<TaskRepositoryBase>()
+                .read<TasksBloc>()
+                .repository
                 .findByUuid(state.currentTask!),
             builder: (context, snapshot) {
               if (snapshot.hasData) {

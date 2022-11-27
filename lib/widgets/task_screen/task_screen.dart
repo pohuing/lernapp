@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lernapp/repositories/task_repository.dart';
+import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
 import 'package:lernapp/widgets/general_purpose/timed_snackbar.dart';
 import 'package:lernapp/widgets/task_screen/task_area.dart';
 import 'package:uuid/uuid.dart';
@@ -18,7 +18,7 @@ class TaskScreen extends StatelessWidget {
         child: FutureBuilder(
           future: () async {
             final result =
-                await context.read<TaskRepositoryBase>().findByUuid(uuid);
+                await context.read<TasksBloc>().repository.findByUuid(uuid);
             if (result == null) {
               // Stateless widgets cannot be unmounted thus we don't need to check if the context is active
               // ignore: use_build_context_synchronously
@@ -47,7 +47,7 @@ class TaskScreen extends StatelessWidget {
   }
 
   void redirect(BuildContext context) {
-    context.replace('/');
+    context.go('/');
     showTimedSnackBar(context, 'Found no task with that Uuid');
   }
 }

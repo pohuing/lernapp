@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lernapp/blocs/selection_cubit.dart';
 import 'package:lernapp/widgets/general_purpose/scratchpad.dart';
 import 'package:lernapp/widgets/listing_screen/listing_screen.dart';
+import 'package:lernapp/widgets/settings_screen/settings_screen.dart';
 import 'package:lernapp/widgets/task_screen/session_screen.dart';
 import 'package:lernapp/widgets/task_screen/task_screen.dart';
 import 'package:uuid/uuid.dart';
@@ -37,12 +38,13 @@ class LernappRouter {
         name: 'session',
         path: '/session',
         builder: (context, state) => SessionScreen(
-          tasks: context
-              .read<SelectionCubit>()
-              .state
-              .selectedUuids
-              .toList(),
+          tasks: context.read<SelectionCubit>().state.selectedUuids.toList(),
         ),
+      ),
+      GoRoute(
+        name: 'preference',
+        path: '/preferences',
+        builder: (context, state) => const PreferencesScreen(),
       ),
     ],
   );

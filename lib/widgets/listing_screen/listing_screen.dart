@@ -19,7 +19,8 @@ class ListingScreen extends StatelessWidget {
             buildWhen: (previous, current) =>
                 current is TaskStorageLoaded ||
                 current is TaskStorageLoading ||
-                current is TaskStorageUninitialized,
+                current is TaskStorageUninitialized ||
+                current is TaskStorageChanged,
             builder: (context, state) {
               if (state is TaskStorageUninitialized) {
                 context.read<TasksBloc>().add(TaskStorageLoad());
@@ -29,6 +30,7 @@ class ListingScreen extends StatelessWidget {
               } else if (state is TaskStorageLoaded ||
                   state is TaskStorageRepositoryFinishedSaving) {
                 return TaskListing(
+                  key: Key(state.hashCode.toString()),
                   categories: (state as dynamic).contents,
                   withNavBarStyle: true,
                 );
@@ -107,6 +109,16 @@ class ListingScreen extends StatelessWidget {
                   ),
                 ),
               ),
+              PopupMenuItem(
+                padding: EdgeInsets.zero,
+                onTap: () => context.push('/preferences'),
+                child: const IgnorePointer(
+                  child: ListTile(
+                    leading: Icon(Icons.settings),
+                    title: Text('Settings'),
+                  ),
+                ),
+              ),
               const PopupMenuItem(
                 padding: EdgeInsets.zero,
                 child: AboutListTile(
@@ -117,7 +129,7 @@ class ListingScreen extends StatelessWidget {
                     image: AssetImage('images/dorime.gif'),
                   ),
                 ),
-              )
+              ),
             ],
           ),
       ],

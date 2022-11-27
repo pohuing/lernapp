@@ -20,7 +20,7 @@ class HiveTaskRepository implements TaskRepositoryBase {
   static List<TaskCategory> _loadCategories([Box<List<dynamic>>? box]) {
     final start = DateTime.now();
     final List<TaskCategory> categories = [];
-    log('initialising load', name: 'TaskRepository._loadCategories');
+    log('initialising load', name: 'HiveTaskRepository._loadCategories');
     if ((box?.isNotEmpty ?? false) && box!.containsKey(tasksKey)) {
       final list = List<Map>.from(box.get(tasksKey) ?? [])
           .map((e) => Map<String, dynamic>.from(e));
@@ -31,14 +31,17 @@ class HiveTaskRepository implements TaskRepositoryBase {
         } else {
           log(
             'Category Map is not well formed: ${categoryMap.toString()}',
-            name: 'TaskRepository._loadCategories',
+            name: 'HiveTaskRepository._loadCategories',
           );
         }
       }
     } else {
       categories.addAll(_generateCategories());
     }
-    log('Finished load, duration: ${DateTime.now().difference(start).inMilliseconds}ms');
+    log(
+      'Finished load, duration: ${DateTime.now().difference(start).inMilliseconds}ms',
+      name: 'HiveTaskRepository._loadCategories',
+    );
     return categories;
   }
 
@@ -60,16 +63,24 @@ class HiveTaskRepository implements TaskRepositoryBase {
     log('Starting save', name: 'TaskRepository.save');
     await box?.delete(tasksKey);
     await box?.put(tasksKey, categories.map((e) => e.toMap()).toList());
-    log('Finished save, duration: ${DateTime.now().difference(start).inMilliseconds}ms');
+    log(
+      'Finished save, duration: ${DateTime.now().difference(start).inMilliseconds}ms',
+      name: 'HiveTaskRepository.save',
+    );
   }
 
   @override
   Future<void> reload() async {
+    log('Reloading', name: 'TaskRepository.load');
     categories.clear();
-    categories.addAll(_loadCategories());
+    categories.addAll(_loadCategories(box));
   }
 
   static List<TaskCategory> _generateCategories() {
+    log(
+      'Generating default categories',
+      name: 'HiveTaskRepository._generateCategories',
+    );
     return [
       TaskCategory(
         title: 'Angewandte Informatik',
@@ -130,6 +141,11 @@ class HiveTaskRepository implements TaskRepositoryBase {
   Future<void> saveTask(Task task) {
     return save();
   }
+
+  @override
+  void dispose() {
+    box?.close();
+  }
 }
 
 abstract class TaskRepositoryBase {
@@ -153,4 +169,6 @@ abstract class TaskRepositoryBase {
   /// Save just a task.
   /// Throws if task was not found in hierarchy
   Future<void> saveTask(Task task);
+
+  void dispose();
 }

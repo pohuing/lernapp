@@ -2,10 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:lernapp/blocs/preferences/preferences_bloc.dart';
 import 'package:lernapp/blocs/selection_cubit.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
 import 'package:lernapp/logic/router.dart';
-import 'package:lernapp/repositories/task_repository.dart';
 import 'package:provider/provider.dart';
 import 'package:system_theme/system_theme.dart';
 
@@ -18,13 +18,30 @@ void main() async {
     await SystemTheme.accentColor.load();
   }
   await Hive.initFlutter();
-  final repository = HiveTaskRepository(box: await Hive.openBox('tcbox'));
+
+  var hiveRepositoryConfiguration = HiveRepositoryConfiguration('tcbox');
+  final prefs = PreferencesBloc(
+    PreferencesStateBase(
+      RepositorySettings(
+        [
+          hiveRepositoryConfiguration,
+          HiveRepositoryConfiguration('aaabox'),
+        ],
+        hiveRepositoryConfiguration,
+      ),
+      ThemePreferences(),
+    ),
+  );
+  final defaultRepository =
+      await hiveRepositoryConfiguration.createRepository();
 
   runApp(
     MultiProvider(
       providers: [
-        Provider<TaskRepositoryBase>.value(value: repository),
-        BlocProvider<TasksBloc>(create: (context) => TasksBloc(repository)),
+        BlocProvider.value(value: prefs),
+        BlocProvider<TasksBloc>(
+          create: (context) => TasksBloc(defaultRepository, prefs),
+        ),
       ],
       child: const MyApp(),
     ),
