@@ -6,18 +6,17 @@ import 'package:lernapp/repositories/task_repository.dart';
 import 'events.dart';
 import 'states.dart';
 
+export 'events.dart';
+export 'states.dart';
+
 class TasksBloc extends Bloc<TaskStorageEventBase, TaskStorageStateBase> {
   TaskRepositoryBase repository;
 
   TasksBloc(this.repository) : super(TaskStorageUninitialized()) {
     on<TaskStorageLoad>(_onLoad);
-
     on<TaskStorageSave>(_onSave);
-
     on<TaskStorageWipe>(_onWipe);
-
     on<TaskStorageSaveCategory>(_onSaveCategory);
-
     on<TaskStorageSaveTask>(_onSaveTask);
   }
 

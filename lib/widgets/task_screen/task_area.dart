@@ -1,21 +1,19 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lernapp/blocs/tasks/events.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
 import 'package:lernapp/logic/list_extensions.dart';
-import 'package:lernapp/widgets/drawing_area/drawing_area_controller.dart';
+import 'package:lernapp/model/line.dart';
+import 'package:lernapp/model/solution_state.dart';
+import 'package:lernapp/model/task.dart';
+import 'package:lernapp/widgets/drawing_area/drawing_area.dart';
 import 'package:lernapp/widgets/general_purpose/color_selection/color_picker_dialogue.dart';
 import 'package:lernapp/widgets/general_purpose/color_selection/color_selection.dart';
-import 'package:lernapp/widgets/task_screen/solution_card.dart';
-import 'package:lernapp/widgets/task_screen/task_card.dart';
+import 'package:lernapp/widgets/general_purpose/flippable.dart';
 
-import '../../model/line.dart';
-import '../../model/solution_state.dart';
-import '../../model/task.dart';
-import '../drawing_area/drawing_area.dart';
-import '../general_purpose/flippable.dart';
 import 'hint_card.dart';
+import 'solution_card.dart';
+import 'task_card.dart';
 
 class TaskArea extends StatefulWidget {
   final bool? showBackButton;

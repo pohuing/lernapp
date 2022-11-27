@@ -1,27 +1,27 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:implicitly_animated_list/implicitly_animated_list.dart';
+import 'package:lernapp/model/high_performance_listing_wrappers.dart';
 import 'package:lernapp/model/task_category.dart';
 
-import '../../model/high_performance_listing_wrappers.dart';
-import '../listing_screen/task_tile.dart';
-import 'high_perf_category_tile.dart';
+import 'task_tile.dart';
+import 'category_tile.dart';
 
-class HighPerfListing extends StatefulWidget {
+class TaskListing extends StatefulWidget {
   final List<TaskCategory> categories;
   final bool withNavBarStyle;
 
-  const HighPerfListing({
+  const TaskListing({
     Key? key,
     required this.categories,
     required this.withNavBarStyle,
   }) : super(key: key);
 
   @override
-  State<HighPerfListing> createState() => _HighPerfListingState();
+  State<TaskListing> createState() => _TaskListingState();
 }
 
-class _HighPerfListingState extends State<HighPerfListing> {
+class _TaskListingState extends State<TaskListing> {
   late final List<ListingEntryCategory> entries;
 
   @override
@@ -39,7 +39,7 @@ class _HighPerfListingState extends State<HighPerfListing> {
       primary: true,
       itemBuilder: (context, entry) {
         if (entry is ListingEntryCategory) {
-          return HighPerfCategoryTile(
+          return CategoryTile(
             key: Key(entry.category.uuid.toString()),
             entry: entry,
             asNavigationBarItem: widget.withNavBarStyle,

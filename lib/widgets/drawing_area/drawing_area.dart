@@ -1,10 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:lernapp/logic/logging.dart';
-import 'package:lernapp/widgets/drawing_area/drawing_area_controller.dart';
+import 'package:lernapp/model/line.dart';
 
-import '../../model/line.dart';
 import 'drawing_area_painter.dart';
+import 'drawing_area_controller.dart';
+export 'drawing_area_controller.dart';
 
 class DrawingArea extends StatefulWidget {
   final DrawingAreaController controller;

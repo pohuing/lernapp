@@ -1,83 +1,116 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lernapp/blocs/selection_cubit.dart';
-import 'package:lernapp/widgets/listing_screen/task_tile.dart';
+import 'package:lernapp/model/high_performance_listing_wrappers.dart';
 
-import '../../model/task_category.dart';
+import '../../blocs/selection_cubit.dart';
 
-class CategoryTile extends StatefulWidget {
-  final TaskCategory category;
+class CategoryTile extends StatelessWidget {
+  final ListingEntryCategory entry;
+  final Function()? onTap;
+  final bool asNavigationBarItem;
 
-  const CategoryTile({Key? key, required this.category}) : super(key: key);
+  const CategoryTile({
+    Key? key,
+    required this.entry,
+    this.onTap,
+    bool? asNavigationBarItem,
+  })  : asNavigationBarItem = asNavigationBarItem ?? false,
+        super(key: key);
 
-  @override
-  State<CategoryTile> createState() => _CategoryTileState();
-}
-
-class _CategoryTileState extends State<CategoryTile> {
-  var isExpanded = false;
-  late final TaskCategory category;
-
-  EdgeInsetsGeometry get childPadding {
-    return const EdgeInsets.only(left: 16);
-  }
-
-  Widget? get trailingElement {
-    if (category.numberOfChildren > 0) {
-      return null;
+  Widget decoration(BuildContext context, {required Widget child}) {
+    if (asNavigationBarItem) {
+      return Padding(
+        padding: const EdgeInsets.all(2),
+        child: child,
+      );
     } else {
-      return const SizedBox(
-        height: 0,
-        width: 0,
+      return Container(
+        decoration: BoxDecoration(
+          border: BorderDirectional(
+            top: BorderSide(color: Theme.of(context).dividerColor),
+            start: BorderSide(
+              color: Theme.of(context).dividerColor,
+            ),
+          ),
+        ),
+        child: child,
       );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return IgnorePointer(
-      ignoring: category.numberOfChildren == 0,
-      child: Container(
-        decoration: BoxDecoration(
-          border: BorderDirectional(
-            start: BorderSide(color: Theme.of(context).dividerColor, width: 1),
-          ),
-        ),
-        child: BlocBuilder<SelectionCubit, SelectionState>(
-          builder: (context, state) => ExpansionTile(
-            title: Text(widget.category.title),
-            childrenPadding: childPadding,
-            maintainState: true,
-            leading: leading(state),
-            trailing: trailingElement,
-            children: [
-              ...category.subCategories
-                  .map((e) => CategoryTile(category: e))
-                  .toList(),
-              ...category.tasks.map(
-                (e) => TaskTile(task: e),
+    return Padding(
+      padding: EdgeInsets.only(left: entry.depth * 16),
+      child: BlocBuilder<SelectionCubit, SelectionState>(
+        builder: (context, state) => Stack(
+          children: [
+            decoration(
+              context,
+              child: ListTile(
+                shape: asNavigationBarItem
+                    ? RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      )
+                    : null,
+                onTap: () {
+                  onTap?.call();
+                },
+                tileColor: entry.isExpanded && asNavigationBarItem
+                    ? Theme.of(context).colorScheme.secondaryContainer
+                    : null,
+                leading: leading(context, state),
+                trailing: IgnorePointer(
+                  child: ExpandIcon(
+                    onPressed: (_) => onTap?.call(),
+                    isExpanded: entry.isExpanded,
+                  ),
+                ),
+                title: Text(
+                  entry.category.title,
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        color: entry.isExpanded
+                            ? Theme.of(context).colorScheme.onSecondaryContainer
+                            : Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                ),
+              ),
+            ),
+            if (entry.isExpanded && !asNavigationBarItem)
+              Positioned(
+                bottom: 0,
+                left: 0,
+                child: Container(
+                  width: 16,
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        width: 1,
+                        color: Theme.of(context).dividerColor,
+                      ),
+                    ),
+                  ),
+                ),
               )
-            ],
-          ),
+          ],
         ),
       ),
     );
   }
 
-  @override
-  void initState() {
-    category = widget.category;
-    super.initState();
-  }
-
-  Widget? leading(SelectionState state) {
-    if (!state.isSelecting || category.numberOfChildren == 0) {
+  Widget? leading(BuildContext context, SelectionState state) {
+    if (!state.isSelecting || entry.category.numberOfChildren == 0) {
       return null;
     }
     return Checkbox(
-      value: state.entireCategoryIsSelected(category),
+      value: state.entireCategoryIsSelected(entry.category),
       onChanged: (value) =>
-          context.read<SelectionCubit>().toggleCategory(category),
+          context.read<SelectionCubit>().toggleCategory(entry.category),
     );
   }
+}
+
+class DummyHighPerfListingTile extends CategoryTile {
+  DummyHighPerfListingTile({Key? key})
+      : super(key: key, entry: ListingEntryCategory());
 }

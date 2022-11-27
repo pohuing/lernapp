@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lernapp/blocs/selection_cubit.dart';
-import 'package:lernapp/blocs/tasks/events.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
-import 'package:lernapp/widgets/high_perf_listing_screen/high_perf_listing_screen.dart';
+
+import 'task_listing.dart';
 
 class ListingScreen extends StatelessWidget {
   const ListingScreen({Key? key}) : super(key: key);
@@ -87,7 +87,32 @@ class ListingScreen extends StatelessWidget {
                 ),
             ],
           ),
-          body: const HighPerfListingScreen(withNavBarStyle: true),
+          body: BlocBuilder<TasksBloc, TaskStorageStateBase>(
+            buildWhen: (previous, current) =>
+                current is TaskStorageLoaded ||
+                current is TaskStorageLoading ||
+                current is TaskStorageUninitialized,
+            builder: (context, state) {
+              if (state is TaskStorageUninitialized) {
+                context.read<TasksBloc>().add(TaskStorageLoad());
+                return const Center(
+                  child: Text('Storage is uninitialized'),
+                );
+              } else if (state is TaskStorageLoaded ||
+                  state is TaskStorageRepositoryFinishedSaving) {
+                return TaskListing(
+                  categories: (state as dynamic).contents,
+                  withNavBarStyle: true,
+                );
+              } else if (state is TaskStorageLoading) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                return Text(state.toString());
+              }
+            },
+          ),
         ),
       );
 }
