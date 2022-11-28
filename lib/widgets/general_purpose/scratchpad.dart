@@ -8,7 +8,7 @@ class Scratchpad extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Scribble')),
-      body: DrawingArea(lines: const []),
+      body: DrawingArea(lines: []),
     );
   }
 }

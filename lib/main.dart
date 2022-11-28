@@ -42,6 +42,7 @@ void main() async {
         BlocProvider<TasksBloc>(
           create: (context) => TasksBloc(defaultRepository, prefs),
         ),
+        BlocProvider<SelectionCubit>(create:(context) => SelectionCubit(), ),
       ],
       child: const MyApp(),
     ),
@@ -75,19 +76,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) {
-        return SelectionCubit();
-      },
-      child: MaterialApp.router(
-        title: 'Lernapp',
-        themeMode: ThemeMode.system,
-        theme: brightTheme,
-        darkTheme: darkTheme,
-        routeInformationParser: LernappRouter.router.routeInformationParser,
-        routeInformationProvider: LernappRouter.router.routeInformationProvider,
-        routerDelegate: LernappRouter.router.routerDelegate,
-      ),
+    return MaterialApp.router(
+      title: 'Lernapp',
+      themeMode: ThemeMode.system,
+      theme: brightTheme,
+      darkTheme: darkTheme,
+      routeInformationParser: LernappRouter.router.routeInformationParser,
+      routeInformationProvider: LernappRouter.router.routeInformationProvider,
+      routerDelegate: LernappRouter.router.routerDelegate,
     );
   }
 }

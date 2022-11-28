@@ -77,6 +77,7 @@ class ListingScreen extends StatelessWidget {
           ),
         if (!state.isSelecting)
           PopupMenuButton(
+            position: PopupMenuPosition.under,
             itemBuilder: (context) => [
               PopupMenuItem(
                 padding: EdgeInsets.zero,
