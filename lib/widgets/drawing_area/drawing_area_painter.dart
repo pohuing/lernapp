@@ -9,10 +9,12 @@ import 'package:system_theme/system_theme.dart';
 class DrawingAreaPainter extends CustomPainter {
   Line line;
   final List<Line> lines;
-  double xOffset = 0;
-  double yOffset = 0;
-  Offset? eraserAt;
-  double eraserSize;
+  final double xOffset;
+  final double yOffset;
+  final Offset? eraserAt;
+  final double eraserSize;
+  final bool antiAliasBlend;
+  final bool antiAliasPaint;
 
   // used for redraw testing for when system theme has changed since last paint
   bool? lastPaintTheme;
@@ -20,19 +22,27 @@ class DrawingAreaPainter extends CustomPainter {
 
   DrawingAreaPainter({
     required this.line,
-    this.lines = const [],
-    this.xOffset = 0,
-    this.yOffset = 0,
+    required this.lines,
+    required this.xOffset,
+    required this.yOffset,
     this.eraserAt,
     double? eraserSize,
-  }) : eraserSize = eraserSize ?? 2;
+    bool? antiAliasBlend,
+    bool? antiAliasPaint,
+  })  : antiAliasBlend = antiAliasBlend ?? false,
+        antiAliasPaint = antiAliasPaint ?? false,
+        eraserSize = eraserSize ?? 2;
 
   @override
   void paint(Canvas canvas, Size size) {
     final isDarkMode = SystemTheme.isDarkMode;
+    final intransparentPaint = Paint()
+      ..strokeCap = StrokeCap.round
+      ..isAntiAlias = antiAliasPaint;
     lastPaintTheme = isDarkMode;
     final eraserPaint = Paint()
-      ..color = isDarkMode ? Colors.white : Colors.black;
+      ..color = isDarkMode ? Colors.white : Colors.black
+      ..isAntiAlias = antiAliasPaint;
 
     if (eraserAt != null) {
       canvas.drawCircle(
@@ -44,23 +54,18 @@ class DrawingAreaPainter extends CustomPainter {
 
     canvas.translate(xOffset, yOffset);
 
-    final intransparentPaint = Paint()..strokeCap = StrokeCap.round;
-
     for (int i = 0; i < lines.length; i++) {
       final blendPaint = Paint();
       blendPaint.color = lines[i].paintColor;
-      blendPaint.isAntiAlias = false;
       intransparentPaint.strokeWidth = lines[i].size;
       intransparentPaint.color = lines[i].paintColor.withAlpha(255);
-      intransparentPaint.isAntiAlias = true;
+      intransparentPaint.isAntiAlias = antiAliasPaint;
 
       // Drawing the layer with an intransparent paint and later restoring with
       // a transparent paint avoids overlaps between start and end of a line
       // segment
       canvas.saveLayer(canvas.getLocalClipBounds(), blendPaint);
-      for (var line in lines[i].windowed) {
-        canvas.drawLine(line.one, line.two, intransparentPaint);
-      }
+      canvas.drawPoints(PointMode.polygon, lines[i].path, intransparentPaint);
       canvas.restore();
     }
 
@@ -70,25 +75,28 @@ class DrawingAreaPainter extends CustomPainter {
     } else if (line.path.length == 1) {
       canvas.drawPoints(PointMode.points, line.path, intransparentPaint);
     } else {
-      final blendPaint = Paint();
-      blendPaint.color = line.paintColor;
-      blendPaint.isAntiAlias = false;
+      final blendPaint = Paint()
+        ..color = line.paintColor
+        ..isAntiAlias = antiAliasBlend;
       canvas.saveLayer(canvas.getLocalClipBounds(), blendPaint);
-      for (var pair in line.windowed) {
-        canvas.drawLine(pair.one, pair.two, intransparentPaint);
-      }
+      canvas.drawPoints(PointMode.polygon, line.path, intransparentPaint);
       canvas.restore();
     }
   }
 
   @override
   bool shouldRepaint(covariant DrawingAreaPainter oldDelegate) {
+    final start = DateTime.now();
     lastPaintHashCode = _generateHashCode();
     var result = oldDelegate.lastPaintHashCode != lastPaintHashCode ||
         oldDelegate.eraserAt != eraserAt ||
         oldDelegate.lastPaintTheme != lastPaintTheme;
     if (kDebugMode) {
       log(result.toString(), name: 'DrawingAreaPainter.shouldRepaint()');
+      log(
+        'Took ${start.difference(DateTime.now()).inMilliseconds}ms checking repaint',
+        name: 'DrawingAreaPainter.shouldRepaint',
+      );
     }
     return result;
   }

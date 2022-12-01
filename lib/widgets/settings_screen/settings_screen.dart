@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lernapp/blocs/preferences/events.dart';
 import 'package:lernapp/blocs/preferences/preferences_bloc.dart';
+import 'package:lernapp/widgets/settings_screen/theme_settings_tile.dart';
 
 class PreferencesScreen extends StatefulWidget {
   const PreferencesScreen({Key? key}) : super(key: key);
@@ -20,6 +20,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
             title: const Text('Preferences'),
           ),
           const SliverToBoxAdapter(child: RepositoryOptionsSelection()),
+          const SliverToBoxAdapter(child: ThemeSettingsTile()),
         ],
       ),
     );

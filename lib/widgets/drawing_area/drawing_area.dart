@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:lernapp/blocs/preferences/preferences_bloc.dart';
 import 'package:lernapp/logic/logging.dart';
 import 'package:lernapp/model/line.dart';
 
@@ -51,15 +53,19 @@ class _DrawingAreaState extends State<DrawingArea> {
         onPointerDown: onPointerDown,
         onPointerMove: onPointerMove,
         onPointerUp: onPointerUp,
-        child: CustomPaint(
-          size: MediaQuery.of(context).size,
-          painter: DrawingAreaPainter(
-            line: line,
-            lines: widget.lines,
-            xOffset: controller.xOffset,
-            yOffset: controller.yOffset,
-            eraserAt: eraserAt,
-            eraserSize: controller.eraserSize,
+        child: BlocBuilder<PreferencesBloc, PreferencesStateBase>(
+          builder:(context, state) => CustomPaint(
+            size: MediaQuery.of(context).size,
+            painter: DrawingAreaPainter(
+              line: line,
+              lines: widget.lines,
+              xOffset: controller.xOffset,
+              yOffset: controller.yOffset,
+              eraserAt: eraserAt,
+              eraserSize: controller.eraserSize,
+              antiAliasBlend: state.themePreferences.blendAA,
+              antiAliasPaint: state.themePreferences.paintAA,
+            ),
           ),
         ),
       ),

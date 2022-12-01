@@ -29,7 +29,7 @@ void main() async {
         ],
         hiveRepositoryConfiguration,
       ),
-      ThemePreferences(),
+      ThemePreferences(false, false),
     ),
   );
   final defaultRepository =
