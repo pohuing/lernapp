@@ -39,7 +39,6 @@ class DrawingAreaPainter extends CustomPainter {
     final intransparentPaint = Paint()
       ..strokeCap = StrokeCap.round
       ..isAntiAlias = antiAliasPaint;
-    lastPaintTheme = isDarkMode;
     final eraserPaint = Paint()
       ..color = isDarkMode ? Colors.white : Colors.black
       ..isAntiAlias = antiAliasPaint;
@@ -60,13 +59,18 @@ class DrawingAreaPainter extends CustomPainter {
       intransparentPaint.strokeWidth = lines[i].size;
       intransparentPaint.color = lines[i].paintColor.withAlpha(255);
       intransparentPaint.isAntiAlias = antiAliasPaint;
+      final hasTransparency = lines[i].paintColor.alpha != 255;
 
-      // Drawing the layer with an intransparent paint and later restoring with
-      // a transparent paint avoids overlaps between start and end of a line
-      // segment
-      canvas.saveLayer(canvas.getLocalClipBounds(), blendPaint);
+      if (hasTransparency) {
+        // Drawing the layer with an intransparent paint and later restoring with
+        // a transparent paint avoids overlaps between start and end of a line
+        // segment
+        canvas.saveLayer(canvas.getLocalClipBounds(), blendPaint);
+      }
       canvas.drawPoints(PointMode.polygon, lines[i].path, intransparentPaint);
-      canvas.restore();
+      if (hasTransparency) {
+        canvas.restore();
+      }
     }
 
     intransparentPaint.color = line.paintColor.withAlpha(255);
@@ -88,13 +92,16 @@ class DrawingAreaPainter extends CustomPainter {
   bool shouldRepaint(covariant DrawingAreaPainter oldDelegate) {
     final start = DateTime.now();
     lastPaintHashCode = _generateHashCode();
+    log('Took ${DateTime.now().difference(start).inMicroseconds}microseconds to calculate hash',
+        name: 'DrawingAreaPainter.shouldRepaint');
+    lastPaintTheme = SystemTheme.isDarkMode;
     var result = oldDelegate.lastPaintHashCode != lastPaintHashCode ||
         oldDelegate.eraserAt != eraserAt ||
         oldDelegate.lastPaintTheme != lastPaintTheme;
     if (kDebugMode) {
       log(result.toString(), name: 'DrawingAreaPainter.shouldRepaint()');
       log(
-        'Took ${start.difference(DateTime.now()).inMilliseconds}ms checking repaint',
+        'Took ${DateTime.now().difference(start).inMicroseconds}μs checking repaint',
         name: 'DrawingAreaPainter.shouldRepaint',
       );
     }
