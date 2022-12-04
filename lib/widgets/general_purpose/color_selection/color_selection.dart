@@ -10,8 +10,6 @@ class ColorSelectionController {
   void Function(ColorPair newColor)? colorChanged;
   List<ColorPair> colors;
   int _selectedIndex;
-  static const defaultColors =
-      ColorPair(darkTheme: Colors.white, brightTheme: Colors.black);
 
   ColorSelectionController(
     this.colors,
@@ -26,7 +24,7 @@ class ColorSelectionController {
   })  : colors = [],
         _selectedIndex = 0 {
     this.colors = [
-      defaultColors,
+      const ColorPair.defaultColors(),
       ...?colors,
     ];
     selectedIndex = 0;
@@ -85,7 +83,7 @@ class ColorSelectionController {
 
   void removeNonDefaultColors() {
     colors.clear();
-    colors.add(defaultColors);
+    colors.add(const ColorPair.defaultColors());
   }
 }
 

@@ -76,15 +76,19 @@ class DrawingAreaPainter extends CustomPainter {
     intransparentPaint.color = line.paintColor.withAlpha(255);
     intransparentPaint.strokeWidth = line.size;
     if (line.path.isEmpty) {
-    } else if (line.path.length == 1) {
-      canvas.drawPoints(PointMode.points, line.path, intransparentPaint);
     } else {
-      final blendPaint = Paint()
-        ..color = line.paintColor
-        ..isAntiAlias = antiAliasBlend;
-      canvas.saveLayer(canvas.getLocalClipBounds(), blendPaint);
+      final hasTransparency = line.paintColor.alpha != 255;
+
+      if (hasTransparency) {
+        final blendPaint = Paint()
+          ..color = line.paintColor
+          ..isAntiAlias = antiAliasBlend;
+        canvas.saveLayer(canvas.getLocalClipBounds(), blendPaint);
+      }
       canvas.drawPoints(PointMode.polygon, line.path, intransparentPaint);
-      canvas.restore();
+      if (hasTransparency) {
+        canvas.restore();
+      }
     }
   }
 
@@ -92,8 +96,10 @@ class DrawingAreaPainter extends CustomPainter {
   bool shouldRepaint(covariant DrawingAreaPainter oldDelegate) {
     final start = DateTime.now();
     lastPaintHashCode = _generateHashCode();
-    log('Took ${DateTime.now().difference(start).inMicroseconds}microseconds to calculate hash',
-        name: 'DrawingAreaPainter.shouldRepaint');
+    log(
+      'Took ${DateTime.now().difference(start).inMicroseconds}microseconds to calculate hash',
+      name: 'DrawingAreaPainter.shouldRepaint',
+    );
     lastPaintTheme = SystemTheme.isDarkMode;
     var result = oldDelegate.lastPaintHashCode != lastPaintHashCode ||
         oldDelegate.eraserAt != eraserAt ||

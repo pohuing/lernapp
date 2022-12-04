@@ -23,7 +23,7 @@ class Line {
   Line(this.path, this.colors, this.size);
   Line.withDefaultProperties(this.path)
       : colors =
-            const ColorPair(brightTheme: Colors.black, darkTheme: Colors.white)
+            const ColorPair.defaultColors()
                 .copy(),
         size = 1;
 

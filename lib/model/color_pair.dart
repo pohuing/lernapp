@@ -1,5 +1,4 @@
-import 'dart:ui';
-
+import 'package:flutter/material.dart';
 import 'package:lernapp/logic/logging.dart';
 
 /// A pair of colours used for drawing on a canvas with colors fitting to the
@@ -15,6 +14,10 @@ class ColorPair {
   static const darkThemeKey = 'darkTheme';
 
   const ColorPair({required this.brightTheme, required this.darkTheme});
+
+  const ColorPair.defaultColors()
+      : darkTheme = Colors.white,
+        brightTheme = Colors.black;
 
   @override
   int get hashCode => brightTheme.hashCode ^ darkTheme.hashCode;

@@ -5,8 +5,9 @@ import 'package:lernapp/blocs/preferences/preferences_bloc.dart';
 import 'package:lernapp/logic/logging.dart';
 import 'package:lernapp/model/line.dart';
 
-import 'drawing_area_painter.dart';
 import 'drawing_area_controller.dart';
+import 'drawing_area_painter.dart';
+
 export 'drawing_area_controller.dart';
 
 class DrawingArea extends StatefulWidget {
@@ -48,16 +49,25 @@ class _DrawingAreaState extends State<DrawingArea> {
 
   @override
   Widget build(BuildContext context) {
-    return RepaintBoundary(
-      child: Listener(
-        onPointerDown: onPointerDown,
-        onPointerMove: onPointerMove,
-        onPointerUp: onPointerUp,
-        child: BlocBuilder<PreferencesBloc, PreferencesStateBase>(
-          builder:(context, state) => CustomPaint(
+    return BlocBuilder<PreferencesBloc, PreferencesStateBase>(
+      builder: (context, state) => RepaintBoundary(
+        child: Listener(
+          onPointerDown: onPointerDown,
+          onPointerMove: onPointerMove,
+          onPointerUp: onPointerUp,
+          child: CustomPaint(
             size: MediaQuery.of(context).size,
-            painter: DrawingAreaPainter(
+            isComplex: true,
+            foregroundPainter: DrawingAreaPainter(
               line: line,
+              lines: [],
+              xOffset: controller.xOffset,
+              yOffset: controller.yOffset,
+              antiAliasBlend: state.themePreferences.blendAA,
+              antiAliasPaint: state.themePreferences.paintAA,
+            ),
+            painter: DrawingAreaPainter(
+              line: Line.withDefaultProperties(const []),
               lines: widget.lines,
               xOffset: controller.xOffset,
               yOffset: controller.yOffset,
