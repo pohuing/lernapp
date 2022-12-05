@@ -166,6 +166,7 @@ class _TaskAreaState extends State<TaskArea> {
                         const EdgeInsets.only(left: 4, bottom: 8.0, top: 0),
                     child: Material(
                       color: Theme.of(context).colorScheme.secondaryContainer,
+                      elevation: 3,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
