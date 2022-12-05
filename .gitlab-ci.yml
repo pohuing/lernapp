@@ -14,7 +14,7 @@ web:
   stage: build
   image: "cirrusci/flutter:stable"
   script:
-    - flutter build web --dart-define=FLUTTER_WEB_CANVASKIT_URL=/canvaskit/
+    - flutter build web --dart-define=FLUTTER_WEB_CANVASKIT_URL=/canvaskit/ # Self host canvaskit
     - tar -cvf web.tar -C ./build/ web
   artifacts:
     name: web
