@@ -42,7 +42,9 @@ void main() async {
         BlocProvider<TasksBloc>(
           create: (context) => TasksBloc(defaultRepository, prefs),
         ),
-        BlocProvider<SelectionCubit>(create:(context) => SelectionCubit(), ),
+        BlocProvider<SelectionCubit>(
+          create: (context) => SelectionCubit(),
+        ),
       ],
       child: const MyApp(),
     ),
@@ -50,7 +52,9 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool? showPerformanceOverlay;
+
+  const MyApp({super.key, this.showPerformanceOverlay});
 
   ThemeData get brightTheme {
     return ThemeData.from(
@@ -81,6 +85,7 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       theme: brightTheme,
       darkTheme: darkTheme,
+      showPerformanceOverlay: showPerformanceOverlay ?? false,
       routeInformationParser: LernappRouter.router.routeInformationParser,
       routeInformationProvider: LernappRouter.router.routeInformationProvider,
       routerDelegate: LernappRouter.router.routerDelegate,

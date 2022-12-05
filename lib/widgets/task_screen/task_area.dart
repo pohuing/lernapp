@@ -126,6 +126,7 @@ class _TaskAreaState extends State<TaskArea> {
                         ),
                         ColorSelectionRow(controller: colorController),
                         IconButton(
+                          tooltip: 'Add a new color',
                           onPressed: () async {
                             final colourChanged = await showDialog(
                               context: context,
@@ -144,7 +145,7 @@ class _TaskAreaState extends State<TaskArea> {
                         ),
                         Slider(
                           min: 1,
-                          max: 10,
+                          max: 20,
                           value: controller.penSize,
                           onChanged: (value) => setState(() {
                             controller.penSize = value;
@@ -155,6 +156,7 @@ class _TaskAreaState extends State<TaskArea> {
                   ),
                 ),
                 AnimatedPositioned(
+                  // History
                   duration: expandDuration,
                   curve: expandAnimationCurve,
                   top: 0,
@@ -215,6 +217,7 @@ class _TaskAreaState extends State<TaskArea> {
                   ),
                 ),
                 AnimatedPositioned(
+                  // History button
                   duration: expandDuration,
                   curve: expandAnimationCurve,
                   bottom: 4,
