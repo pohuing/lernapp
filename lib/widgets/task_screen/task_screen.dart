@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
+import 'package:lernapp/model/task.dart';
 import 'package:lernapp/widgets/general_purpose/timed_snackbar.dart';
 import 'package:lernapp/widgets/task_screen/task_area.dart';
 import 'package:uuid/uuid.dart';
@@ -15,7 +16,7 @@ class TaskScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: FutureBuilder(
+        child: FutureBuilder<Task?>(
           future: () async {
             final result =
                 await context.read<TasksBloc>().repository.findByUuid(uuid);

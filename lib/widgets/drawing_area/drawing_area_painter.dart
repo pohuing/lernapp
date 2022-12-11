@@ -15,6 +15,7 @@ class DrawingAreaPainter extends CustomPainter {
   final double eraserSize;
   final bool antiAliasBlend;
   final bool antiAliasPaint;
+  final String? tag;
 
   // used for redraw testing for when system theme has changed since last paint
   bool? lastPaintTheme;
@@ -22,10 +23,11 @@ class DrawingAreaPainter extends CustomPainter {
 
   DrawingAreaPainter({
     required this.line,
-    required this.lines,
+    this.lines = const [],
     required this.xOffset,
     required this.yOffset,
     this.eraserAt,
+    this.tag,
     double? eraserSize,
     bool? antiAliasBlend,
     bool? antiAliasPaint,
@@ -39,11 +41,11 @@ class DrawingAreaPainter extends CustomPainter {
     final intransparentPaint = Paint()
       ..strokeCap = StrokeCap.round
       ..isAntiAlias = antiAliasPaint;
-    final eraserPaint = Paint()
-      ..color = isDarkMode ? Colors.white : Colors.black
-      ..isAntiAlias = antiAliasPaint;
 
     if (eraserAt != null) {
+      final eraserPaint = Paint()
+        ..color = isDarkMode ? Colors.white : Colors.black
+        ..isAntiAlias = antiAliasPaint;
       canvas.drawCircle(
         eraserAt!,
         eraserSize,
@@ -54,14 +56,14 @@ class DrawingAreaPainter extends CustomPainter {
     canvas.translate(xOffset, yOffset);
 
     for (int i = 0; i < lines.length; i++) {
-      final blendPaint = Paint();
-      blendPaint.color = lines[i].paintColor;
       intransparentPaint.strokeWidth = lines[i].size;
       intransparentPaint.color = lines[i].paintColor.withAlpha(255);
       intransparentPaint.isAntiAlias = antiAliasPaint;
       final hasTransparency = lines[i].paintColor.alpha != 255;
 
       if (hasTransparency) {
+        final blendPaint = Paint();
+        blendPaint.color = lines[i].paintColor;
         // Drawing the layer with an intransparent paint and later restoring with
         // a transparent paint avoids overlaps between start and end of a line
         // segment
@@ -97,18 +99,18 @@ class DrawingAreaPainter extends CustomPainter {
     final start = DateTime.now();
     lastPaintHashCode = _generateHashCode();
     log(
-      'Took ${DateTime.now().difference(start).inMicroseconds}microseconds to calculate hash',
-      name: 'DrawingAreaPainter.shouldRepaint',
+      'Took ${DateTime.now().difference(start).inMicroseconds}μs to calculate hash',
+      name: 'DrawingAreaPainter($tag).shouldRepaint',
     );
     lastPaintTheme = SystemTheme.isDarkMode;
     var result = oldDelegate.lastPaintHashCode != lastPaintHashCode ||
         oldDelegate.eraserAt != eraserAt ||
         oldDelegate.lastPaintTheme != lastPaintTheme;
     if (kDebugMode) {
-      log(result.toString(), name: 'DrawingAreaPainter.shouldRepaint()');
+      log(result.toString(), name: 'DrawingAreaPainter($tag).shouldRepaint');
       log(
         'Took ${DateTime.now().difference(start).inMicroseconds}μs checking repaint',
-        name: 'DrawingAreaPainter.shouldRepaint',
+        name: 'DrawingAreaPainter($tag).shouldRepaint',
       );
     }
     return result;
