@@ -28,7 +28,7 @@ class _ThemeSettingsTileState extends State<ThemeSettingsTile> {
                   onChanged: (value) =>
                       context.read<PreferencesBloc>().add(ChangeBlendAA(value)),
                 ),
-                SwitchListTile(
+                SwitchListTile.adaptive(
                   title: const Text('Enable Paint AA'),
                   subtitle: const Text(
                     'Apply anti-aliasing when drawing lines, major performance impact',

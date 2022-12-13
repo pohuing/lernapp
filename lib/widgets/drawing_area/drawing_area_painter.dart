@@ -58,7 +58,6 @@ class DrawingAreaPainter extends CustomPainter {
     for (int i = 0; i < lines.length; i++) {
       intransparentPaint.strokeWidth = lines[i].size;
       intransparentPaint.color = lines[i].paintColor.withAlpha(255);
-      intransparentPaint.isAntiAlias = antiAliasPaint;
       final hasTransparency = lines[i].paintColor.alpha != 255;
 
       if (hasTransparency) {

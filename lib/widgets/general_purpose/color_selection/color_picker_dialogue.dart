@@ -55,7 +55,7 @@ class _ColorPickerDialogueState extends State<ColorPickerDialogue> {
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SwitchListTile(
+          SwitchListTile.adaptive(
             title: const Text('Use separate colors'),
             value: dualColours,
             onChanged: (value) => setState(() => dualColours = value),
