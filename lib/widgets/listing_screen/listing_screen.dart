@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lernapp/blocs/selection_cubit.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
+import 'package:lernapp/widgets/general_purpose/adaptive_yes_no_option.dart';
 
 import 'task_listing.dart';
 
@@ -66,12 +67,33 @@ class ListingScreen extends StatelessWidget {
             ),
           ),
         if (state.isSelecting)
+          InkWell(
+            onTap: () => context
+                .read<SelectionCubit>()
+                .setShouldRandomize(!state.isRandomized),
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              child: Row(
+                children: [
+                  Text(
+                    'Randomize',
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                  AdaptiveYesNoOption(
+                    value: state.isRandomized,
+                    onChanged: (newValue) => null,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        if (state.isSelecting)
           Container(
             padding: const EdgeInsets.all(8),
             child: ElevatedButton(
               onPressed: state.selectedUuids.isEmpty
                   ? null
-                  : () => context.goNamed('session'),
+                  : () => context.pushNamed('session'),
               child: const Text('Start Session'),
             ),
           ),

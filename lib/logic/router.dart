@@ -38,7 +38,7 @@ class LernappRouter {
         name: 'session',
         path: '/session',
         builder: (context, state) => SessionScreen(
-          tasks: context.read<SelectionCubit>().state.selectedUuids.toList(),
+          tasks: context.read<SelectionCubit>().state.maybeShuffledUuids,
         ),
       ),
       GoRoute(
