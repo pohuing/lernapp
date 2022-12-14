@@ -76,8 +76,14 @@ class PlatformAdativeScaffold extends StatelessWidget {
           navigationBar: CupertinoNavigationBar(
             previousPageTitle: previousTitle,
             middle: Text(title),
+            trailing: actions.map(
+              (e) => Row(
+                mainAxisSize: MainAxisSize.min,
+                children: e,
+              ),
+            ),
           ),
-          child: Material(child: body),
+          child: SafeArea(child: Material(child: body)),
         );
       }
     } else {

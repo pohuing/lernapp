@@ -16,8 +16,7 @@ class TaskTile extends StatelessWidget {
     return Material(
       child: BlocBuilder<SelectionCubit, SelectionState>(
         builder: (context, state) => Padding(
-          padding:
-              EdgeInsets.only(left: depth != null ? (depth! + 1) * 16 : 0),
+          padding: EdgeInsets.only(left: depth != null ? (depth! + 1) * 16 : 0),
           child: Container(
             decoration: BoxDecoration(
               border: BorderDirectional(
@@ -33,8 +32,7 @@ class TaskTile extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      color:
-                          Theme.of(context).colorScheme.onSecondaryContainer,
+                      color: Theme.of(context).colorScheme.onSecondaryContainer,
                     ),
               ),
               leading: state.isSelecting
