@@ -67,7 +67,9 @@ class _SessionScreenState extends State<SessionScreen> {
                   ),
                 );
               } else {
-                return const Center(child: CircularProgressIndicator());
+                return const Center(
+                  child: CircularProgressIndicator.adaptive(),
+                );
               }
             },
           );

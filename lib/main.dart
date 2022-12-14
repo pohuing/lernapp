@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -57,7 +58,7 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key, this.showPerformanceOverlay});
 
   ThemeData get brightTheme {
-    return ThemeData.from(
+    var data = ThemeData.from(
       colorScheme: ColorScheme.fromSeed(
         seedColor: SystemTheme.accentColor.accent,
         brightness: Brightness.light,
@@ -65,10 +66,23 @@ class MyApp extends StatelessWidget {
       useMaterial3: true,
       textTheme: Typography().black,
     );
+
+    data = data.copyWith(
+      listTileTheme: data.listTileTheme.copyWith(tileColor: Colors.transparent),
+      canvasColor: Colors.transparent,
+      cupertinoOverrideTheme: CupertinoThemeData(
+        scaffoldBackgroundColor: Colors.white,
+        barBackgroundColor: data.colorScheme.background.withAlpha(120),
+        textTheme:
+            CupertinoTextThemeData(primaryColor: data.colorScheme.primary),
+      ),
+    );
+
+    return data;
   }
 
   ThemeData get darkTheme {
-    return ThemeData.from(
+    var data = ThemeData.from(
       colorScheme: ColorScheme.fromSeed(
         seedColor: SystemTheme.accentColor.accent,
         brightness: Brightness.dark,
@@ -76,6 +90,19 @@ class MyApp extends StatelessWidget {
       useMaterial3: true,
       textTheme: Typography().white,
     );
+
+    data = data.copyWith(
+      listTileTheme: data.listTileTheme.copyWith(tileColor: Colors.transparent),
+      canvasColor: Colors.transparent,
+      cupertinoOverrideTheme: CupertinoThemeData(
+        scaffoldBackgroundColor: Colors.black,
+        barBackgroundColor: data.colorScheme.background.withAlpha(120),
+        textTheme:
+            CupertinoTextThemeData(primaryColor: data.colorScheme.primary),
+      ),
+    );
+
+    return data;
   }
 
   @override

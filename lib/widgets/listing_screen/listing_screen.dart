@@ -41,12 +41,7 @@ class PlatformAdativeScaffold extends StatelessWidget {
                 handle:
                     NestedScrollView.sliverOverlapAbsorberHandleFor(context),
                 sliver: CupertinoSliverNavigationBar(
-                  backgroundColor:
-                      Theme.of(context).colorScheme.background.withAlpha(120),
-                  largeTitle: Text(
-                    title,
-                    style: Theme.of(context).textTheme.displaySmall,
-                  ),
+                  largeTitle: Text(title),
                   previousPageTitle: previousTitle,
                   trailing: actions.map(
                     (value) => Material(
@@ -65,9 +60,12 @@ class PlatformAdativeScaffold extends StatelessWidget {
                 slivers: [
                   SliverOverlapInjector(
                     handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                        context),
+                      context,
+                    ),
                   ),
-                  SliverToBoxAdapter(child: Material(child: body)),
+                  SliverToBoxAdapter(
+                    child: Material(child: body),
+                  ),
                 ],
               ),
             ),
@@ -76,12 +74,10 @@ class PlatformAdativeScaffold extends StatelessWidget {
       } else {
         return CupertinoPageScaffold(
           navigationBar: CupertinoNavigationBar(
-            backgroundColor:
-                Theme.of(context).colorScheme.background.withAlpha(120),
             previousPageTitle: previousTitle,
-            middle: Text(title, style: Theme.of(context).textTheme.titleLarge),
+            middle: Text(title),
           ),
-          child: body,
+          child: Material(child: body),
         );
       }
     } else {
@@ -106,7 +102,8 @@ class PlatformAdativeScaffold extends StatelessWidget {
                 slivers: [
                   SliverOverlapInjector(
                     handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                        context),
+                      context,
+                    ),
                   ),
                   SliverToBoxAdapter(child: Material(child: body)),
                 ],
@@ -120,7 +117,7 @@ class PlatformAdativeScaffold extends StatelessWidget {
             title: Text(title),
             actions: actions,
           ),
-          primary: primary ?? false,
+          primary: primary,
           body: body,
         );
       }
@@ -159,7 +156,7 @@ class ListingScreen extends StatelessWidget {
                 );
               } else if (state is TaskStorageLoading) {
                 return const Center(
-                  child: CircularProgressIndicator(),
+                  child: CircularProgressIndicator.adaptive(),
                 );
               } else {
                 return Text(state.toString());
