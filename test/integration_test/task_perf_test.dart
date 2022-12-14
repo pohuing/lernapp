@@ -40,7 +40,7 @@ main() {
       ),
     );
     final defaultRepository =
-    await hiveRepositoryConfiguration.createRepository();
+        await hiveRepositoryConfiguration.createRepository();
 
     await widgetTester.pumpWidget(
       MultiProvider(
@@ -62,10 +62,15 @@ main() {
         .tap(find.widgetWithText(CategoryTile, 'Angewandte Informatik'));
     await widgetTester.pumpAndSettle();
     await widgetTester.tap(
-        find.widgetWithText(CategoryTile, 'Objektorientierte Programmierung'));
+      find.widgetWithText(CategoryTile, 'Objektorientierte Programmierung'),
+    );
     await widgetTester.pumpAndSettle();
-    await widgetTester.tap(find.widgetWithText(
-        TaskTile, 'Modellieren eines Kettensägengeschäfts'));
+    await widgetTester.tap(
+      find.widgetWithText(
+        TaskTile,
+        'Modellieren eines Kettensägengeschäfts',
+      ),
+    );
     await widgetTester.pumpAndSettle();
     expect(find.byType(TaskScreen), findsOneWidget);
 
@@ -88,9 +93,9 @@ main() {
     // Add colored lines
     await widgetTester.tap(find.byTooltip('Add a new color'));
     await widgetTester.pumpAndSettle();
-    await widgetTester.tap(find
-        .byType(ColorPickerSlider)
-        .last);
+    await widgetTester.tap(
+      find.byType(ColorPickerSlider).last,
+    );
     await widgetTester.pumpAndSettle();
     await widgetTester.tap(find.text('Confirm'));
     await widgetTester.pumpAndSettle();

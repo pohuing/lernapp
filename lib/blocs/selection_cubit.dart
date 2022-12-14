@@ -66,14 +66,29 @@ class SelectionState {
   late final UnmodifiableListView<UuidValue> asList =
       UnmodifiableListView(selectedUuids);
 
-  // Getter which returns optionally shuffled list of Uuids
+  /// Getter which returns optionally shuffled list of Uuids
   UnmodifiableListView<UuidValue> get maybeShuffledUuids =>
       isRandomized ? shuffled : asList;
 
   SelectionState(this.selectedUuids, this.isSelecting, this.isRandomized);
 
+  /// Returns true if [selectedUuids] contains all Uuids of [category]
   bool entireCategoryIsSelected(TaskCategory category) {
     return selectedUuids.containsAll(category.gatherUuids());
+  }
+
+  /// Returns [true] if [selectedUuids] contains all Uuids of [category]
+  /// Returns [false] if [selectedUuids] contains no Uuids of [category]
+  /// returns [null] if [selectedUuids] contains some but not all Uuids of [category]
+  bool? isCategorySelectedTristate(TaskCategory category) {
+    final uuids = category.gatherUuids();
+    if (selectedUuids.containsAll(uuids)) {
+      return true;
+    } else if (uuids.any(selectedUuids.contains)) {
+      return null;
+    } else {
+      return false;
+    }
   }
 
   SelectionState copyWith({
@@ -81,7 +96,10 @@ class SelectionState {
     Set<UuidValue>? selectedUuids,
     bool? isRandomized,
   }) {
-    return SelectionState(selectedUuids ?? this.selectedUuids,
-        isSelecting ?? this.isSelecting, isRandomized ?? this.isRandomized,);
+    return SelectionState(
+      selectedUuids ?? this.selectedUuids,
+      isSelecting ?? this.isSelecting,
+      isRandomized ?? this.isRandomized,
+    );
   }
 }

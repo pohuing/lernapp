@@ -24,9 +24,12 @@ class LernappRouter {
       GoRoute(
         name: 'task',
         path: '/task:tid',
-        redirect: (context, state) => Uuid.isValidUUID(fromString: state.params['tid'] ?? 'lol') ? null : '/404',
+        redirect: (context, state) =>
+            Uuid.isValidUUID(fromString: state.params['tid'] ?? 'lol')
+                ? null
+                : '/404',
         builder: (context, state) {
-            return TaskScreen(uuid: UuidValue(state.params['tid']!));
+          return TaskScreen(uuid: UuidValue(state.params['tid']!));
         },
       ),
       GoRoute(

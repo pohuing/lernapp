@@ -4,8 +4,8 @@ import 'package:implicitly_animated_list/implicitly_animated_list.dart';
 import 'package:lernapp/model/high_performance_listing_wrappers.dart';
 import 'package:lernapp/model/task_category.dart';
 
-import 'task_tile.dart';
 import 'category_tile.dart';
+import 'task_tile.dart';
 
 class TaskListing extends StatefulWidget {
   final List<TaskCategory> categories;
@@ -36,7 +36,8 @@ class _TaskListingState extends State<TaskListing> {
 
     return ImplicitlyAnimatedList(
       itemData: flattened,
-      primary: true,
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
       itemBuilder: (context, entry) {
         if (entry is ListingEntryCategory) {
           return CategoryTile(

@@ -103,7 +103,8 @@ class CategoryTile extends StatelessWidget {
       return null;
     }
     return Checkbox(
-      value: state.entireCategoryIsSelected(entry.category),
+      value: state.isCategorySelectedTristate(entry.category),
+      tristate: true,
       onChanged: (value) =>
           context.read<SelectionCubit>().toggleCategory(entry.category),
     );
