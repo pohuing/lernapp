@@ -7,11 +7,13 @@ import 'package:lernapp/blocs/preferences/preferences_bloc.dart';
 import 'package:lernapp/blocs/selection_cubit.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
 import 'package:lernapp/logic/router.dart';
+import 'package:lernapp/logic/ui_overlay_setter_observer.dart';
 import 'package:provider/provider.dart';
 import 'package:system_theme/system_theme.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  final binding = WidgetsFlutterBinding.ensureInitialized();
+  binding.addObserver(UIOverlaySetterObserver());
 
   if (kIsWeb ||
       [TargetPlatform.android, TargetPlatform.windows]
