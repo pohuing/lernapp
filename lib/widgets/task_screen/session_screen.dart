@@ -22,9 +22,9 @@ class _SessionScreenState extends State<SessionScreen> {
   Widget build(BuildContext context) {
     return PlatformAdativeScaffold(
       title: 'Session',
-      scrollable: false,
-      primary: true,
+      useSliverAppBar: false,
       previousTitle: 'Tasks',
+      allowBackGesture: false,
       actions: [
         TextButton(
           onPressed: () => cubit.previous(),

@@ -9,8 +9,8 @@ class Scratchpad extends StatelessWidget {
   Widget build(BuildContext context) {
     return PlatformAdativeScaffold(
       title: 'Scribble',
-      scrollable: false,
-      primary: true,
+      useSliverAppBar: false,
+      allowBackGesture: false,
       previousTitle: 'Tasks',
       body: DrawingArea(lines: []),
     );

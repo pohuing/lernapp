@@ -18,8 +18,8 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
     return PlatformAdativeScaffold(
       title: 'Preferences',
       previousTitle: 'Tasks',
-      primary: true,
-      body: Column(
+      body: ListView(
+        padding: EdgeInsets.zero,
         children: const [
           RepositoryOptionsSelection(),
           ThemeSettingsTile(),

@@ -17,108 +17,88 @@ class PlatformAdativeScaffold extends StatelessWidget {
   final String? previousTitle;
   final Widget body;
   final bool primary;
-  final bool scrollable;
+  final bool useSliverAppBar;
+  final bool allowBackGesture;
+  final bool showAppBar;
 
-  PlatformAdativeScaffold({
+  const PlatformAdativeScaffold({
     super.key,
     this.actions,
     required this.title,
     this.previousTitle,
     required this.body,
     bool? primary,
-    bool? scrollable,
-  })  : primary = primary ?? false,
-        scrollable = scrollable ?? true;
+    bool? useSliverAppBar,
+    bool? allowBackGesture,
+    bool? showAppBar,
+  })  : primary = primary ?? true,
+        useSliverAppBar = useSliverAppBar ?? true,
+        allowBackGesture = allowBackGesture ?? true,
+        showAppBar = showAppBar ?? true;
 
   @override
   Widget build(BuildContext context) {
+    Widget value;
     if (Platform.isIOS) {
-      if (scrollable) {
-        return CupertinoPageScaffold(
+      if (useSliverAppBar && showAppBar) {
+        value = CupertinoPageScaffold(
           child: NestedScrollView(
-            headerSliverBuilder: (context, innerBoxIsScrolled) => [
-              SliverOverlapAbsorber(
-                handle:
-                    NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                sliver: CupertinoSliverNavigationBar(
+            headerSliverBuilder: (context, innerBoxIsScrolled) {
+              return [
+                CupertinoSliverNavigationBar(
                   largeTitle: Text(title),
                   previousPageTitle: previousTitle,
                   trailing: actions.map(
-                    (value) => Material(
-                      color: Colors.transparent,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: value,
-                      ),
+                    (value) => Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: value,
                     ),
-                  ),
-                ),
-              )
-            ],
-            body: Builder(
-              builder: (context) => CustomScrollView(
-                slivers: [
-                  SliverOverlapInjector(
-                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                      context,
-                    ),
-                  ),
-                  SliverToBoxAdapter(
-                    child: Material(child: body),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      } else {
-        return CupertinoPageScaffold(
-          navigationBar: CupertinoNavigationBar(
-            previousPageTitle: previousTitle,
-            middle: Text(title),
-            trailing: actions.map(
-              (e) => Row(
-                mainAxisSize: MainAxisSize.min,
-                children: e,
-              ),
-            ),
-          ),
-          child: SafeArea(child: Material(child: body)),
-        );
-      }
-    } else {
-      if (scrollable) {
-        return Scaffold(
-          primary: true,
-          body: NestedScrollView(
-            headerSliverBuilder: (context, innerBoxIsScrolled) {
-              return [
-                SliverOverlapAbsorber(
-                  handle:
-                      NestedScrollView.sliverOverlapAbsorberHandleFor(context),
-                  sliver: SliverAppBar.large(
-                    title: Text(title),
-                    actions: actions,
                   ),
                 )
               ];
             },
-            body: Builder(
-              builder: (context) => CustomScrollView(
-                slivers: [
-                  SliverOverlapInjector(
-                    handle: NestedScrollView.sliverOverlapAbsorberHandleFor(
-                      context,
-                    ),
-                  ),
-                  SliverToBoxAdapter(child: Material(child: body)),
-                ],
-              ),
-            ),
+            body: body,
           ),
         );
       } else {
-        return Scaffold(
+        value = CupertinoPageScaffold(
+          navigationBar: showAppBar
+              ? CupertinoNavigationBar(
+                  previousPageTitle: previousTitle,
+                  middle: Text(title),
+                  trailing: actions.map(
+                    (e) => Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: e,
+                    ),
+                  ),
+                )
+              : null,
+          child: body,
+        );
+      }
+      value = Material(
+        color: Colors.transparent,
+        child: value,
+      );
+    } else {
+      if (useSliverAppBar && showAppBar) {
+        value = Scaffold(
+          primary: primary,
+          body: NestedScrollView(
+            headerSliverBuilder: (context, innerBoxIsScrolled) {
+              return [
+                SliverAppBar.large(
+                  title: Text(title),
+                  actions: actions,
+                ),
+              ];
+            },
+            body: body,
+          ),
+        );
+      } else {
+        value = Scaffold(
           appBar: AppBar(
             title: Text(title),
             actions: actions,
@@ -128,6 +108,17 @@ class PlatformAdativeScaffold extends StatelessWidget {
         );
       }
     }
+
+    if (!showAppBar) {
+      value = SafeArea(child: value);
+    }
+
+    return WillPopScope(
+      onWillPop: allowBackGesture
+          ? null
+          : () => Future.value(Navigator.of(context).userGestureInProgress),
+      child: value,
+    );
   }
 }
 
@@ -138,7 +129,6 @@ class ListingScreen extends StatelessWidget {
   Widget build(BuildContext context) =>
       BlocBuilder<SelectionCubit, SelectionState>(
         builder: (context, state) => PlatformAdativeScaffold(
-          primary: true,
           title: 'Tasks',
           actions: _buildAppBar(state, context),
           body: BlocBuilder<TasksBloc, TaskStorageStateBase>(

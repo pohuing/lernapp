@@ -36,8 +36,6 @@ class _TaskListingState extends State<TaskListing> {
 
     return ImplicitlyAnimatedList(
       itemData: flattened,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, entry) {
         if (entry is ListingEntryCategory) {
           return CategoryTile(
