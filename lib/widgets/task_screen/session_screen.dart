@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lernapp/blocs/session_cubit.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
-import 'package:lernapp/widgets/listing_screen/listing_screen.dart';
+import 'package:lernapp/widgets/general_purpose/platform_adaptive_scaffold.dart';
 import 'package:lernapp/widgets/task_screen/task_area.dart';
 import 'package:uuid/uuid.dart';
 
@@ -20,7 +20,7 @@ class _SessionScreenState extends State<SessionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return PlatformAdativeScaffold(
+    return PlatformAdaptiveScaffold(
       title: 'Session',
       useSliverAppBar: false,
       previousTitle: 'Tasks',

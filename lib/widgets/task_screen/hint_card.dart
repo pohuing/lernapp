@@ -18,8 +18,7 @@ class HintCard extends StatelessWidget {
             const VerticalDivider(width: 8),
             IgnorePointer(
               child: IconButton(
-                // ignore: avoid_returning_null_for_void
-                onPressed: () => null,
+                onPressed: () {},
                 icon: const Icon(Icons.flip),
               ),
             ),
