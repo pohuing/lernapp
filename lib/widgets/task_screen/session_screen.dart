@@ -24,7 +24,6 @@ class _SessionScreenState extends State<SessionScreen> {
       title: 'Session',
       useSliverAppBar: false,
       previousTitle: 'Tasks',
-      allowBackGesture: false,
       actions: [
         TextButton(
           onPressed: () => cubit.previous(),
@@ -35,36 +34,38 @@ class _SessionScreenState extends State<SessionScreen> {
           child: const Text('Next'),
         ),
       ],
-      body: BlocBuilder<SessionCubit, SessionState>(
-        bloc: cubit,
-        builder: (context, state) {
-          return FutureBuilder(
-            key: Key(state.currentTask.toString()),
-            future: context
-                .read<TasksBloc>()
-                .repository
-                .findByUuid(state.currentTask!),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return TaskArea(
-                  key: Key(state.currentTask!.uuid.toString()),
-                  showBackButton: false,
-                  task: snapshot.data!,
-                );
-              } else if (snapshot.connectionState == ConnectionState.done) {
-                return const Center(
-                  child: Text(
-                    'Something went wrong, could not find any data for that task id',
-                  ),
-                );
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator.adaptive(),
-                );
-              }
-            },
-          );
-        },
+      body: SafeArea(
+        child: BlocBuilder<SessionCubit, SessionState>(
+          bloc: cubit,
+          builder: (context, state) {
+            return FutureBuilder(
+              key: Key(state.currentTask.toString()),
+              future: context
+                  .read<TasksBloc>()
+                  .repository
+                  .findByUuid(state.currentTask!),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return TaskArea(
+                    key: Key(state.currentTask!.uuid.toString()),
+                    showBackButton: false,
+                    task: snapshot.data!,
+                  );
+                } else if (snapshot.connectionState == ConnectionState.done) {
+                  return const Center(
+                    child: Text(
+                      'Something went wrong, could not find any data for that task id',
+                    ),
+                  );
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator.adaptive(),
+                  );
+                }
+              },
+            );
+          },
+        ),
       ),
     );
   }
