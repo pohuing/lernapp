@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class ScrollableSelectableText extends StatelessWidget {
@@ -22,7 +21,7 @@ class ScrollableSelectableText extends StatelessWidget {
           controller: _controller,
           child: SelectableRegion(
             focusNode: FocusNode(),
-            selectionControls: defaultTargetPlatform == TargetPlatform.iOS
+            selectionControls: Theme.of(context).platform == TargetPlatform.iOS
                 ? CupertinoTextSelectionControls()
                 : MaterialTextSelectionControls(),
             child: Text(

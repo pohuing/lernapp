@@ -1,3 +1,4 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -38,20 +39,29 @@ void main() async {
   final defaultRepository =
       await hiveRepositoryConfiguration.createRepository();
 
-  runApp(
-    MultiProvider(
-      providers: [
-        BlocProvider.value(value: prefs),
-        BlocProvider<TasksBloc>(
-          create: (context) => TasksBloc(defaultRepository, prefs),
-        ),
-        BlocProvider<SelectionCubit>(
-          create: (context) => SelectionCubit(),
-        ),
-      ],
-      child: const MyApp(),
-    ),
-  );
+  Widget builder([BuildContext? context]) => MultiProvider(
+        providers: [
+          BlocProvider.value(value: prefs),
+          BlocProvider<TasksBloc>(
+            create: (context) => TasksBloc(defaultRepository, prefs),
+          ),
+          BlocProvider<SelectionCubit>(
+            create: (context) => SelectionCubit(),
+          ),
+        ],
+        child: const MyApp(),
+      );
+
+  if (kDebugMode) {
+    runApp(
+      DevicePreview(
+        enabled: kDebugMode,
+        builder: builder,
+      ),
+    );
+  } else {
+    runApp(builder());
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -115,6 +125,9 @@ class MyApp extends StatelessWidget {
       theme: brightTheme,
       darkTheme: darkTheme,
       showPerformanceOverlay: showPerformanceOverlay ?? false,
+      useInheritedMediaQuery: kDebugMode,
+      locale: kDebugMode ? DevicePreview.locale(context) : null,
+      builder: kDebugMode ? DevicePreview.appBuilder : null,
       routeInformationParser: LernappRouter.router.routeInformationParser,
       routeInformationProvider: LernappRouter.router.routeInformationProvider,
       routerDelegate: LernappRouter.router.routerDelegate,
