@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lernapp/blocs/preferences/preferences_bloc.dart';
 
 class ThemeSettingsTile extends StatefulWidget {
-  const ThemeSettingsTile({Key? key}) : super(key: key);
+  const ThemeSettingsTile({super.key});
 
   @override
   State<ThemeSettingsTile> createState() => _ThemeSettingsTileState();

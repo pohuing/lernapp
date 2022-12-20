@@ -9,7 +9,7 @@ class TaskTile extends StatelessWidget {
   final Task task;
   final int? depth;
 
-  const TaskTile({Key? key, required this.task, this.depth}) : super(key: key);
+  const TaskTile({super.key, required this.task, this.depth});
 
   @override
   Widget build(BuildContext context) {

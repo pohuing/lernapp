@@ -91,8 +91,7 @@ class ColorSelectionRow extends StatefulWidget {
   final ColorSelectionController? controller;
   final double? height;
 
-  const ColorSelectionRow({Key? key, this.controller, this.height})
-      : super(key: key);
+  const ColorSelectionRow({super.key, this.controller, this.height});
 
   @override
   State<ColorSelectionRow> createState() => _ColorSelectionRowState();

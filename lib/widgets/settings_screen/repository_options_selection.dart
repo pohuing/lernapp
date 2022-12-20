@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lernapp/blocs/preferences/preferences_bloc.dart';
 
 class RepositoryOptionsSelection extends StatefulWidget {
-  const RepositoryOptionsSelection({Key? key}) : super(key: key);
+  const RepositoryOptionsSelection({super.key});
 
   @override
   State<RepositoryOptionsSelection> createState() =>

@@ -5,7 +5,7 @@ import '../general_purpose/scrollable_selectable_text.dart';
 class HintCard extends StatelessWidget {
   final String hint;
 
-  const HintCard({Key? key, required this.hint}) : super(key: key);
+  const HintCard({super.key, required this.hint});
 
   @override
   Widget build(BuildContext context) {

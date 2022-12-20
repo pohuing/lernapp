@@ -6,8 +6,7 @@ import 'package:lernapp/widgets/general_purpose/color_selection/color_selection.
 class ColorPickerDialogue extends StatefulWidget {
   final ColorSelectionController colorController;
 
-  const ColorPickerDialogue({Key? key, required this.colorController})
-      : super(key: key);
+  const ColorPickerDialogue({super.key, required this.colorController});
 
   @override
   State<ColorPickerDialogue> createState() => _ColorPickerDialogueState();

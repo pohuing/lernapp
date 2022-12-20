@@ -12,10 +12,10 @@ class TaskListing extends StatefulWidget {
   final bool withNavBarStyle;
 
   const TaskListing({
-    Key? key,
+    super.key,
     required this.categories,
     required this.withNavBarStyle,
-  }) : super(key: key);
+  });
 
   @override
   State<TaskListing> createState() => _TaskListingState();

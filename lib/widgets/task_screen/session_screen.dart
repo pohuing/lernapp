@@ -9,7 +9,7 @@ import 'package:uuid/uuid.dart';
 class SessionScreen extends StatefulWidget {
   final List<UuidValue> tasks;
 
-  const SessionScreen({Key? key, required this.tasks}) : super(key: key);
+  const SessionScreen({super.key, required this.tasks});
 
   @override
   State<SessionScreen> createState() => _SessionScreenState();

@@ -10,7 +10,7 @@ import 'package:uuid/uuid.dart';
 class TaskScreen extends StatelessWidget {
   final UuidValue uuid;
 
-  const TaskScreen({Key? key, required this.uuid}) : super(key: key);
+  const TaskScreen({super.key, required this.uuid});
 
   @override
   Widget build(BuildContext context) {

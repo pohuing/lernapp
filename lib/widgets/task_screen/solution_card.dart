@@ -5,7 +5,7 @@ import '../general_purpose/scrollable_selectable_text.dart';
 class SolutionCard extends StatelessWidget {
   final String solution;
 
-  const SolutionCard({Key? key, required this.solution}) : super(key: key);
+  const SolutionCard({super.key, required this.solution});
 
   @override
   Widget build(BuildContext context) {

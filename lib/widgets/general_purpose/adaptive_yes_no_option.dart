@@ -4,8 +4,7 @@ class AdaptiveYesNoOption extends StatelessWidget {
   final void Function(bool? newValue)? onChanged;
   final bool value;
 
-  const AdaptiveYesNoOption({Key? key, this.onChanged, required this.value})
-      : super(key: key);
+  const AdaptiveYesNoOption({super.key, this.onChanged, required this.value});
 
   @override
   Widget build(BuildContext context) {

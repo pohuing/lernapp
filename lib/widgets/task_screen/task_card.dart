@@ -13,14 +13,13 @@ class TaskCard extends StatelessWidget {
   final _scrollController = ScrollController();
 
   TaskCard({
-    Key? key,
+    super.key,
     required this.title,
     required this.description,
     this.secondaryAction,
     this.isExpanded,
     bool? showBackButton,
-  })  : showBackButton = showBackButton ?? true,
-        super(key: key);
+  })  : showBackButton = showBackButton ?? true;
 
   @override
   Widget build(BuildContext context) {

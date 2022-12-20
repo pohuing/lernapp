@@ -10,12 +10,11 @@ class CategoryTile extends StatelessWidget {
   final bool asNavigationBarItem;
 
   const CategoryTile({
-    Key? key,
+    super.key,
     required this.entry,
     this.onTap,
     bool? asNavigationBarItem,
-  })  : asNavigationBarItem = asNavigationBarItem ?? false,
-        super(key: key);
+  })  : asNavigationBarItem = asNavigationBarItem ?? false;
 
   Widget decoration(BuildContext context, {required Widget child}) {
     if (asNavigationBarItem) {
@@ -112,6 +111,6 @@ class CategoryTile extends StatelessWidget {
 }
 
 class DummyHighPerfListingTile extends CategoryTile {
-  DummyHighPerfListingTile({Key? key})
-      : super(key: key, entry: ListingEntryCategory());
+  DummyHighPerfListingTile({super.key})
+      : super(entry: ListingEntryCategory());
 }

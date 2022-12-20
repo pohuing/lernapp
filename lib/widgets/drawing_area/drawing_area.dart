@@ -18,14 +18,13 @@ class DrawingArea extends StatefulWidget {
   final bool showEraser;
 
   DrawingArea({
-    Key? key,
+    super.key,
     DrawingAreaController? controller,
     this.onEdited,
     required this.lines,
     bool? showEraser,
   })  : controller = controller ?? DrawingAreaController(),
-        showEraser = showEraser ?? false,
-        super(key: key);
+        showEraser = showEraser ?? false;
 
   @override
   State<DrawingArea> createState() => _DrawingAreaState();

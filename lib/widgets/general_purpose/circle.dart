@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 class Circle extends StatelessWidget {
   final Color color;
 
-  const Circle({Key? key, required this.color}) : super(key: key);
+  const Circle({super.key, required this.color});
 
   @override
   Widget build(BuildContext context) {

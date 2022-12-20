@@ -4,7 +4,7 @@ import 'package:lernapp/widgets/drawing_area/drawing_area.dart';
 import 'platform_adaptive_scaffold.dart';
 
 class Scratchpad extends StatelessWidget {
-  const Scratchpad({Key? key}) : super(key: key);
+  const Scratchpad({super.key});
 
   @override
   Widget build(BuildContext context) {

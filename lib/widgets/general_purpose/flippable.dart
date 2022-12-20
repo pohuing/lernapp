@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 class Flippable extends StatefulWidget {
   final Widget front, back;
 
-  const Flippable({Key? key, required this.front, required this.back})
-      : super(key: key);
+  const Flippable({super.key, required this.front, required this.back});
 
   @override
   State<Flippable> createState() => _FlippableState();
