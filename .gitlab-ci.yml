@@ -25,3 +25,7 @@ test:
   stage: test
   image: "cirrusci/flutter:stable"
   script: flutter test test/unit_tests
+
+stages:
+  - test
+  - build
