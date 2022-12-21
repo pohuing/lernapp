@@ -24,4 +24,4 @@ web:
 test:
   stage: test
   image: "cirrusci/flutter:stable"
-  script: flutter test
+  script: flutter test test/unit_tests
