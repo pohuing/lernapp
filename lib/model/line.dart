@@ -21,10 +21,9 @@ class Line {
   static const pathKey = 'path';
 
   Line(this.path, this.colors, this.size);
+
   Line.withDefaultProperties(this.path)
-      : colors =
-            const ColorPair.defaultColors()
-                .copy(),
+      : colors = ColorPair.defaultColors.copy(),
         size = 1;
 
   @override

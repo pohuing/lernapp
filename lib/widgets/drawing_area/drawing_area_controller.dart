@@ -8,7 +8,7 @@ class DrawingAreaController {
   double penSize = 1;
   double eraserSize = 5;
 
-  ColorPair currentColor = const ColorPair.defaultColors();
+  ColorPair currentColor = ColorPair.defaultColors;
 }
 
 enum TapMode { draw, pan, erase }

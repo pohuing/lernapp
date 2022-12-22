@@ -8,14 +8,18 @@ class SolutionState {
   final UuidValue id;
   final List<Line> lines;
   final DateTime timestamp;
+  final bool revealedSolution;
   static const _uuidGenerator = Uuid();
 
   static const idKey = 'id';
   static const linesKey = 'lines';
   static const timestampKey = 'timestamp';
+  static const revealedSolutionKey = 'revealed';
 
-  SolutionState(this.lines, {UuidValue? id, DateTime? timestamp})
+  SolutionState(this.lines,
+      {bool? revealedSolution, UuidValue? id, DateTime? timestamp})
       : id = id ?? _uuidGenerator.v4obj(),
+        revealedSolution = revealedSolution ?? false,
         timestamp = timestamp ?? DateTime.now();
 
   static SolutionState? fromMap(Map map) {
@@ -26,8 +30,10 @@ class SolutionState {
           .map((e) => Line.fromMap(e))
           .whereType<Line>()
           .toList();
+      final revealed = map[revealedSolutionKey];
 
-      return SolutionState(lines, id: id, timestamp: timestamp);
+      return SolutionState(lines,
+          id: id, timestamp: timestamp, revealedSolution: revealed);
     } catch (e) {
       log(
         'Failed to create SolutionState, error ${e.toString()}',
@@ -42,6 +48,7 @@ class SolutionState {
       idKey: id.uuid,
       timestampKey: timestamp.toIso8601String(),
       linesKey: lines.map((e) => e.toMap()).toList(),
+      revealedSolutionKey: revealedSolution,
     };
   }
 
@@ -52,8 +59,14 @@ class SolutionState {
           runtimeType == other.runtimeType &&
           id == other.id &&
           timestamp == other.timestamp &&
-          lines.equals(other.lines);
+          lines.equals(other.lines) &&
+          revealedSolution == other.revealedSolution;
 
   @override
-  int get hashCode => id.hashCode ^ lines.hashCode ^ timestamp.hashCode;
+  int get hashCode =>
+      id.hashCode ^
+      lines.fold(
+          0, (previousValue, element) => previousValue ^ element.hashCode) ^
+      timestamp.hashCode ^
+      (revealedSolution ? 1 : 0);
 }

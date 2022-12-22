@@ -1,8 +1,10 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
 import 'package:lernapp/logic/list_extensions.dart';
+import 'package:lernapp/model/color_pair.dart';
 import 'package:lernapp/model/line.dart';
 import 'package:lernapp/model/solution_state.dart';
 import 'package:lernapp/model/task.dart';
@@ -37,6 +39,7 @@ class _TaskAreaState extends State<TaskArea> {
   bool showsHistory = false;
   final double historyWidth = 180;
   int? selectedHistoryIndex;
+  bool revealedSolution = false;
 
   double getDrawingAreaHeight(double widgetHeight) {
     if (expandedTopRow) {
@@ -81,6 +84,10 @@ class _TaskAreaState extends State<TaskArea> {
                 ),
                 Expanded(
                   child: Flippable(
+                    onFlip: (isFlipped) => setState(() {
+                      revealedSolution |= isFlipped;
+                      updateColorController();
+                    }),
                     front: HintCard(hint: task!.hint),
                     back: SolutionCard(solution: task!.solution),
                   ),
@@ -107,53 +114,7 @@ class _TaskAreaState extends State<TaskArea> {
                   curve: expandAnimationCurve,
                   top: 0,
                   left: 4 + (showsHistory ? historyWidth : 0),
-                  child: SizedBox(
-                    child: Row(
-                      children: [
-                        ToggleButtons(
-                          borderRadius: BorderRadius.circular(12),
-                          isSelected: controller.selectionList,
-                          onPressed: (index) {
-                            setState(() {
-                              controller.tapMode = TapMode.values[index];
-                            });
-                          },
-                          children: const [
-                            Icon(Icons.draw),
-                            Icon(Icons.pan_tool),
-                            Icon(Icons.undo)
-                          ],
-                        ),
-                        ColorSelectionRow(controller: colorController),
-                        IconButton(
-                          tooltip: 'Add a new color',
-                          onPressed: () async {
-                            final colourChanged = await showDialog(
-                              context: context,
-                              builder: (context) => ColorPickerDialogue(
-                                colorController: colorController,
-                              ),
-                            );
-                            if (colourChanged is bool && colourChanged) {
-                              setState(() {
-                                colorController.selectedIndex =
-                                    colorController.colors.length - 1;
-                              });
-                            }
-                          },
-                          icon: const Icon(Icons.add),
-                        ),
-                        Slider(
-                          min: 1,
-                          max: 20,
-                          value: controller.penSize,
-                          onChanged: (value) => setState(() {
-                            controller.penSize = value;
-                          }),
-                        )
-                      ],
-                    ),
-                  ),
+                  child: buildControls(),
                 ),
                 AnimatedPositioned(
                   // History
@@ -163,58 +124,7 @@ class _TaskAreaState extends State<TaskArea> {
                   left: showsHistory ? 0 : -historyWidth,
                   width: historyWidth,
                   height: getDrawingAreaHeight(constraints.maxHeight),
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.only(left: 4, bottom: 8.0, top: 0),
-                    child: Material(
-                      color: Theme.of(context).colorScheme.secondaryContainer,
-                      elevation: 3,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: task?.solutions.length ?? 0,
-                        primary: false,
-                        itemBuilder: (context, index) {
-                          var solution = task!.solutions[index];
-                          var subtitle =
-                              '${solution.timestamp.hour}:${solution.timestamp.minute} ${solution.timestamp.day}.${solution.timestamp.month}.${solution.timestamp.year}';
-                          return Container(
-                            margin: const EdgeInsets.all(4),
-                            child: ListTile(
-                              tileColor: index == selectedHistoryIndex
-                                  ? Theme.of(context).colorScheme.secondary
-                                  : null,
-                              textColor: index == selectedHistoryIndex
-                                  ? Theme.of(context).colorScheme.onSecondary
-                                  : Theme.of(context)
-                                      .colorScheme
-                                      .onSecondaryContainer,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              title: StreamBuilder(
-                                stream:
-                                    Stream.periodic(const Duration(minutes: 1)),
-                                builder: (context, snapshot) => Text(
-                                  getHistoryTileTitle(solution),
-                                ),
-                              ),
-                              subtitle: Text(subtitle),
-                              onTap: () {
-                                setState(() {
-                                  lines = solution.lines.copy();
-                                  selectedHistoryIndex = index;
-                                  updateColorController();
-                                });
-                              },
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
+                  child: buildHistory(),
                 ),
                 AnimatedPositioned(
                   // History button
@@ -239,10 +149,114 @@ class _TaskAreaState extends State<TaskArea> {
     );
   }
 
+  Widget buildControls() => SizedBox(
+        child: Row(
+          children: [
+            ToggleButtons(
+              borderRadius: BorderRadius.circular(12),
+              isSelected: controller.selectionList,
+              onPressed: (index) {
+                setState(() {
+                  controller.tapMode = TapMode.values[index];
+                });
+              },
+              children: const [
+                Icon(Icons.draw),
+                Icon(Icons.pan_tool),
+                Icon(Icons.undo)
+              ],
+            ),
+            ColorSelectionRow(controller: colorController),
+            if (!revealedSolution)
+              IconButton(
+                tooltip: 'Add a new color',
+                onPressed: () async {
+                  final colourChanged = await showDialog(
+                    context: context,
+                    builder: (context) => ColorPickerDialogue(
+                      colorController: colorController,
+                    ),
+                  );
+                  if (colourChanged is bool && colourChanged) {
+                    setState(() {
+                      colorController.selectedIndex =
+                          colorController.colors.length - 1;
+                    });
+                  }
+                },
+                icon: const Icon(Icons.add),
+              ),
+            Slider(
+              min: 1,
+              max: 20,
+              value: controller.penSize,
+              onChanged: (value) => setState(() {
+                controller.penSize = value;
+              }),
+            )
+          ],
+        ),
+      );
+
+  Widget buildHistory() {
+    return Padding(
+      padding: const EdgeInsets.only(left: 4, bottom: 8.0, top: 0),
+      child: Material(
+        color: Theme.of(context).colorScheme.secondaryContainer,
+        elevation: 3,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: task?.solutions.length ?? 0,
+          primary: false,
+          itemBuilder: (context, i) {
+            // Show history in reversed order, newest first
+            final index = task!.solutions.length - i - 1;
+            var solution = task!.solutions[index];
+            var subtitle =
+                '${solution.timestamp.hour}:${solution.timestamp.minute} ${solution.timestamp.day}.${solution.timestamp.month}.${solution.timestamp.year}';
+            return Container(
+              margin: const EdgeInsets.all(4),
+              child: ListTile(
+                tileColor: index == selectedHistoryIndex
+                    ? Theme.of(context).colorScheme.secondary
+                    : null,
+                textColor: index == selectedHistoryIndex
+                    ? Theme.of(context).colorScheme.onSecondary
+                    : Theme.of(context).colorScheme.onSecondaryContainer,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                title: StreamBuilder(
+                  stream: Stream.periodic(const Duration(minutes: 1)),
+                  builder: (context, snapshot) => Text(
+                    getHistoryTileTitle(solution),
+                  ),
+                ),
+                subtitle: Text(subtitle),
+                onTap: () {
+                  setState(() {
+                    lines = solution.lines.copy();
+                    revealedSolution |= solution.revealedSolution;
+                    selectedHistoryIndex = index;
+                    updateColorController();
+                  });
+                },
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
   @override
   void dispose() {
     if (!(task?.solutions.lastOrNull?.lines.equals(lines) ?? false)) {
-      task?.solutions.add(SolutionState(lines));
+      task?.solutions
+          .add(SolutionState(lines, revealedSolution: revealedSolution));
       tasksBloc.add(TaskStorageSaveTask(task!));
     }
     super.dispose();
@@ -252,21 +266,22 @@ class _TaskAreaState extends State<TaskArea> {
   void initState() {
     task = widget.task;
     tasksBloc = context.read<TasksBloc>();
-    if (task!.solutions.isNotEmpty) {
-      for (var line in task!.solutions.last.lines) {
-        lines.add(line);
-      }
-    }
-    updateColorController();
     colorController.colorChanged =
         (newColor) => setState(() => controller.currentColor = newColor);
     super.initState();
   }
 
   void updateColorController() {
-    colorController.removeNonDefaultColors();
-    for (final line in lines) {
-      colorController.addColorPair(line.colors);
+    if (revealedSolution) {
+      colorController.removeAllColors();
+      colorController.addColorPair(ColorPair.correctionColors);
+      colorController.selectedIndex = 0;
+    } else {
+      colorController.removeNonDefaultColors();
+      for (final line in lines) {
+        colorController.addColorPair(line.colors);
+      }
+      colorController.selectedIndex = 0;
     }
   }
 

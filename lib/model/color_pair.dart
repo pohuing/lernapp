@@ -15,9 +15,11 @@ class ColorPair {
 
   const ColorPair({required this.brightTheme, required this.darkTheme});
 
-  const ColorPair.defaultColors()
-      : darkTheme = Colors.white,
-        brightTheme = Colors.black;
+  static const defaultColors =
+      ColorPair(darkTheme: Colors.white, brightTheme: Colors.black);
+
+  static const correctionColors =
+      ColorPair(darkTheme: Colors.red, brightTheme: Colors.red);
 
   @override
   int get hashCode => brightTheme.hashCode ^ darkTheme.hashCode;

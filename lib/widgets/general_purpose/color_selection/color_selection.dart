@@ -24,7 +24,7 @@ class ColorSelectionController {
   })  : colors = [],
         _selectedIndex = 0 {
     this.colors = [
-      const ColorPair.defaultColors(),
+      ColorPair.defaultColors,
       ...?colors,
     ];
     selectedIndex = 0;
@@ -83,7 +83,11 @@ class ColorSelectionController {
 
   void removeNonDefaultColors() {
     colors.clear();
-    colors.add(const ColorPair.defaultColors());
+    colors.add(ColorPair.defaultColors);
+  }
+
+  void removeAllColors() {
+    colors.clear();
   }
 }
 

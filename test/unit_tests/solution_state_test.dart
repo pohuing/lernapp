@@ -20,6 +20,7 @@ void main() {
         DateTime.parse(serialized[SolutionState.timestampKey]),
         original.timestamp,
       );
+      expect(serialized[SolutionState.revealedSolutionKey], false);
     });
 
     test('deserialize SolutionState', () {
@@ -29,11 +30,13 @@ void main() {
         Line.withDefaultProperties([Offset.zero]),
         Line.withDefaultProperties([Offset.zero]),
       ];
+      const originalRevealedSolution = true;
 
       final original = {
         SolutionState.idKey: originalId.uuid,
         SolutionState.timestampKey: originalTimestamp.toIso8601String(),
         SolutionState.linesKey: originalLines.map((e) => e.toMap()).toList(),
+        SolutionState.revealedSolutionKey: originalRevealedSolution,
       };
 
       final deserialized = SolutionState.fromMap(original)!;
@@ -41,6 +44,7 @@ void main() {
       expect(deserialized.id, originalId);
       expect(deserialized.timestamp, originalTimestamp);
       expect(deserialized.lines, originalLines);
+      expect(deserialized.revealedSolution, originalRevealedSolution);
     });
 
     test('back and forth SolutionState', () {
@@ -52,6 +56,7 @@ void main() {
       final deserialized = SolutionState.fromMap(serialized);
 
       expect(deserialized, original);
+      expect(deserialized.hashCode, original.hashCode);
     });
   });
 }
