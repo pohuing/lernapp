@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:lernapp/logic/nullable_extensions.dart';
 import 'package:lernapp/model/color_pair.dart';
 import 'package:lernapp/widgets/general_purpose/color_selection/color_selection.dart';
 
+/// Content for picking colors.
+/// Values can be retrieved via .pop(value) or via a colorController
 class ColorPickerDialogue extends StatefulWidget {
-  final ColorSelectionController colorController;
+  final ColorSelectionController? colorController;
+  final ColorPair? startingColors;
 
-  const ColorPickerDialogue({super.key, required this.colorController});
+  const ColorPickerDialogue({
+    super.key,
+    this.colorController,
+    this.startingColors,
+  });
 
   @override
   State<ColorPickerDialogue> createState() => _ColorPickerDialogueState();
@@ -40,13 +48,11 @@ class _ColorPickerDialogueState extends State<ColorPickerDialogue> {
       actions: [
         ElevatedButton(
           onPressed: () {
-            widget.colorController.colors.add(
-              ColorPair(
-                darkTheme: darkThemeColor,
-                brightTheme: dualColours ? brightThemeColor : darkThemeColor,
-              ),
+            widget.colorController?.colors.add(
+              buildColorPair(),
             );
-            Navigator.of(context, rootNavigator: false).pop(true);
+            Navigator.of(context, rootNavigator: false)
+                .pop<ColorPair?>(buildColorPair());
           },
           child: const Text('Confirm'),
         )
@@ -111,6 +117,25 @@ class _ColorPickerDialogueState extends State<ColorPickerDialogue> {
           ),
         ],
       ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    widget.startingColors.map(
+      (value) {
+        brightThemeColor = value.brightTheme;
+        darkThemeColor = value.darkTheme;
+        dualColours = brightThemeColor != darkThemeColor;
+      },
+    );
+  }
+
+  ColorPair buildColorPair() {
+    return ColorPair(
+      darkTheme: darkThemeColor,
+      brightTheme: dualColours ? brightThemeColor : darkThemeColor,
     );
   }
 }

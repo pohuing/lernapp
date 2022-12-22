@@ -16,6 +16,7 @@ class PreferencesBloc extends Bloc<PreferencesEventBase, PreferencesStateBase> {
     on<ChangeRepositoryConfiguration>(onChangeRepository);
     on<ChangePaintAA>(_onPaintAAChange);
     on<ChangeBlendAA>(_onChangeBlendAA);
+    on<ChangeCorrectionColor>(_onChangeCorrectionColor);
     _loggingSubscription = stream
         .listen((event) => log(event.toString(), name: 'PreferencesBloc'));
   }
@@ -54,7 +55,19 @@ class PreferencesBloc extends Bloc<PreferencesEventBase, PreferencesStateBase> {
     );
   }
 
-  void dispose(){
+  void dispose() {
     _loggingSubscription?.cancel();
+  }
+
+  void _onChangeCorrectionColor(
+    ChangeCorrectionColor event,
+    Emitter<PreferencesStateBase> emit,
+  ) {
+    emit(
+      ThemeChanged(
+        state.repositorySettings,
+        state.themePreferences.copyWith(correctionColors: event.newColors),
+      ),
+    );
   }
 }

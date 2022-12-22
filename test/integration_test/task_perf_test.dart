@@ -36,7 +36,7 @@ main() {
           ],
           hiveRepositoryConfiguration,
         ),
-        ThemePreferences(false, false),
+        ThemePreferences.defaults(),
       ),
     );
     final defaultRepository =

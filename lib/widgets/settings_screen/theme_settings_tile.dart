@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lernapp/blocs/preferences/preferences_bloc.dart';
+import 'package:lernapp/widgets/settings_screen/task_area_preferences_settings.dart';
 
 class ThemeSettingsTile extends StatefulWidget {
   const ThemeSettingsTile({super.key});
@@ -34,10 +35,10 @@ class _ThemeSettingsTileState extends State<ThemeSettingsTile> {
                     'Apply anti-aliasing when drawing lines, major performance impact',
                   ),
                   value: state.themePreferences.paintAA,
-                  isThreeLine: true,
                   onChanged: (value) =>
                       context.read<PreferencesBloc>().add(ChangePaintAA(value)),
-                )
+                ),
+                const TaskAreaPreferencesSettings(),
               ],
             );
           },

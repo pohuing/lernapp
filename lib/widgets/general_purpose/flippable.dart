@@ -6,8 +6,12 @@ class Flippable extends StatefulWidget {
   /// Callback that is called every time the flippable is flipped. A flippable shows the back widget when flipped
   final void Function(bool isFlipped)? onFlip;
 
-  const Flippable(
-      {super.key, required this.front, required this.back, this.onFlip});
+  const Flippable({
+    super.key,
+    required this.front,
+    required this.back,
+    this.onFlip,
+  });
 
   @override
   State<Flippable> createState() => _FlippableState();

@@ -16,9 +16,12 @@ class SolutionState {
   static const timestampKey = 'timestamp';
   static const revealedSolutionKey = 'revealed';
 
-  SolutionState(this.lines,
-      {bool? revealedSolution, UuidValue? id, DateTime? timestamp})
-      : id = id ?? _uuidGenerator.v4obj(),
+  SolutionState(
+    this.lines, {
+    bool? revealedSolution,
+    UuidValue? id,
+    DateTime? timestamp,
+  })  : id = id ?? _uuidGenerator.v4obj(),
         revealedSolution = revealedSolution ?? false,
         timestamp = timestamp ?? DateTime.now();
 
@@ -32,8 +35,12 @@ class SolutionState {
           .toList();
       final revealed = map[revealedSolutionKey];
 
-      return SolutionState(lines,
-          id: id, timestamp: timestamp, revealedSolution: revealed);
+      return SolutionState(
+        lines,
+        id: id,
+        timestamp: timestamp,
+        revealedSolution: revealed,
+      );
     } catch (e) {
       log(
         'Failed to create SolutionState, error ${e.toString()}',
@@ -66,7 +73,9 @@ class SolutionState {
   int get hashCode =>
       id.hashCode ^
       lines.fold(
-          0, (previousValue, element) => previousValue ^ element.hashCode) ^
+        0,
+        (previousValue, element) => previousValue ^ element.hashCode,
+      ) ^
       timestamp.hashCode ^
       (revealedSolution ? 1 : 0);
 }

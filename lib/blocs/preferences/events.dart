@@ -1,8 +1,9 @@
 import 'package:lernapp/blocs/preferences/states.dart';
+import 'package:lernapp/model/color_pair.dart';
 
 abstract class PreferencesEventBase {}
 
-class ChangeRepositoryConfiguration implements PreferencesEventBase{
+class ChangeRepositoryConfiguration implements PreferencesEventBase {
   final RepositoryConfigurationBase configuration;
 
   ChangeRepositoryConfiguration(this.configuration);
@@ -24,4 +25,10 @@ class ChangePaintAA implements PreferencesEventBase {
   final bool newValue;
 
   ChangePaintAA(this.newValue);
+}
+
+class ChangeCorrectionColor implements PreferencesEventBase {
+  final ColorPair newColors;
+
+  ChangeCorrectionColor(this.newColors);
 }

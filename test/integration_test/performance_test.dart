@@ -14,7 +14,7 @@ void main() {
     final prefs = PreferencesBloc(
       PreferencesStateBase(
         RepositorySettings([], null),
-        ThemePreferences(false, false),
+        ThemePreferences.defaults(),
       ),
     );
 

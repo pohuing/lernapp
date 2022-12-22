@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:lernapp/model/color_pair.dart';
 import 'package:lernapp/repositories/task_repository.dart';
 
 class RepositoryConfigurationChanged implements PreferencesStateBase {
@@ -61,10 +62,25 @@ class HiveRepositoryConfiguration implements RepositoryConfigurationBase {
 class ThemePreferences {
   final bool paintAA;
   final bool blendAA;
+  final ColorPair correctionColors;
 
-  ThemePreferences(this.paintAA, this.blendAA);
+  ThemePreferences(this.paintAA, this.blendAA, ColorPair? correctionColors)
+      : correctionColors = correctionColors ?? ColorPair.correctionColors;
 
-  ThemePreferences copyWith({bool? paintAA, bool? blendAA}) {
-    return ThemePreferences(paintAA ?? this.paintAA, blendAA ?? this.blendAA);
+  ThemePreferences.defaults()
+      : paintAA = false,
+        blendAA = false,
+        correctionColors = ColorPair.correctionColors;
+
+  ThemePreferences copyWith({
+    bool? paintAA,
+    bool? blendAA,
+    ColorPair? correctionColors,
+  }) {
+    return ThemePreferences(
+      paintAA ?? this.paintAA,
+      blendAA ?? this.blendAA,
+      correctionColors ?? this.correctionColors,
+    );
   }
 }
