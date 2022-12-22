@@ -125,20 +125,26 @@ class _TaskAreaState extends State<TaskArea> {
                   height: getDrawingAreaHeight(constraints.maxHeight),
                   child: buildHistory(),
                 ),
-                AnimatedPositioned(
-                  // History button
-                  duration: expandDuration,
-                  curve: expandAnimationCurve,
-                  bottom: 4,
-                  left: 4 + (showsHistory ? historyWidth : 0),
-                  child: IconButton(
-                    icon: const Icon(Icons.menu),
-                    onPressed: () {
-                      setState(() {
-                        showsHistory = !showsHistory;
-                      });
-                    },
-                  ),
+                BlocBuilder<PreferencesBloc, PreferencesStateBase>(
+                  builder: (context, state) =>
+                      state.generalPreferences.showHistoryBeforeSolving ||
+                              revealedSolution
+                          ? AnimatedPositioned(
+                              // History button
+                              duration: expandDuration,
+                              curve: expandAnimationCurve,
+                              bottom: 4,
+                              left: 4 + (showsHistory ? historyWidth : 0),
+                              child: IconButton(
+                                icon: const Icon(Icons.menu),
+                                onPressed: () {
+                                  setState(() {
+                                    showsHistory = !showsHistory;
+                                  });
+                                },
+                              ),
+                            )
+                          : Container(),
                 ),
               ],
             ),

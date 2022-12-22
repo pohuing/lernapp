@@ -17,6 +17,7 @@ class PreferencesBloc extends Bloc<PreferencesEventBase, PreferencesStateBase> {
     on<ChangePaintAA>(_onPaintAAChange);
     on<ChangeBlendAA>(_onChangeBlendAA);
     on<ChangeCorrectionColor>(_onChangeCorrectionColor);
+    on<ChangeShowHistory>(_onChangeShowHistory);
     _loggingSubscription = stream
         .listen((event) => log(event.toString(), name: 'PreferencesBloc'));
   }
@@ -28,6 +29,7 @@ class PreferencesBloc extends Bloc<PreferencesEventBase, PreferencesStateBase> {
         state.themePreferences.copyWith(
           blendAA: event.newValue,
         ),
+        state.generalPreferences,
       ),
     );
   }
@@ -39,6 +41,7 @@ class PreferencesBloc extends Bloc<PreferencesEventBase, PreferencesStateBase> {
         state.themePreferences.copyWith(
           paintAA: event.newValue,
         ),
+        state.generalPreferences,
       ),
     );
   }
@@ -51,6 +54,7 @@ class PreferencesBloc extends Bloc<PreferencesEventBase, PreferencesStateBase> {
           event.configuration,
         ),
         state.themePreferences,
+        state.generalPreferences,
       ),
     );
   }
@@ -67,6 +71,21 @@ class PreferencesBloc extends Bloc<PreferencesEventBase, PreferencesStateBase> {
       ThemeChanged(
         state.repositorySettings,
         state.themePreferences.copyWith(correctionColors: event.newColors),
+        state.generalPreferences,
+      ),
+    );
+  }
+
+  _onChangeShowHistory(
+    ChangeShowHistory event,
+    Emitter<PreferencesStateBase> emit,
+  ) {
+    emit(
+      GeneralPreferencesChanged(
+        state.repositorySettings,
+        state.themePreferences,
+        state.generalPreferences
+            .copyWith(showHistoryBeforeSolving: event.showHistory),
       ),
     );
   }

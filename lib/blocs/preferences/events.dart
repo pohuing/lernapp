@@ -32,3 +32,9 @@ class ChangeCorrectionColor implements PreferencesEventBase {
 
   ChangeCorrectionColor(this.newColors);
 }
+
+class ChangeShowHistory implements PreferencesEventBase {
+  final bool showHistory;
+
+  ChangeShowHistory(this.showHistory);
+}

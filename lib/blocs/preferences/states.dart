@@ -2,34 +2,65 @@ import 'package:hive/hive.dart';
 import 'package:lernapp/model/color_pair.dart';
 import 'package:lernapp/repositories/task_repository.dart';
 
-class RepositoryConfigurationChanged implements PreferencesStateBase {
-  @override
-  final RepositorySettings repositorySettings;
-
-  @override
-  final ThemePreferences themePreferences;
-
+class RepositoryConfigurationChanged extends PreferencesStateBase {
   RepositoryConfigurationChanged(
-    this.repositorySettings,
-    this.themePreferences,
+    super.repositorySettings,
+    super.themePreferences,
+    super.generalPreferences,
   );
 }
 
-class ThemeChanged implements PreferencesStateBase {
-  @override
-  final RepositorySettings repositorySettings;
+class ThemeChanged extends PreferencesStateBase {
+  ThemeChanged(
+    super.repositorySettings,
+    super.themePreferences,
+    super.generalPreferences,
+  );
+}
 
-  @override
-  final ThemePreferences themePreferences;
-
-  ThemeChanged(this.repositorySettings, this.themePreferences);
+class GeneralPreferencesChanged extends PreferencesStateBase {
+  GeneralPreferencesChanged(
+    super.repositorySettings,
+    super.themePreferences,
+    super.generalPreferences,
+  );
 }
 
 class PreferencesStateBase {
   final RepositorySettings repositorySettings;
   final ThemePreferences themePreferences;
+  final GeneralPreferences generalPreferences;
 
-  PreferencesStateBase(this.repositorySettings, this.themePreferences);
+  PreferencesStateBase(
+    this.repositorySettings,
+    this.themePreferences, [
+    GeneralPreferences? generalPreferences,
+  ]) : generalPreferences = generalPreferences ?? GeneralPreferences();
+
+  static PreferencesStateBase construct(
+    RepositorySettings repositorySettings,
+    ThemePreferences themePreferences,
+    GeneralPreferences generalPreferences,
+  ) {
+    return PreferencesStateBase(
+      repositorySettings,
+      themePreferences,
+      generalPreferences,
+    );
+  }
+
+// TODO introduce generic copyWith once dart is powerful enough for it
+//T copyWith<T extends PreferencesStateBase>({
+//  RepositorySettings? repositorySettings,
+//  ThemePreferences? themePreferences,
+//  GeneralPreferences? generalPreferences,
+//}) {
+//  return T.construct(
+//    repositorySettings,
+//    themePreferences,
+//    generalPreferences,
+//  );
+//}
 }
 
 class RepositorySettings {
@@ -81,6 +112,19 @@ class ThemePreferences {
       paintAA ?? this.paintAA,
       blendAA ?? this.blendAA,
       correctionColors ?? this.correctionColors,
+    );
+  }
+}
+
+class GeneralPreferences {
+  final bool showHistoryBeforeSolving;
+
+  const GeneralPreferences([bool? showHistoryBeforeSolving])
+      : showHistoryBeforeSolving = showHistoryBeforeSolving ?? false;
+
+  GeneralPreferences copyWith({bool? showHistoryBeforeSolving}) {
+    return GeneralPreferences(
+      showHistoryBeforeSolving ?? this.showHistoryBeforeSolving,
     );
   }
 }

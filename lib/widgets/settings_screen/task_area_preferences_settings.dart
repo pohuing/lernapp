@@ -39,7 +39,14 @@ class TaskAreaPreferencesSettings extends StatelessWidget {
                     state.themePreferences.correctionColors.brightTheme,
               ),
             ),
-          )
+          ),
+          SwitchListTile.adaptive(
+            title: const Text('Show history button before revealing solution'),
+            value: state.generalPreferences.showHistoryBeforeSolving,
+            onChanged: (value) => context.read<PreferencesBloc>().add(
+                  ChangeShowHistory(value),
+                ),
+          ),
         ],
       ),
     );
