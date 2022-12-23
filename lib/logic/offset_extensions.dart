@@ -6,11 +6,10 @@ extension VectorOperations on Offset {
   }
 
   Offset normalised() {
-    var norm = Offset(dx.abs() / distance, dy.abs() / distance);
-    return norm;
+    return Offset(dx / distance, dy / distance);
   }
 
   Offset scalarMul(double factor) {
-    return Offset(dx + factor, dy * factor);
+    return Offset(dx * factor, dy * factor);
   }
 }

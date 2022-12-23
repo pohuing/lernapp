@@ -30,6 +30,17 @@ void main() {
           const Offset(2, 0),
           const Offset(0, 1),
           1,
+          0.5,
+        ),
+        true,
+      );
+      expect(
+        Line.segmentInCircle(
+          const Offset(-2, 0),
+          const Offset(2, 0),
+          const Offset(0, 3),
+          1,
+          1,
         ),
         false,
       );
@@ -39,6 +50,7 @@ void main() {
           const Offset(2, 0),
           const Offset(0, 1),
           0.5,
+          0.5,
         ),
         false,
       );
@@ -46,10 +58,34 @@ void main() {
         Line.segmentInCircle(
           const Offset(-2, 0),
           const Offset(2, 0),
-          const Offset(0, 1),
-          2,
+          const Offset(0, -3),
+          1,
+          0.5,
         ),
         true,
+        reason: 'Eraser should touch edge of p1',
+      );
+      expect(
+        Line.segmentInCircle(
+          const Offset(-2, 0),
+          const Offset(2, 0),
+          const Offset(0, 3),
+          1,
+          0.5,
+        ),
+        true,
+        reason: 'Eraser should touch edge of p2',
+      );
+      expect(
+        Line.segmentInCircle(
+          const Offset(-2, 0),
+          const Offset(2, 0),
+          const Offset(0, 4),
+          1,
+          0.5,
+        ),
+        true,
+        reason: 'Eraser should miss edge of p2',
       );
     });
 
