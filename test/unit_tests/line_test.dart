@@ -58,7 +58,7 @@ void main() {
         Line.segmentInCircle(
           const Offset(-2, 0),
           const Offset(2, 0),
-          const Offset(0, -3),
+          const Offset(-3, 0),
           1,
           0.5,
         ),
@@ -69,7 +69,7 @@ void main() {
         Line.segmentInCircle(
           const Offset(-2, 0),
           const Offset(2, 0),
-          const Offset(0, 3),
+          const Offset(3, 0),
           1,
           0.5,
         ),
@@ -80,11 +80,11 @@ void main() {
         Line.segmentInCircle(
           const Offset(-2, 0),
           const Offset(2, 0),
-          const Offset(0, 4),
+          const Offset(-4, 0),
           1,
           0.5,
         ),
-        true,
+        false,
         reason: 'Eraser should miss edge of p2',
       );
     });
@@ -101,7 +101,7 @@ void main() {
       );
 
       expect(
-        line.isInCircle(Offset.zero, 1),
+        line.isInCircle(Offset.zero, 0.5),
         false,
         reason: 'Found line',
       );
@@ -111,7 +111,7 @@ void main() {
         reason: 'Failed to find line',
       );
       expect(
-        line.isInCircle(const Offset(-4, -2), 2),
+        line.isInCircle(const Offset(-10, -8), 2),
         false,
         reason: 'Circle matches infinite line',
       );
@@ -137,7 +137,7 @@ void main() {
           reason: 'Line with one segment does not touch circle',
         );
         expect(
-          line.isInCircle(const Offset(1, 1), 1),
+          line.isInCircle(const Offset(2, 0), 1),
           false,
           reason: 'Line with one segment is in circle',
         );
