@@ -21,10 +21,9 @@ class Line {
   static const pathKey = 'path';
 
   Line(this.path, this.colors, this.size);
+
   Line.withDefaultProperties(this.path)
-      : colors =
-            const ColorPair.defaultColors()
-                .copy(),
+      : colors = const ColorPair.defaultColors().copy(),
         size = 1;
 
   @override
@@ -87,10 +86,10 @@ class Line {
   /// [radius]: is the center of the radius
   bool isInCircle(Offset center, double radius) {
     if (path.length == 1) {
-      return (path.first - center).distance <= radius;
+      return (path.first - center).distance <= radius + size / 2;
     }
     for (int i = 0; i < path.length - 1; i++) {
-      if (segmentInCircle(path[i], path[i + 1], center, radius)) {
+      if (segmentInCircle(path[i], path[i + 1], center, radius, size)) {
         return true;
       }
     }
@@ -144,7 +143,11 @@ class Line {
     } else if (dot > (p2 - p1).distance) {
       return (point - p2).distance;
     } else {
-      return (pDash - p2Dash.scalarMul(pDash.dot(p2Dash))).distance;
+      var dot = pDash.dot(p2Dash);
+      var scalarMul = p2Dash.scalarMul(dot) + p1;
+      var offset = point - scalarMul;
+      var distance2 = (offset).distance;
+      return distance2;
     }
   }
 
@@ -180,8 +183,9 @@ class Line {
     Offset p2,
     Offset center,
     double radius,
+    double lineWidth,
   ) {
-    return distanceLinePoint(p1, p2, center) <= radius;
+    return distanceLinePoint(p1, p2, center) <= radius + lineWidth / 2;
   }
 
   static bool _isBetweenPoints(
