@@ -75,7 +75,7 @@ class _DrawingAreaState extends State<DrawingArea> {
               yOffset: controller.yOffset,
               antiAliasBlend: state.themePreferences.blendAA,
               antiAliasPaint: state.themePreferences.paintAA,
-              showBoundingBoxes: true,
+              showBoundingBoxes: false,
             ),
           ),
         ),
