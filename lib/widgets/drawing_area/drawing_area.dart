@@ -75,6 +75,7 @@ class _DrawingAreaState extends State<DrawingArea> {
               yOffset: controller.yOffset,
               antiAliasBlend: state.themePreferences.blendAA,
               antiAliasPaint: state.themePreferences.paintAA,
+              showBoundingBoxes: true,
             ),
           ),
         ),
@@ -89,15 +90,16 @@ class _DrawingAreaState extends State<DrawingArea> {
   }
 
   void eraseAt(Offset localPosition) {
-    for (var i = 0; i < widget.lines.length; ++i) {
-      widget.lines.removeWhere(
-        (line) => line.isInCircle(
-          localPosition.translate(-controller.xOffset, -controller.yOffset),
-          controller.eraserSize,
-        ),
-      );
+    final count = widget.lines.length;
+    widget.lines.removeWhere(
+      (line) => line.isInCircle(
+        localPosition.translate(-controller.xOffset, -controller.yOffset),
+        controller.eraserSize,
+      ),
+    );
+    if (widget.lines.length != count) {
+      widget.onEdited?.call(List.from(widget.lines));
     }
-    widget.onEdited?.call(List.from(widget.lines));
   }
 
   @override

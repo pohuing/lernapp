@@ -7,7 +7,7 @@ import 'package:lernapp/model/line.dart';
 import 'package:system_theme/system_theme.dart';
 
 class DrawingAreaPainter extends CustomPainter {
-  Line line;
+  final Line line;
   final List<Line> lines;
   final double xOffset;
   final double yOffset;
@@ -15,6 +15,9 @@ class DrawingAreaPainter extends CustomPainter {
   final double eraserSize;
   final bool antiAliasBlend;
   final bool antiAliasPaint;
+  final bool showBoundingBoxes;
+
+  // A tag used for logging
   final String? tag;
 
   // used for redraw testing for when system theme has changed since last paint
@@ -31,9 +34,11 @@ class DrawingAreaPainter extends CustomPainter {
     double? eraserSize,
     bool? antiAliasBlend,
     bool? antiAliasPaint,
+    bool? showBoundingBoxes,
   })  : antiAliasBlend = antiAliasBlend ?? false,
         antiAliasPaint = antiAliasPaint ?? false,
-        eraserSize = eraserSize ?? 2;
+        eraserSize = eraserSize ?? 2,
+        showBoundingBoxes = showBoundingBoxes ?? false;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -60,6 +65,17 @@ class DrawingAreaPainter extends CustomPainter {
       intransparentPaint.color = lines[i].paintColor.withAlpha(255);
       final hasTransparency = lines[i].paintColor.alpha != 255;
 
+      if (showBoundingBoxes) {
+        var rect = Rect.fromPoints(
+          lines[i].boundingBox.bottomLeft,
+          lines[i].boundingBox.topRight,
+        );
+        canvas.drawRect(
+          rect,
+          intransparentPaint..style = PaintingStyle.stroke,
+        );
+      }
+
       if (hasTransparency) {
         final blendPaint = Paint();
         blendPaint.color = lines[i].paintColor;
@@ -79,7 +95,13 @@ class DrawingAreaPainter extends CustomPainter {
     if (line.path.isEmpty) {
     } else {
       final hasTransparency = line.paintColor.alpha != 255;
-
+      canvas.drawRect(
+        Rect.fromPoints(
+          line.boundingBox.bottomLeft,
+          line.boundingBox.topRight,
+        ),
+        intransparentPaint..style = PaintingStyle.stroke,
+      );
       if (hasTransparency) {
         final blendPaint = Paint()
           ..color = line.paintColor

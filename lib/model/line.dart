@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lernapp/logic/list_extensions.dart';
 import 'package:lernapp/logic/logging.dart';
 import 'package:lernapp/logic/offset_extensions.dart';
+import 'package:lernapp/model/bounding_box.dart';
 import 'package:lernapp/model/color_pair.dart';
 import 'package:lernapp/model/pair.dart';
 import 'package:system_theme/system_theme.dart';
@@ -14,10 +15,25 @@ class Line {
   final ColorPair colors;
   final double size;
 
+  int _lastLength = 0;
+  BoundingBox? _lastBox;
+
+  BoundingBox get boundingBox {
+    if (_lastLength == path.length) {
+      _lastLength = path.length;
+      _lastBox ??= BoundingBox.fromLine(this);
+      return _lastBox!;
+    } else {
+      _lastLength = path.length;
+      _lastBox = BoundingBox.fromLine(this);
+      return _lastBox!;
+    }
+  }
+
   var _savedCounter = 0;
 
   static const colorsKey = 'colors';
-  static const String sizeKey = 'size';
+  static const sizeKey = 'size';
   static const pathKey = 'path';
 
   Line(this.path, this.colors, this.size);
@@ -87,6 +103,9 @@ class Line {
   bool isInCircle(Offset center, double radius) {
     if (path.length == 1) {
       return (path.first - center).distance <= radius + size / 2;
+    }
+    if (!boundingBox.approxContains(center, radius)) {
+      return false;
     }
     for (int i = 0; i < path.length - 1; i++) {
       if (segmentInCircle(path[i], path[i + 1], center, radius, size)) {
