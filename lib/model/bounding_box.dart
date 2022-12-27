@@ -13,10 +13,12 @@ class BoundingBox {
 
   /// Create a new BoundingBox while asserting that the points are in the
   /// topRight/bottomLeft of the box
-  BoundingBox.checked(this.topRight, this.bottomLeft)
+  BoundingBox.checked({required this.topRight, required this.bottomLeft})
       : assert(topRight.dx > bottomLeft.dx),
         assert(topRight.dy > bottomLeft.dy);
 
+  /// Create a Bounding box from two points. Spanning the smallest possible
+  /// rectangle which contains both points
   factory BoundingBox.fromAB(Offset a, Offset b) {
     final maxX = max(a.dx, b.dx);
     final maxY = max(a.dy, b.dy);

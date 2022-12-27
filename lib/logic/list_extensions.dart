@@ -14,17 +14,15 @@ extension RandomEntry<E> on List<E> {
   }
 
   Iterable<Pair<E>> pairwise() sync* {
-    late final int a;
     if (length % 2 != 0) {
       log(
         'List has odd number of elements, ignoring last element!',
         name: runtimeType.toString(),
       );
-      a = (length / 2).floor();
-    } else {
-      a = (length / 2).floor();
     }
-    for (int i = 0; i < a; i++) {
+
+    final numPairs = (length / 2).floor();
+    for (int i = 0; i < numPairs; i++) {
       yield Pair(this[i * 2], this[i * 2 + 1]);
     }
   }

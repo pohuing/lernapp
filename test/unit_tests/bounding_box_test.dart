@@ -53,7 +53,18 @@ main() {
 
     test('creation should fail', () {
       expect(
-        () => BoundingBox.checked(Offset(-3.5, 3.5), Offset(3.5, -3.5)),
+        () => BoundingBox.checked(
+          topRight: Offset.zero,
+          bottomLeft: const Offset(3.5, -3.5),
+        ),
+        throwsAssertionError,
+      );
+
+      expect(
+        () => BoundingBox.checked(
+          topRight: Offset.zero,
+          bottomLeft: const Offset(-3.5, 3.5),
+        ),
         throwsAssertionError,
       );
     });
