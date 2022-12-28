@@ -54,6 +54,7 @@ class _DrawingAreaState extends State<DrawingArea> {
           onPointerDown: onPointerDown,
           onPointerMove: onPointerMove,
           onPointerUp: onPointerUp,
+          onPointerCancel: onPointerCancel,
           child: CustomPaint(
             size: MediaQuery.of(context).size,
             isComplex: true,
@@ -75,7 +76,6 @@ class _DrawingAreaState extends State<DrawingArea> {
               yOffset: controller.yOffset,
               antiAliasBlend: state.themePreferences.blendAA,
               antiAliasPaint: state.themePreferences.paintAA,
-              showBoundingBoxes: false,
             ),
           ),
         ),
@@ -180,6 +180,9 @@ class _DrawingAreaState extends State<DrawingArea> {
   }
 
   void onPointerDown(PointerDownEvent event) {
+    if (Navigator.of(context).userGestureInProgress) {
+      return;
+    }
     if (activePointerId == null) {
       activePointerId = event.pointer;
       onPanStart(event.localPosition);
@@ -193,6 +196,13 @@ class _DrawingAreaState extends State<DrawingArea> {
   }
 
   void onPointerUp(PointerUpEvent event) {
+    if (event.pointer == activePointerId) {
+      activePointerId = null;
+      onPanEnd(event.localPosition);
+    }
+  }
+
+  void onPointerCancel(PointerCancelEvent event) {
     if (event.pointer == activePointerId) {
       activePointerId = null;
       onPanEnd(event.localPosition);
