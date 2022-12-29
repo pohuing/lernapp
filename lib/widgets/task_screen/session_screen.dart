@@ -29,6 +29,18 @@ class _SessionScreenState extends State<SessionScreen> {
           onPressed: () => cubit.previous(),
           child: const Text('Previous'),
         ),
+        BlocBuilder<SessionCubit, SessionState>(
+          bloc: cubit,
+          builder: (context, state) => Padding(
+            padding: const EdgeInsets.all(8),
+            child: Center(
+              child: Text(
+                '${state.index + 1}/${state.tasks.length}',
+                style: Theme.of(context).textTheme.bodyMedium,
+              ),
+            ),
+          ),
+        ),
         ElevatedButton(
           onPressed: () => cubit.next(),
           child: const Text('Next'),
