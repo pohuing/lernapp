@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:lernapp/logic/list_extensions.dart';
 import 'package:lernapp/model/color_pair.dart';
 import 'package:lernapp/model/line.dart';
+import 'package:lernapp/model/line_type.dart';
 
 void main() {
   group('Line Tests', () {
@@ -194,6 +195,7 @@ void main() {
         Line.pathKey: originalPath,
         Line.colorsKey: originalColors.toMap(),
         Line.sizeKey: originalSize,
+        Line.typeKey: LineType.correction.index,
       };
 
       final deserialized = Line.fromMap(original)!;

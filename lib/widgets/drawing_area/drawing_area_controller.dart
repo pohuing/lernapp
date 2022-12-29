@@ -9,6 +9,9 @@ class DrawingAreaController {
   double eraserSize = 5;
 
   ColorPair currentColor = ColorPair.defaultColors;
+
+  /// Whether the current area has revealed the solution
+  bool isCorrecting = false;
 }
 
 enum TapMode { draw, pan, erase }
