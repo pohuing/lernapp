@@ -38,7 +38,6 @@ class _TaskAreaState extends State<TaskArea> {
   bool showsHistory = false;
   final double historyWidth = 180;
   int? selectedHistoryIndex;
-  bool revealedSolution = false;
 
   double getDrawingAreaHeight(double widgetHeight) {
     if (expandedTopRow) {
@@ -84,7 +83,7 @@ class _TaskAreaState extends State<TaskArea> {
                 Expanded(
                   child: Flippable(
                     onFlip: (isFlipped) => setState(() {
-                      revealedSolution |= isFlipped;
+                      controller.isCorrecting |= isFlipped;
                       updateColorController();
                     }),
                     front: HintCard(hint: task!.hint),
@@ -128,7 +127,7 @@ class _TaskAreaState extends State<TaskArea> {
                 BlocBuilder<PreferencesBloc, PreferencesStateBase>(
                   builder: (context, state) =>
                       state.generalPreferences.showHistoryBeforeSolving ||
-                              revealedSolution
+                              controller.isCorrecting
                           ? AnimatedPositioned(
                               // History button
                               duration: expandDuration,
@@ -172,7 +171,7 @@ class _TaskAreaState extends State<TaskArea> {
               ],
             ),
             ColorSelectionRow(controller: colorController),
-            if (!revealedSolution)
+            if (!controller.isCorrecting)
               IconButton(
                 tooltip: 'Add a new color',
                 onPressed: () async {
@@ -244,7 +243,7 @@ class _TaskAreaState extends State<TaskArea> {
                 onTap: () {
                   setState(() {
                     lines = solution.lines.copy();
-                    revealedSolution |= solution.revealedSolution;
+                    controller.isCorrecting |= solution.revealedSolution;
                     selectedHistoryIndex = index;
                     updateColorController();
                   });
@@ -261,7 +260,7 @@ class _TaskAreaState extends State<TaskArea> {
   void dispose() {
     if (!(task?.solutions.lastOrNull?.lines.equals(lines) ?? false)) {
       task?.solutions
-          .add(SolutionState(lines, revealedSolution: revealedSolution));
+          .add(SolutionState(lines, revealedSolution: controller.isCorrecting));
       tasksBloc.add(TaskStorageSaveTask(task!));
     }
     super.dispose();
@@ -277,7 +276,7 @@ class _TaskAreaState extends State<TaskArea> {
   }
 
   void updateColorController() {
-    if (revealedSolution) {
+    if (controller.isCorrecting) {
       colorController.removeAllColors();
       colorController.addColorPair(
         context.read<PreferencesBloc>().state.themePreferences.correctionColors,

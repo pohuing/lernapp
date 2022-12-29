@@ -6,6 +6,7 @@ import 'package:lernapp/logic/logging.dart';
 import 'package:lernapp/logic/offset_extensions.dart';
 import 'package:lernapp/model/bounding_box.dart';
 import 'package:lernapp/model/color_pair.dart';
+import 'package:lernapp/model/line_type.dart';
 import 'package:lernapp/model/pair.dart';
 import 'package:system_theme/system_theme.dart';
 
@@ -14,6 +15,7 @@ class Line {
   final List<Offset> path;
   final ColorPair colors;
   final double size;
+  LineType type;
 
   int _lastLength = 0;
   BoundingBox? _lastBox;
@@ -36,11 +38,13 @@ class Line {
   static const sizeKey = 'size';
   static const pathKey = 'path';
 
-  Line(this.path, this.colors, this.size);
+  Line(this.path, this.colors, this.size, [LineType? type])
+      : type = type ?? LineType.regular;
 
   Line.withDefaultProperties(this.path)
       : colors = ColorPair.defaultColors.copy(),
-        size = 1;
+        size = 1,
+        type = LineType.regular;
 
   @override
   int get hashCode => path.fold(
@@ -230,8 +234,11 @@ class Line {
       sizeKey: size,
       colorsKey: colors.toMap(),
       pathKey: path.map((e) => [e.dx, e.dy]).flattened.toList(),
+      typeKey: type.index,
     };
   }
+
+  static String typeKey = 'type';
 
   static Line? fromMap(Map map) {
     try {
@@ -240,10 +247,12 @@ class Line {
       final offsets = List<double>.from(map[pathKey]);
       assert(offsets.length % 2 == 0);
       final path = offsets.pairwise().map((e) => Offset(e.one, e.two)).toList();
+      final type = LineType.values[map[typeKey]];
       return Line(
         path,
         colors,
         size,
+        type,
       );
     } catch (e) {
       log(

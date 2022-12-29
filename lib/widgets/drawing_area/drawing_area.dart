@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lernapp/blocs/preferences/preferences_bloc.dart';
 import 'package:lernapp/logic/logging.dart';
 import 'package:lernapp/model/line.dart';
+import 'package:lernapp/model/line_type.dart';
 
 import 'drawing_area_controller.dart';
 import 'drawing_area_painter.dart';
@@ -14,6 +15,8 @@ class DrawingArea extends StatefulWidget {
   final DrawingAreaController controller;
 
   final List<Line> lines;
+
+  /// Called when a line is erased or added
   final Function(List<Line> lines)? onEdited;
   final bool showEraser;
 
@@ -92,10 +95,16 @@ class _DrawingAreaState extends State<DrawingArea> {
   void eraseAt(Offset localPosition) {
     final count = widget.lines.length;
     widget.lines.removeWhere(
-      (line) => line.isInCircle(
-        localPosition.translate(-controller.xOffset, -controller.yOffset),
-        controller.eraserSize,
-      ),
+      (line) {
+        /// Only erase if we are currently correcting and testing a correction line.
+        /// If we aren't correcting we can remove any line
+        return ((controller.isCorrecting && line.type == LineType.correction) ||
+                !controller.isCorrecting) &&
+            line.isInCircle(
+              localPosition.translate(-controller.xOffset, -controller.yOffset),
+              controller.eraserSize,
+            );
+      },
     );
     if (widget.lines.length != count) {
       widget.onEdited?.call(List.from(widget.lines));
@@ -115,6 +124,7 @@ class _DrawingAreaState extends State<DrawingArea> {
     }
     switch (controller.tapMode) {
       case TapMode.draw:
+        if (controller.isCorrecting) line.type = LineType.correction;
         setState(() {
           widget.lines.add(line);
           line = Line(
