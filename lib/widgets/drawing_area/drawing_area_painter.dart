@@ -95,13 +95,15 @@ class DrawingAreaPainter extends CustomPainter {
     if (line.path.isEmpty) {
     } else {
       final hasTransparency = line.paintColor.alpha != 255;
-      canvas.drawRect(
-        Rect.fromPoints(
-          line.boundingBox.bottomLeft,
-          line.boundingBox.topRight,
-        ),
-        intransparentPaint..style = PaintingStyle.stroke,
-      );
+      if (showBoundingBoxes) {
+        canvas.drawRect(
+          Rect.fromPoints(
+            line.boundingBox.bottomLeft,
+            line.boundingBox.topRight,
+          ),
+          intransparentPaint..style = PaintingStyle.stroke,
+        );
+      }
       if (hasTransparency) {
         final blendPaint = Paint()
           ..color = line.paintColor
