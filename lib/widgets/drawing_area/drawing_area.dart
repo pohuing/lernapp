@@ -213,9 +213,6 @@ class _DrawingAreaState extends State<DrawingArea> {
   }
 
   void onPointerCancel(PointerCancelEvent event) {
-    if (event.pointer == activePointerId) {
-      activePointerId = null;
-      onPanEnd(event.localPosition);
-    }
+    activePointerId = null;
   }
 }
