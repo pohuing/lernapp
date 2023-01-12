@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:lernapp/logic/logging.dart';
+import 'package:lernapp/logic/map_extensions.dart';
 import 'package:uuid/uuid.dart';
 
 import 'line.dart';
@@ -11,7 +12,7 @@ class SolutionState {
   final bool revealedSolution;
   static const _uuidGenerator = Uuid();
 
-  static const idKey = 'id';
+  static const uuidKey = 'id';
   static const linesKey = 'lines';
   static const timestampKey = 'timestamp';
   static const revealedSolutionKey = 'revealed';
@@ -27,7 +28,11 @@ class SolutionState {
 
   static SolutionState? fromMap(Map map) {
     try {
-      final id = UuidValue(map[idKey]);
+      final uuid = map.transformOrFallback<UuidValue>(
+        uuidKey,
+        (value) => UuidValue(value),
+        const Uuid().v4obj(),
+      );
       final timestamp = DateTime.parse(map[timestampKey]);
       final lines = List<Map>.from(map[linesKey])
           .map((e) => Line.fromMap(e))
@@ -37,7 +42,7 @@ class SolutionState {
 
       return SolutionState(
         lines,
-        id: id,
+        id: uuid,
         timestamp: timestamp,
         revealedSolution: revealed,
       );
@@ -52,7 +57,7 @@ class SolutionState {
 
   Map<String, dynamic> toMap() {
     return {
-      idKey: id.uuid,
+      uuidKey: id.uuid,
       timestampKey: timestamp.toIso8601String(),
       linesKey: lines.map((e) => e.toMap()).toList(),
       revealedSolutionKey: revealedSolution,

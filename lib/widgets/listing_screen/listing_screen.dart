@@ -5,6 +5,7 @@ import 'package:lernapp/blocs/selection_cubit.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
 import 'package:lernapp/widgets/general_purpose/adaptive_yes_no_option.dart';
 import 'package:lernapp/widgets/general_purpose/platform_adaptive_scaffold.dart';
+import 'package:lernapp/widgets/import_flow/import_tile.dart';
 
 import 'task_listing.dart';
 
@@ -100,6 +101,10 @@ class ListingScreen extends StatelessWidget {
                   title: Text('Save'),
                 ),
               ),
+            ),
+            const PopupMenuItem(
+              padding: EdgeInsets.zero,
+              child: ImportTile(),
             ),
             PopupMenuItem(
               padding: EdgeInsets.zero,

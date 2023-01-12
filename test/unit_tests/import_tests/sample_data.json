@@ -1,0 +1,32 @@
+[
+  {
+    "title": "1",
+    "tasks": [
+      {
+        "title": "1: task 1",
+        "description": "desc: 1.1",
+        "hint": "hint: 1.1",
+        "solution": "sol: 1.1"
+      },
+      {
+        "title": "1: task 2",
+        "description": "desc: 1.2",
+        "hint": "hint: 1.2",
+        "solution": "sol: 1.2"
+      }
+    ],
+    "subCategories": [
+      {
+        "title": "1: subcategory 1",
+        "tasks": [
+          {
+            "title": "1.1: task 1",
+            "description": "desc: 1.1.1",
+            "hint": "hint: 1.1.1",
+            "solution": "solution: 1.1.1"
+          }
+        ]
+      }
+    ]
+  }
+]

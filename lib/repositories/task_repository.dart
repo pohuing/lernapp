@@ -130,6 +130,7 @@ class HiveTaskRepository implements TaskRepositoryBase {
   @override
   Future<void> wipeStorage() async {
     await box?.clear();
+    categories.clear();
   }
 
   @override
@@ -145,6 +146,12 @@ class HiveTaskRepository implements TaskRepositoryBase {
   @override
   void dispose() {
     box?.close();
+  }
+
+  @override
+  Future<void> import(List<TaskCategory> newCategories) async {
+    categories.addAll(newCategories);
+    await save();
   }
 }
 
@@ -171,4 +178,7 @@ abstract class TaskRepositoryBase {
   Future<void> saveTask(Task task);
 
   void dispose();
+
+  /// Import new Categories
+  Future<void> import(List<TaskCategory> newCategories);
 }

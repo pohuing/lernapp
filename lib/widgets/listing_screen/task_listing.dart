@@ -10,12 +10,16 @@ import 'task_tile.dart';
 class TaskListing extends StatefulWidget {
   final List<TaskCategory> categories;
   final bool withNavBarStyle;
+  final bool? shrinkWrap;
+  final bool allowTapTasks;
 
   const TaskListing({
     super.key,
     required this.categories,
     required this.withNavBarStyle,
-  });
+    this.shrinkWrap,
+    bool? clickableTasks,
+  }) : allowTapTasks = clickableTasks ?? true;
 
   @override
   State<TaskListing> createState() => _TaskListingState();
@@ -36,6 +40,7 @@ class _TaskListingState extends State<TaskListing> {
 
     return ImplicitlyAnimatedList(
       itemData: flattened,
+      shrinkWrap: widget.shrinkWrap ?? false,
       itemBuilder: (context, entry) {
         if (entry is ListingEntryCategory) {
           return CategoryTile(
@@ -53,6 +58,7 @@ class _TaskListingState extends State<TaskListing> {
             key: Key(entry.task.uuid.toString()),
             task: entry.task,
             depth: entry.depth,
+            allowTap: widget.allowTapTasks,
           );
         }
         return DummyHighPerfListingTile();
