@@ -1,6 +1,9 @@
+import 'package:collection/collection.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:json_schema2/json_schema2.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
 import 'package:lernapp/logic/import/file_reading.dart';
 import 'package:lernapp/logic/logging.dart';
@@ -35,9 +38,9 @@ class _ImportScreenState extends State<ImportScreen> {
           ),
           if (parsedContents != null)
             ListTile(
-              leading: Icon(Icons.check),
-              title: Text('Import loaded data'),
-              subtitle: Text('This will overwrite existing data'),
+              leading: const Icon(Icons.check),
+              title: const Text('Import loaded data'),
+              subtitle: const Text('This will overwrite existing data'),
               onTap: () {
                 context.read<TasksBloc>()
                   ..add(TaskStorageImportCategories(parsedContents!))
@@ -74,6 +77,8 @@ class _ImportScreenState extends State<ImportScreen> {
         result.files.first.bytes != null) {
       final file = result.files.first;
       try {
+        final contents = await prepareString(file.bytes!);
+        await validateJson(contents);
         final categories = await readByteArrayToTaskCategory(file.bytes!);
         setState(() {
           parsedContents = categories;
@@ -91,6 +96,37 @@ class _ImportScreenState extends State<ImportScreen> {
           ),
         );
       }
+    }
+  }
+
+  Future<void> validateJson(String json) async {
+    final schema = await rootBundle.loadString('assets/importSchema.json');
+    final validator =
+        JsonSchema.createSchema(schema, schemaVersion: SchemaVersion.draft6);
+    final result = validator.validateWithErrors(json, parseJson: true);
+    if (result.isNotEmpty) {
+      await showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Data does not adhere to the spec'),
+            content: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: SelectionArea(
+                  child: Column(
+                    children: [
+                      ...result
+                          .map((e) => [Text(e.message), Divider()])
+                          .flattened
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      );
     }
   }
 }

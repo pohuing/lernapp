@@ -1,0 +1,49 @@
+{
+  "type": "array",
+  "items": {
+    "title": "Task categories",
+    "type": "object",
+    "properties": {
+      "title": {
+        "type": "string",
+        "description": "Name of the category"
+      },
+      "tasks": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string",
+              "description": "title of the task"
+            },
+            "description": {
+              "type": "string",
+              "description": "Elaboration on the task"
+            },
+            "hint": {
+              "type": "string",
+              "description": "Elaboration on the correct answer"
+            },
+            "solution": {
+              "type": "string",
+              "description": "The correct answer"
+            }
+          },
+          "required": [
+            "title",
+            "description",
+            "hint",
+            "solution"
+          ]
+        }
+      },
+      "subCategories": {
+        "$ref": "#"
+      }
+    },
+    "required": [
+      "title"
+    ]
+  }
+}

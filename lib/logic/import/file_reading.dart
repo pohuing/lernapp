@@ -7,21 +7,22 @@ import 'package:lernapp/model/task_category.dart';
 enum Encoding { utf8, utf16BE, utf16LE }
 
 Future<List<TaskCategory>> readByteArrayToTaskCategory(Uint8List bytes) async {
-  final codes = convertUtf16ToUtf8(bytes);
-  final encoding = guessFileEncoding(bytes);
-  var contents = uint16ToString(codes, encoding);
-  final object = json.decode(contents.trim());
+  final object = json.decode(await prepareString(bytes));
   if ((object is Iterable)) {
     return object
         .map((e) => TaskCategory.fromMap(e))
         .whereType<TaskCategory>()
         .toList();
-  } else if (object is Map) {
-    final converted = TaskCategory.fromMap(object)!;
-    return [converted];
   } else {
     throw const FormatException('JSON is missing top level task categories');
   }
+}
+
+Future<String> prepareString(Uint8List bytes) async {
+  final codes = convertUtf16ToUtf8(bytes);
+  final encoding = guessFileEncoding(bytes);
+  var contents = uint16ToString(codes, encoding);
+  return contents.trim();
 }
 
 String uint16ToString(Uint16List codes, Encoding encoding) {
@@ -68,26 +69,4 @@ Encoding guessFileEncoding(Uint8List bytes) {
 
   /// Return utf8 and pray it's not Windows 1252 or something else
   return Encoding.utf8;
-}
-
-/// Test if bytes start with utf8/16 BOM https://en.wikipedia.org/wiki/Byte_order_mark#Byte_order_marks_by_encoding
-int leadingNBOMBytes(Uint8List bytes) {
-  // utf8
-  if (bytes.length >= 3 &&
-      bytes[0] == 0xef &&
-      bytes[1] == 0xbb &&
-      bytes[2] == 0xbf) {
-    return 3;
-  }
-  // utf16-BE  utf16-LE
-  if (bytes.length >= 2 &&
-      (bytes[0] == 0xfe && bytes[1] == 0xff ||
-          bytes[0] == 0xff && bytes[1] == 0xfe)) {
-    return 2;
-  }
-  return 0;
-}
-
-Iterable<int> stripLeadingBOM(Uint8List bytes) {
-  return bytes.skip(leadingNBOMBytes(bytes));
 }
