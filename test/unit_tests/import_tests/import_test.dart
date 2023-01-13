@@ -2,7 +2,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:lernapp/logic/file_reading.dart';
+import 'package:lernapp/logic/import/file_reading.dart';
 
 main() {
   group('Import tests utf8', () {

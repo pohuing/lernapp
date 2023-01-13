@@ -2,7 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
-import 'package:lernapp/logic/file_reading.dart';
+import 'package:lernapp/logic/import/file_reading.dart';
 import 'package:lernapp/logic/logging.dart';
 import 'package:lernapp/logic/nullable_extensions.dart';
 import 'package:lernapp/model/task_category.dart';
