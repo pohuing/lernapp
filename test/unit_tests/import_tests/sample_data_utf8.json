@@ -1,9 +1,9 @@
 [
   {
-    "title": "1",
+    "title": "1大成功",
     "tasks": [
       {
-        "title": "1: task 1",
+        "title": "1: task 1 オヒオ",
         "description": "desc: 1.1",
         "hint": "hint: 1.1",
         "solution": "sol: 1.1"
@@ -24,6 +24,19 @@
             "description": "desc: 1.1.1",
             "hint": "hint: 1.1.1",
             "solution": "solution: 1.1.1"
+          }
+        ],
+        "subCategories": [
+          {
+            "title": "1.1.1: subcategory 1",
+            "tasks": [
+              {
+                "title": "1.1.1: task 1",
+                "description": "desc: 1.1.1",
+                "hint": "hint: 1.1.1",
+                "solution": "solution: 1.1.1"
+              }
+            ]
           }
         ]
       }

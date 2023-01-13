@@ -1,9 +1,8 @@
-import 'dart:convert';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
+import 'package:lernapp/logic/file_reading.dart';
 import 'package:lernapp/logic/logging.dart';
 import 'package:lernapp/logic/nullable_extensions.dart';
 import 'package:lernapp/model/task_category.dart';
@@ -31,56 +30,8 @@ class _ImportScreenState extends State<ImportScreen> {
           ListTile(
             leading: const Icon(Icons.file_open),
             title: const Text('Import'),
-            subtitle: fileName.map((value) => const Text('value')),
-            onTap: () async {
-              final result = await FilePicker.platform.pickFiles(
-                allowedExtensions: ['json', 'txt'],
-                allowMultiple: false,
-                withReadStream: true,
-              );
-              if (result != null &&
-                  result.names.isNotEmpty &&
-                  result.files.first.readStream != null) {
-                final file = result.files.first;
-                final fileStream = file.readStream!;
-                setState(() {
-                  fileName = result.names.first;
-                });
-                try {
-                  const jsonDecoder = JsonDecoder();
-                  const utfDecoder = Utf8Decoder();
-                  final conversionStream =
-                      utfDecoder.fuse(jsonDecoder).bind(fileStream);
-                  // ignore: unused_local_variable
-                  final objects = await conversionStream
-                      .cast<List>()
-                      .map(
-                        (event) => event
-                            .map((e) => e as Map<String, dynamic>)
-                            .toList(),
-                      )
-                      .toList();
-                  log('deserialized objects: $objects', name: 'ImportScreen');
-                  final categories = objects.first
-                      .map(TaskCategory.fromMap)
-                      .whereType<TaskCategory>()
-                      .toList();
-                  setState(() {
-                    parsedContents = categories;
-                  });
-                } on FormatException catch (e) {
-                  await showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: const Text('Error parsing file'),
-                      content: SingleChildScrollView(
-                        child: Text(e.message),
-                      ),
-                    ),
-                  );
-                }
-              }
-            },
+            subtitle: fileName.map((value) => Text(value)),
+            onTap: loadFiles,
           ),
           if (parsedContents != null)
             ListTile(
@@ -108,5 +59,37 @@ class _ImportScreenState extends State<ImportScreen> {
         ],
       ),
     );
+  }
+
+  Future<void> loadFiles() async {
+    final result = await FilePicker.platform.pickFiles(
+      allowedExtensions: ['json', 'txt'],
+      allowMultiple: false,
+      withData: true,
+      type: FileType.custom,
+    );
+    if (result != null &&
+        result.names.isNotEmpty &&
+        result.files.first.bytes != null) {
+      final file = result.files.first;
+      try {
+        final categories = await readByteArrayToTaskCategory(file.bytes!);
+        setState(() {
+          parsedContents = categories;
+          fileName = file.name;
+        });
+      } on FormatException catch (e) {
+        log(e.toString(), name: 'ImportScreen');
+        await showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Error parsing file'),
+            content: SingleChildScrollView(
+              child: Text(e.message),
+            ),
+          ),
+        );
+      }
+    }
   }
 }
