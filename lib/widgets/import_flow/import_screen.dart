@@ -46,6 +46,7 @@ class _ImportScreenState extends State<ImportScreen> {
             ),
           if (parsedContents != null)
             ExpansionTile(
+              key: Key(parsedContents.hashCode.toString()),
               title: const Text('Result:'),
               children: [
                 TaskListing(
