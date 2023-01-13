@@ -5,6 +5,7 @@ import 'package:lernapp/blocs/selection_cubit.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
 import 'package:lernapp/widgets/general_purpose/adaptive_yes_no_option.dart';
 import 'package:lernapp/widgets/general_purpose/platform_adaptive_scaffold.dart';
+import 'package:lernapp/widgets/import_flow/import_tile.dart';
 
 import 'task_listing.dart';
 
@@ -31,6 +32,22 @@ class ListingScreen extends StatelessWidget {
                 );
               } else if (state is TaskStorageLoaded ||
                   state is TaskStorageRepositoryFinishedSaving) {
+                if ((state as dynamic).contents.isEmpty) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Center(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          context.push('/import');
+                        },
+                        child: Text(
+                          'You don\'t appear to have any tasks yet. Tap here to import.',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ),
+                    ),
+                  );
+                }
                 return TaskListing(
                   key: Key(state.hashCode.toString()),
                   categories: (state as dynamic).contents,
@@ -100,6 +117,10 @@ class ListingScreen extends StatelessWidget {
                   title: Text('Save'),
                 ),
               ),
+            ),
+            const PopupMenuItem(
+              padding: EdgeInsets.zero,
+              child: ImportTile(),
             ),
             PopupMenuItem(
               padding: EdgeInsets.zero,

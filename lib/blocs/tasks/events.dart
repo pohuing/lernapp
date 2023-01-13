@@ -27,8 +27,14 @@ class TaskStorageSaveTask implements TaskStorageEventBase {
   TaskStorageSaveTask(this.task);
 }
 
-class TaskStorageChanged implements TaskStorageEventBase{
+class TaskStorageChanged implements TaskStorageEventBase {
   final TaskRepositoryBase newRepository;
 
   TaskStorageChanged(this.newRepository);
+}
+
+class TaskStorageImportCategories implements TaskStorageEventBase {
+  final List<TaskCategory> newCategories;
+
+  TaskStorageImportCategories(this.newCategories);
 }

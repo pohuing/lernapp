@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter_ameno_ipsum/flutter_ameno_ipsum.dart';
 import 'package:lernapp/logic/logging.dart';
+import 'package:lernapp/logic/map_extensions.dart';
 import 'package:lernapp/model/solution_state.dart';
 import 'package:uuid/uuid.dart';
 
@@ -77,11 +78,15 @@ class Task {
   static Task? fromMap(Map map) {
     try {
       final title = map[titleKey] as String;
-      final uuid = UuidValue(map[uuidKey]);
+      final uuid = map.transformOrFallback<UuidValue>(
+        uuidKey,
+        (value) => UuidValue(value),
+        const Uuid().v4obj(),
+      );
       final description = map[descriptionKey] as String;
       final hint = map[hintKey] as String;
       final solution = map[solutionKey] as String;
-      final solutions = List<Map>.from(map[solutionsKey])
+      final solutions = List<Map>.from(map[solutionsKey] ?? [])
           .map((e) => SolutionState.fromMap(e))
           .whereType<SolutionState>()
           .toList();

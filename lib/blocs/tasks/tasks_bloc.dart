@@ -25,6 +25,7 @@ class TasksBloc extends Bloc<TaskStorageEventBase, TaskStorageStateBase> {
     on<TaskStorageSaveCategory>(_onSaveCategory);
     on<TaskStorageSaveTask>(_onSaveTask);
     on<TaskStorageChanged>(_onStorageChanged);
+    on<TaskStorageImportCategories>(_onImport);
 
     _loggingSubscription =
         stream.listen((event) => log(event.toString(), name: 'TasksBloc'));
@@ -43,6 +44,13 @@ class TasksBloc extends Bloc<TaskStorageEventBase, TaskStorageStateBase> {
         name: 'TasksBloc',
       );
     });
+  }
+
+  FutureOr<void> _onImport(event, emit) async {
+    emit(TaskStorageUninitialized());
+    await repository.wipeStorage();
+    await repository.import(event.newCategories);
+    emit(TaskStorageLoaded(repository.categories));
   }
 
   @override

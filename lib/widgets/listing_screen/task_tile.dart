@@ -8,8 +8,10 @@ import '../../model/task.dart';
 class TaskTile extends StatelessWidget {
   final Task task;
   final int? depth;
+  final bool allowTap;
 
-  const TaskTile({super.key, required this.task, this.depth});
+  const TaskTile({super.key, required this.task, this.depth, bool? allowTap})
+      : allowTap = allowTap ?? true;
 
   @override
   Widget build(BuildContext context) {
@@ -43,16 +45,20 @@ class TaskTile extends StatelessWidget {
                           .toggleSelection(task.uuid),
                     )
                   : null,
-              onTap: () {
-                if (state.isSelecting) {
-                  context.read<SelectionCubit>().toggleSelection(task.uuid);
-                } else {
-                  context.pushNamed(
-                    'Task',
-                    params: {'tid': task.uuid.toString()},
-                  );
-                }
-              },
+              onTap: !allowTap
+                  ? null
+                  : () {
+                      if (state.isSelecting) {
+                        context
+                            .read<SelectionCubit>()
+                            .toggleSelection(task.uuid);
+                      } else {
+                        context.pushNamed(
+                          'Task',
+                          params: {'tid': task.uuid.toString()},
+                        );
+                      }
+                    },
             ),
           ),
         ),
