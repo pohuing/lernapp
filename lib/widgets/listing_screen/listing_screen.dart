@@ -32,6 +32,22 @@ class ListingScreen extends StatelessWidget {
                 );
               } else if (state is TaskStorageLoaded ||
                   state is TaskStorageRepositoryFinishedSaving) {
+                if ((state as dynamic).contents.isEmpty) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Center(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          context.push('/import');
+                        },
+                        child: Text(
+                          'You don\'t appear to have any tasks yet. Tap here to import.',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ),
+                    ),
+                  );
+                }
                 return TaskListing(
                   key: Key(state.hashCode.toString()),
                   categories: (state as dynamic).contents,
