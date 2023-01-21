@@ -3,14 +3,25 @@ import 'dart:math' hide log;
 import 'package:lernapp/logic/logging.dart';
 import 'package:lernapp/model/pair.dart';
 
+extension OptionalTransformations<E> on Iterable<E> {
+  Iterable<E> maybeTransform(
+    bool condition,
+    Iterable<E> Function(Iterable<E> e) transformation,
+  ) {
+    if (condition) {
+      return transformation(this);
+    } else {
+      return this;
+    }
+  }
+}
+
 extension RandomEntry<E> on List<E> {
   static final _randomGenerator = Random();
 
-  E? random() {
-    if (length == 0) {
-      return null;
-    }
-    return this[_randomGenerator.nextInt(length)];
+  /// Return a shallow copy of [this]
+  List<E> copy() {
+    return map((e) => e).toList();
   }
 
   Iterable<Pair<E>> pairwise() sync* {
@@ -27,7 +38,13 @@ extension RandomEntry<E> on List<E> {
     }
   }
 
-  List<E> copy() {
-    return map((e) => e).toList();
+  E? random() {
+    if (length == 0) {
+      return null;
+    }
+    return this[_randomGenerator.nextInt(length)];
   }
+
+  /// Return a shuffled copy of [this]
+  List<E> shuffled() => copy()..shuffle();
 }

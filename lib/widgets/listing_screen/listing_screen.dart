@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lernapp/blocs/selection_cubit.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
-import 'package:lernapp/widgets/general_purpose/adaptive_yes_no_option.dart';
+import 'package:lernapp/logic/nullable_extensions.dart';
+import 'package:lernapp/widgets/general_purpose/adaptive_alert_dialog.dart';
 import 'package:lernapp/widgets/general_purpose/platform_adaptive_scaffold.dart';
 import 'package:lernapp/widgets/import_flow/import_tile.dart';
 
@@ -78,30 +80,13 @@ class ListingScreen extends StatelessWidget {
           child: const Text('Cancel'),
         ),
       if (state.isSelecting)
-        InkWell(
-          onTap: () => context
-              .read<SelectionCubit>()
-              .setShouldRandomize(!state.isRandomized),
-          child: Row(
-            children: [
-              Text(
-                'Randomize',
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              IgnorePointer(
-                child: AdaptiveYesNoOption(
-                  value: state.isRandomized,
-                  onChanged: (newValue) {},
-                ),
-              ),
-            ],
-          ),
-        ),
-      if (state.isSelecting)
         ElevatedButton(
           onPressed: state.selectedUuids.isEmpty
               ? null
-              : () => context.pushNamed('session'),
+              : () => showDialog(
+                    context: context,
+                    builder: (context) => _sessionStartBuilder(),
+                  ),
           child: const Text('Start'),
         ),
       if (!state.isSelecting)
@@ -167,5 +152,58 @@ class ListingScreen extends StatelessWidget {
           ],
         )
     ];
+  }
+
+  Widget _sessionStartBuilder() {
+    return BlocBuilder<SelectionCubit, SelectionState>(
+      builder: (context, state) => AdaptiveAlertDialog(
+        title: 'Configure Session',
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SwitchListTile.adaptive(
+              title: const Text('Number of questions'),
+              value: state.withLimit,
+              onChanged: (value) {
+                if (value) {
+                  context.read<SelectionCubit>().setLimit(1);
+                } else {
+                  context.read<SelectionCubit>().setLimit(-1);
+                }
+              },
+            ),
+            if (state.withLimit)
+              ListTile(
+                title: const Text('Count'),
+                trailing: SizedBox(
+                  width: 80,
+                  child: TextField(
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    onChanged: (value) => int.tryParse(value)
+                        .map(context.read<SelectionCubit>().setLimit),
+                  ),
+                ),
+              ),
+            SwitchListTile.adaptive(
+              title: Text(
+                'Randomize',
+                style: Theme.of(context).textTheme.labelLarge,
+              ),
+              value: state.isRandomized,
+              onChanged: (_) => context
+                  .read<SelectionCubit>()
+                  .setShouldRandomize(!state.isRandomized),
+            )
+          ],
+        ),
+        actions: [
+          IconButton(onPressed: context.pop, icon: const Icon(Icons.cancel)),
+          TextButton(
+            onPressed: () => context.push('/session'),
+            child: const Text('Start'),
+          ),
+        ],
+      ),
+    );
   }
 }
