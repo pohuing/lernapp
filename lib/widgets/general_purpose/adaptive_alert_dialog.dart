@@ -6,14 +6,21 @@ import 'package:flutter/material.dart';
 /// An Alert Dialog that shows CupertinoAlertDialog on ios and macos
 class AdaptiveAlertDialog extends StatelessWidget {
   final String title;
-  final List<Widget> actions;
+  final Widget? confirmChild;
+  final Widget? cancelChild;
+  final Function()? onConfirm;
+  final Function()? onCancel;
+
   final Widget? content;
 
   const AdaptiveAlertDialog({
     super.key,
     required this.title,
-    required this.actions,
     this.content,
+    this.confirmChild,
+    this.cancelChild,
+    this.onConfirm,
+    this.onCancel,
   });
 
   @override
@@ -21,13 +28,30 @@ class AdaptiveAlertDialog extends StatelessWidget {
     if (Platform.isIOS || Platform.isMacOS) {
       return CupertinoAlertDialog(
         title: Text(title),
-        actions: actions,
+        actions: [
+          if (confirmChild != null)
+            CupertinoDialogAction(
+              onPressed: onConfirm,
+              child: confirmChild!,
+            ),
+          if (cancelChild != null)
+            CupertinoDialogAction(
+              onPressed: onCancel,
+              child: cancelChild!,
+            )
+        ],
         content: content,
       );
     } else {
       return AlertDialog(
         title: Text(title),
-        actions: actions,
+        scrollable: true,
+        actions: [
+          if (cancelChild != null)
+            OutlinedButton(onPressed: onCancel, child: cancelChild),
+          if (cancelChild != null)
+            FilledButton(onPressed: onConfirm, child: confirmChild),
+        ],
         content: content,
       );
     }
