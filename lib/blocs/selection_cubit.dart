@@ -1,11 +1,12 @@
 import 'dart:collection';
 
 import 'package:bloc/bloc.dart';
+import 'package:lernapp/logic/list_extensions.dart';
 import 'package:lernapp/model/task_category.dart';
 import 'package:uuid/uuid.dart';
 
 class SelectionCubit extends Cubit<SelectionState> {
-  SelectionCubit() : super(SelectionState(<UuidValue>{}, false, false));
+  SelectionCubit() : super(SelectionState(<UuidValue>{}, false, false, -1));
 
   void deselectCategory(TaskCategory category) {
     final selected = Set<UuidValue>.from(state.selectedUuids);
@@ -46,14 +47,18 @@ class SelectionCubit extends Cubit<SelectionState> {
 
   void toggleSelectionMode() {
     if (state.isSelecting) {
-      emit(SelectionState({}, false, state.isSelecting));
+      emit(SelectionState({}, false, state.isSelecting, -1));
     } else {
       enableSelectionMode();
     }
   }
 
-  setShouldRandomize(bool value) {
+  void setShouldRandomize(bool value) {
     emit(state.copyWith(isRandomized: value));
+  }
+
+  void setLimit(int limit) {
+    emit(state.copyWith(limit: limit));
   }
 }
 
@@ -61,16 +66,28 @@ class SelectionState {
   final bool isSelecting;
   final Set<UuidValue> selectedUuids;
   final bool isRandomized;
-  late final UnmodifiableListView<UuidValue> shuffled =
-      UnmodifiableListView(selectedUuids.toList(growable: false)..shuffle());
-  late final UnmodifiableListView<UuidValue> asList =
-      UnmodifiableListView(selectedUuids);
+
+  /// A non positive value means no limit
+  final int limit;
+
+  bool get withLimit => limit > 0;
+
+  late final UnmodifiableListView<UuidValue> shuffled = UnmodifiableListView(
+    selectedUuids
+        .toList(growable: false)
+        .shuffled()
+        .maybeTransform(withLimit, (e) => e.take(limit)),
+  );
+  late final UnmodifiableListView<UuidValue> asList = UnmodifiableListView(
+    selectedUuids.maybeTransform(withLimit, (e) => e.take(limit)),
+  );
 
   /// Getter which returns optionally shuffled list of Uuids
   UnmodifiableListView<UuidValue> get maybeShuffledUuids =>
       isRandomized ? shuffled : asList;
 
-  SelectionState(this.selectedUuids, this.isSelecting, this.isRandomized);
+  SelectionState(
+      this.selectedUuids, this.isSelecting, this.isRandomized, this.limit);
 
   /// Returns true if [selectedUuids] contains all Uuids of [category]
   bool entireCategoryIsSelected(TaskCategory category) {
@@ -95,11 +112,13 @@ class SelectionState {
     bool? isSelecting,
     Set<UuidValue>? selectedUuids,
     bool? isRandomized,
+    int? limit,
   }) {
     return SelectionState(
       selectedUuids ?? this.selectedUuids,
       isSelecting ?? this.isSelecting,
       isRandomized ?? this.isRandomized,
+      limit ?? this.limit,
     );
   }
 }
