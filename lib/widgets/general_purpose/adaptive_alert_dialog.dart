@@ -29,18 +29,20 @@ class AdaptiveAlertDialog extends StatelessWidget {
       return CupertinoAlertDialog(
         title: Text(title),
         actions: [
-          if (confirmChild != null)
-            CupertinoDialogAction(
-              onPressed: onConfirm,
-              child: confirmChild!,
-            ),
           if (cancelChild != null)
             CupertinoDialogAction(
               onPressed: onCancel,
+              isDestructiveAction: true,
               child: cancelChild!,
-            )
+            ),
+          if (confirmChild != null)
+            CupertinoDialogAction(
+              onPressed: onConfirm,
+              isDefaultAction: true,
+              child: confirmChild!,
+            ),
         ],
-        content: content,
+        content: Material(child: content),
       );
     } else {
       return AlertDialog(
