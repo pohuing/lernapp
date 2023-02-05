@@ -1,14 +1,8 @@
-apk:
-  stage: build
+test:
+  stage: test
   image: "cirrusci/flutter:stable"
-  script:
-    - flutter build apk
-  after_script:
-    - mv $CI_PROJECT_DIR/build/app/outputs/apk/release/app-release.apk $CI_PROJECT_DIR/lernapp.apk
-  artifacts:
-    name: android
-    paths:
-      - $CI_PROJECT_DIR/lernapp.apk
+  script: flutter test test/unit_tests
+
 
 web:
   stage: build
@@ -21,11 +15,35 @@ web:
     paths:
       - $CI_PROJECT_DIR/web.tar
 
-test:
-  stage: test
+apk:
+  stage: build
   image: "cirrusci/flutter:stable"
-  script: flutter test test/unit_tests
+  script:
+    - flutter build apk
+  after_script:
+    - mv $CI_PROJECT_DIR/build/app/outputs/apk/release/app-release.apk $CI_PROJECT_DIR/lernapp.apk
+  artifacts:
+    name: android
+    paths:
+      - $CI_PROJECT_DIR/lernapp.apk
+
+
+deploy:
+  stage: deploy
+  image: "cirrusci/flutter:stable"
+  script:
+    # Ssh refuses to read keyfiles which are globally readable
+    - chmod 600 $DeployKey
+    #- cat /tmp/keyfile
+    - mkdir -p ~/.ssh && touch ~/.ssh/known_hosts
+    # Ssh won't connect to unknown keys in non interactive mode, this figures out the server's keys
+    - ssh-keyscan $DeployTargetServer >> ~/.ssh/known_hosts
+    - tar -xvf $CI_PROJECT_DIR/web.tar
+    - scp -i $DeployKey -r web $DeployUser@$DeployTargetServer:/var/www/html/lernapp
+  after_script:
+    - rm -r web
 
 stages:
   - test
   - build
+  - deploy
