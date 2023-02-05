@@ -30,6 +30,8 @@ apk:
 
 deploy:
   stage: deploy
+  only:
+    - master
   image: "cirrusci/flutter:stable"
   script:
     # Ssh refuses to read keyfiles which are globally readable
