@@ -11,7 +11,7 @@ void main() {
       ]);
       final serialized = original.toMap();
 
-      expect(serialized[SolutionState.idKey], original.id.uuid);
+      expect(serialized[SolutionState.uuidKey], original.id.uuid);
       expect(
         serialized[SolutionState.linesKey],
         containsAllInOrder(original.lines.map((e) => e.toMap()).toList()),
@@ -33,7 +33,7 @@ void main() {
       const originalRevealedSolution = true;
 
       final original = {
-        SolutionState.idKey: originalId.uuid,
+        SolutionState.uuidKey: originalId.uuid,
         SolutionState.timestampKey: originalTimestamp.toIso8601String(),
         SolutionState.linesKey: originalLines.map((e) => e.toMap()).toList(),
         SolutionState.revealedSolutionKey: originalRevealedSolution,

@@ -1,4 +1,5 @@
 import 'package:lernapp/logic/logging.dart';
+import 'package:lernapp/logic/map_extensions.dart';
 import 'package:lernapp/model/task.dart';
 import 'package:uuid/uuid.dart';
 
@@ -65,14 +66,18 @@ class TaskCategory {
 
   static TaskCategory? fromMap(Map map) {
     try {
-      final uuid = UuidValue(map[uuidKey]);
+      final uuid = map.transformOrFallback<UuidValue>(
+        uuidKey,
+        (value) => UuidValue(value),
+        const Uuid().v4obj(),
+      );
       final title = map[titleKey] as String;
-      final subCategories = List<Map>.from(map[subCategoriesKey])
-          .map((e) => TaskCategory.fromMap(e))
+      final subCategories = List<Map>.from(map[subCategoriesKey] ?? [])
+          .map(TaskCategory.fromMap)
           .whereType<TaskCategory>()
           .toList();
-      final tasks = List<Map>.from(map[tasksKey])
-          .map((e) => Task.fromMap(e))
+      final tasks = List<Map>.from(map[tasksKey] ?? [])
+          .map(Task.fromMap)
           .whereType<Task>()
           .toList();
       return TaskCategory(

@@ -3,8 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lernapp/blocs/selection_cubit.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
-import 'package:lernapp/widgets/general_purpose/adaptive_yes_no_option.dart';
 import 'package:lernapp/widgets/general_purpose/platform_adaptive_scaffold.dart';
+import 'package:lernapp/widgets/import_flow/import_tile.dart';
+import 'package:lernapp/widgets/listing_screen/start_session_dialog.dart';
 
 import 'task_listing.dart';
 
@@ -31,6 +32,22 @@ class ListingScreen extends StatelessWidget {
                 );
               } else if (state is TaskStorageLoaded ||
                   state is TaskStorageRepositoryFinishedSaving) {
+                if ((state as dynamic).contents.isEmpty) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Center(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          context.push('/import');
+                        },
+                        child: Text(
+                          'You don\'t appear to have any tasks yet. Tap here to import.',
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ),
+                    ),
+                  );
+                }
                 return TaskListing(
                   key: Key(state.hashCode.toString()),
                   categories: (state as dynamic).contents,
@@ -56,36 +73,22 @@ class ListingScreen extends StatelessWidget {
           icon: const Icon(Icons.check_box_outlined),
         ),
       if (state.isSelecting)
-        TextButton(
+        OutlinedButton(
           onPressed: () => context.read<SelectionCubit>().toggleSelectionMode(),
           child: const Text('Cancel'),
         ),
       if (state.isSelecting)
-        InkWell(
-          onTap: () => context
-              .read<SelectionCubit>()
-              .setShouldRandomize(!state.isRandomized),
-          child: Row(
-            children: [
-              Text(
-                'Randomize',
-                style: Theme.of(context).textTheme.labelLarge,
-              ),
-              IgnorePointer(
-                child: AdaptiveYesNoOption(
-                  value: state.isRandomized,
-                  onChanged: (newValue) {},
-                ),
-              ),
-            ],
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: FilledButton(
+            onPressed: state.selectedUuids.isEmpty
+                ? null
+                : () => showDialog(
+                      context: context,
+                      builder: (context) => const StartSessionDialog(),
+                    ),
+            child: const Text('Start'),
           ),
-        ),
-      if (state.isSelecting)
-        ElevatedButton(
-          onPressed: state.selectedUuids.isEmpty
-              ? null
-              : () => context.pushNamed('session'),
-          child: const Text('Start'),
         ),
       if (!state.isSelecting)
         PopupMenuButton(
@@ -100,6 +103,10 @@ class ListingScreen extends StatelessWidget {
                   title: Text('Save'),
                 ),
               ),
+            ),
+            const PopupMenuItem(
+              padding: EdgeInsets.zero,
+              child: ImportTile(),
             ),
             PopupMenuItem(
               padding: EdgeInsets.zero,

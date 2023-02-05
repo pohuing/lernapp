@@ -22,3 +22,11 @@ Integration Tests mit
 Diese werden am besten auf dem Zielgerät ausgeführt, `flutter devices` gibt eine Liste an möglichen Zielplattformen aus. Mit `flutter test ... -d <ziel>` kann das Ziel für tests angegeben werden.
 
 Performance tests sollten zusätzlich mit `--profile` ausgeführt werden. Profiling Informationen werden in `build` abgelegt und können im Chrome/Edge tracer oder mit [Perfetto](https://ui.perfetto.dev/) analysiert werden.
+
+## Automatisches deployment von web artefakten
+Die gitlab ci builds deployen von selbst auf einen per ssh erreichbaren Server, dafür sind drei Variabeln in der Projektkonfiguration notwendig:
+- $DeployHost: The url or ip to feed into scp for deployment
+- $DeployKey: A *file* type variable with the private key used to authenticate against the server
+- $DeployUser: Username of the user to authenticate as on the server
+
+Der deploy Befehl kopiert die web Dateien nach /var/www/html/lernapp, das Verzeichnis muss also fur $DeployUser schreibbar sein

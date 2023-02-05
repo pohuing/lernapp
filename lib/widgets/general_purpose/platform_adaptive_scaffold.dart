@@ -107,7 +107,7 @@ class PlatformAdaptiveScaffold extends StatelessWidget {
     return WillPopScope(
       onWillPop: allowBackGesture
           ? null
-          : () => Future.value(Navigator.of(context).userGestureInProgress),
+          : () => Future.value(!Navigator.of(context).userGestureInProgress),
       child: value,
     );
   }
