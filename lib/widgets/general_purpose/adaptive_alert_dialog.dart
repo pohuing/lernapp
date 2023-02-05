@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// An Alert Dialog that shows CupertinoAlertDialog on ios and macos
@@ -25,7 +26,7 @@ class AdaptiveAlertDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (Platform.isIOS || Platform.isMacOS) {
+    if (!kIsWeb && (Platform.isIOS || Platform.isMacOS)) {
       return CupertinoAlertDialog(
         title: Text(title),
         actions: [
