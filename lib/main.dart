@@ -8,6 +8,7 @@ import 'package:lernapp/blocs/selection_cubit.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
 import 'package:lernapp/logic/router.dart';
 import 'package:lernapp/logic/ui_overlay_setter_observer.dart';
+import 'package:lernapp/repositories/preferences_repository.dart';
 import 'package:provider/provider.dart';
 import 'package:system_theme/system_theme.dart';
 
@@ -22,31 +23,23 @@ void main() async {
   }
   await Hive.initFlutter();
 
-  var hiveRepositoryConfiguration = HiveRepositoryConfiguration('tcbox');
-  final prefs = PreferencesBloc(
-    PreferencesStateBase(
-      RepositorySettings(
-        [
-          hiveRepositoryConfiguration,
-          HiveRepositoryConfiguration('aaabox'),
-        ],
-        hiveRepositoryConfiguration,
-      ),
-      ThemePreferences.defaults(),
-    ),
-  );
-  final defaultRepository =
-      await hiveRepositoryConfiguration.createRepository();
+  final preferencesRepository =
+      await PreferencesRepository.openBox('preferences');
+  final currentPreferences = preferencesRepository.loadPreferences();
+
+  final preferencesBloc =
+      PreferencesBloc(currentPreferences, preferencesRepository);
+
+  final tasksRepositoryConfiguration =
+      currentPreferences.repositorySettings.currentConfiguration!;
+  final tasksRepository = await tasksRepositoryConfiguration.createRepository();
 
   Widget builder([BuildContext? context]) => MultiProvider(
         providers: [
-          BlocProvider.value(value: prefs),
+          BlocProvider.value(value: preferencesBloc),
           BlocProvider<TasksBloc>(
-            create: (context) => TasksBloc(defaultRepository, prefs),
-          ),
-          BlocProvider<SelectionCubit>(
-            create: (context) => SelectionCubit(),
-          ),
+              create: (context) => TasksBloc(tasksRepository, preferencesBloc)),
+          BlocProvider<SelectionCubit>(create: (context) => SelectionCubit()),
         ],
         child: const MyApp(),
       );
