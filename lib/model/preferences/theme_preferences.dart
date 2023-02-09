@@ -75,7 +75,7 @@ class ThemePreferences {
 
   static ColorPair? _extractCorrectionColors(Map map) {
     if (map.containsKey(correctionColorsKey)) {
-      return ColorPair.fromMap(map);
+      return ColorPair.fromMap(map[correctionColorsKey]);
     }
 
     return null;

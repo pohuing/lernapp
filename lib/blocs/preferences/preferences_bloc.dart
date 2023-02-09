@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lernapp/logic/logging.dart';
 import 'package:lernapp/model/preferences/repository_configuration/repository_settings.dart';
+import 'package:lernapp/repositories/preferences_repository.dart';
 
 import 'events.dart';
 import 'states.dart';
@@ -11,9 +12,11 @@ export 'events.dart';
 export 'states.dart';
 
 class PreferencesBloc extends Bloc<PreferencesEventBase, PreferencesStateBase> {
+  PreferencesRepository repository;
   StreamSubscription<PreferencesStateBase>? _loggingSubscription;
+  StreamSubscription<PreferencesStateBase>? _repositorySubscription;
 
-  PreferencesBloc(super.initialState) {
+  PreferencesBloc(super.initialState, this.repository) {
     on<ChangeRepositoryConfiguration>(onChangeRepository);
     on<ChangePaintAA>(_onPaintAAChange);
     on<ChangeBlendAA>(_onChangeBlendAA);
@@ -21,6 +24,9 @@ class PreferencesBloc extends Bloc<PreferencesEventBase, PreferencesStateBase> {
     on<ChangeShowHistory>(_onChangeShowHistory);
     _loggingSubscription = stream
         .listen((event) => log(event.toString(), name: 'PreferencesBloc'));
+    _repositorySubscription = stream.listen((event) async {
+      await repository.storePreferences(event);
+    });
   }
 
   void _onChangeBlendAA(event, emit) {
@@ -62,6 +68,7 @@ class PreferencesBloc extends Bloc<PreferencesEventBase, PreferencesStateBase> {
 
   void dispose() {
     _loggingSubscription?.cancel();
+    _repositorySubscription?.cancel();
   }
 
   void _onChangeCorrectionColor(

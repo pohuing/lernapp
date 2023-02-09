@@ -35,18 +35,6 @@ class PreferencesStateBase {
     };
   }
 
-  static PreferencesStateBase construct(
-    RepositorySettings repositorySettings,
-    ThemePreferences themePreferences,
-    GeneralPreferences generalPreferences,
-  ) {
-    return PreferencesStateBase(
-      repositorySettings,
-      themePreferences,
-      generalPreferences,
-    );
-  }
-
   static PreferencesStateBase fromMap(Map map) {
     late final RepositorySettings repositorySettings;
     late final ThemePreferences themePreferences;
@@ -54,19 +42,22 @@ class PreferencesStateBase {
     if (map.containsKey(repositorySettingsKey)) {
       repositorySettings =
           RepositorySettings.fromMap(map[repositorySettingsKey])
-              .constructDefault(() {
-        final hiveConfig = HiveRepositoryConfiguration('tcbox');
-        return RepositorySettings([hiveConfig], hiveConfig);
-      });
+              .constructDefault(constructFallbackRepoSettings);
+    } else {
+      repositorySettings = constructFallbackRepoSettings();
     }
     if (map.containsKey(themePreferencesKey)) {
       themePreferences = ThemePreferences.fromMap(map[themePreferencesKey]) ??
           ThemePreferences.defaults();
+    } else {
+      themePreferences = ThemePreferences.defaults();
     }
     if (map.containsKey(generalPreferencesKey)) {
       generalPreferences =
           GeneralPreferences.fromMap(map[generalPreferencesKey]) ??
               const GeneralPreferences();
+    } else {
+      generalPreferences = GeneralPreferences();
     }
 
     return PreferencesStateBase(
@@ -74,6 +65,11 @@ class PreferencesStateBase {
       themePreferences,
       generalPreferences,
     );
+  }
+
+  static RepositorySettings constructFallbackRepoSettings() {
+    final hiveConfig = HiveRepositoryConfiguration('tcbox');
+    return RepositorySettings([hiveConfig], hiveConfig);
   }
 
 // TODO introduce generic copyWith once dart is powerful enough for it
