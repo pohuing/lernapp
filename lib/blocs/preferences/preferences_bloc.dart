@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lernapp/logic/logging.dart';
+import 'package:lernapp/model/preferences/repository_configuration/repository_settings.dart';
 
 import 'events.dart';
 import 'states.dart';

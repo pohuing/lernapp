@@ -7,4 +7,13 @@ extension HigherOrderFunctionality<T> on T? {
       return null;
     }
   }
+
+  /// Invokes [defaultConstructor] if [this] is null
+  T constructDefault(T Function() defaultConstructor) {
+    if (this == null) {
+      return defaultConstructor();
+    } else {
+      return this!;
+    }
+  }
 }

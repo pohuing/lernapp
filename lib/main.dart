@@ -8,6 +8,9 @@ import 'package:lernapp/blocs/selection_cubit.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
 import 'package:lernapp/logic/router.dart';
 import 'package:lernapp/logic/ui_overlay_setter_observer.dart';
+import 'package:lernapp/model/preferences/repository_configuration/hive_repository_configuration.dart';
+import 'package:lernapp/model/preferences/repository_configuration/repository_settings.dart';
+import 'package:lernapp/model/preferences/theme_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:system_theme/system_theme.dart';
 
