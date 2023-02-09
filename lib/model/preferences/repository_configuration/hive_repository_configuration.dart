@@ -17,8 +17,7 @@ class HiveRepositoryConfiguration implements RepositoryConfigurationBase {
     return HiveTaskRepository(box: await Hive.openBox(boxName));
   }
 
-  @override
-  RepositoryConfigurationBase? fromMap(Map<String, dynamic> map) {
+  static RepositoryConfigurationBase? fromMap(Map<String, dynamic> map) {
     if (canDeserialize(map)) {
       return HiveRepositoryConfiguration(map[boxNameKey]);
     } else {
