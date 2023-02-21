@@ -10,6 +10,7 @@ import 'package:lernapp/logic/logging.dart';
 import 'package:lernapp/logic/nullable_extensions.dart';
 import 'package:lernapp/model/task_category.dart';
 import 'package:lernapp/widgets/general_purpose/platform_adaptive_scaffold.dart';
+import 'package:lernapp/widgets/general_purpose/timed_snackbar.dart';
 import 'package:lernapp/widgets/listing_screen/task_listing.dart';
 
 class ImportScreen extends StatefulWidget {
@@ -45,6 +46,7 @@ class _ImportScreenState extends State<ImportScreen> {
                 context.read<TasksBloc>()
                   ..add(TaskStorageImportCategories(parsedContents!))
                   ..add(TaskStorageLoad());
+                showTimedSnackBar(context, 'Finished import');
               },
             ),
           if (parsedContents != null)
