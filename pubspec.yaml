@@ -83,6 +83,9 @@ flutter:
   assets:
     - images/dorime.gif
     - assets/importSchema.json
+    # Include git information for showing hash at run time
+    - .git/HEAD
+    - .git/ORIG_HEAD
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

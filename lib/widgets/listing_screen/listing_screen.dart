@@ -7,6 +7,7 @@ import 'package:lernapp/widgets/general_purpose/platform_adaptive_scaffold.dart'
 import 'package:lernapp/widgets/import_flow/import_tile.dart';
 import 'package:lernapp/widgets/listing_screen/start_session_dialog.dart';
 
+import 'about_list_tile.dart';
 import 'task_listing.dart';
 
 class ListingScreen extends StatelessWidget {
@@ -141,14 +142,7 @@ class ListingScreen extends StatelessWidget {
             ),
             const PopupMenuItem(
               padding: EdgeInsets.zero,
-              child: AboutListTile(
-                icon: Icon(Icons.info),
-                applicationIcon: Image(
-                  isAntiAlias: false,
-                  width: 200,
-                  image: AssetImage('images/dorime.gif'),
-                ),
-              ),
+              child: CustomAboutListTile(),
             ),
           ],
         )

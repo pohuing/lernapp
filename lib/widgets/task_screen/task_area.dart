@@ -36,7 +36,7 @@ class _TaskAreaState extends State<TaskArea> {
   Duration expandDuration = const Duration(milliseconds: 200);
   List<Line> lines = [];
   bool showsHistory = false;
-  final double historyWidth = 180;
+  static const double historyWidth = 180;
   int? selectedHistoryIndex;
 
   double getDrawingAreaHeight(double widgetHeight) {

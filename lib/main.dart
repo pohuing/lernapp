@@ -8,6 +8,7 @@ import 'package:lernapp/blocs/selection_cubit.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
 import 'package:lernapp/logic/router.dart';
 import 'package:lernapp/logic/ui_overlay_setter_observer.dart';
+import 'package:lernapp/logic/version.dart';
 import 'package:lernapp/repositories/preferences_repository.dart';
 import 'package:provider/provider.dart';
 import 'package:system_theme/system_theme.dart';
@@ -33,6 +34,7 @@ void main() async {
   final tasksRepositoryConfiguration =
       currentPreferences.repositorySettings.currentConfiguration!;
   final tasksRepository = await tasksRepositoryConfiguration.createRepository();
+  await initVersionName();
 
   Widget builder([BuildContext? context]) => MultiProvider(
         providers: [
