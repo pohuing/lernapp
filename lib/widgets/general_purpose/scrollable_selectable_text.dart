@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ScrollableSelectableText extends StatelessWidget {
@@ -18,15 +17,10 @@ class ScrollableSelectableText extends StatelessWidget {
         controller: _controller,
         child: SingleChildScrollView(
           controller: _controller,
-          child: SelectableRegion(
-            focusNode: FocusNode(),
-            selectionControls: Theme.of(context).platform == TargetPlatform.iOS
-                ? CupertinoTextSelectionControls()
-                : MaterialTextSelectionControls(),
-            child: Text(
-              text,
-              style: textTheme ?? Theme.of(context).textTheme.bodyLarge,
-            ),
+          //TODO reenable selectable text once flutter bug for issue #36
+          child: Text(
+            text,
+            style: textTheme ?? Theme.of(context).textTheme.bodyLarge,
           ),
         ),
       ),

@@ -1,5 +1,3 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -19,7 +17,7 @@ class TaskCard extends StatelessWidget {
     this.secondaryAction,
     this.isExpanded,
     bool? showBackButton,
-  })  : showBackButton = showBackButton ?? true;
+  }) : showBackButton = showBackButton ?? true;
 
   @override
   Widget build(BuildContext context) {
@@ -59,29 +57,22 @@ class TaskCard extends StatelessWidget {
                   thumbVisibility: true,
                   child: SingleChildScrollView(
                     controller: _scrollController,
-                    child: SelectableRegion(
-                      focusNode: FocusNode(),
-                      selectionControls:
-                          defaultTargetPlatform == TargetPlatform.iOS
-                              ? CupertinoTextSelectionControls()
-                              : MaterialTextSelectionControls(),
-                      child: Padding(
-                        padding: const EdgeInsets.only(right: 8),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              title,
-                              style: Theme.of(context).textTheme.titleLarge,
-                              textAlign: TextAlign.start,
-                            ),
-                            Text(
-                              description,
-                              style: Theme.of(context).textTheme.bodyLarge,
-                              overflow: TextOverflow.fade,
-                            ),
-                          ],
-                        ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            title,
+                            style: Theme.of(context).textTheme.titleLarge,
+                            textAlign: TextAlign.start,
+                          ),
+                          Text(
+                            description,
+                            style: Theme.of(context).textTheme.bodyLarge,
+                            overflow: TextOverflow.fade,
+                          ),
+                        ],
                       ),
                     ),
                   ),
