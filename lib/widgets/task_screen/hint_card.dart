@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../general_purpose/scrollable_selectable_text.dart';
+
 class HintCard extends StatelessWidget {
   final String hint;
 
@@ -12,7 +14,7 @@ class HintCard extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Row(
           children: [
-            Text(hint),
+            ScrollableSelectableText(text: hint),
             const VerticalDivider(width: 8),
             IgnorePointer(
               child: IconButton(
