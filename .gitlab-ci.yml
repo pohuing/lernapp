@@ -1,7 +1,16 @@
+get_version:
+  stage: .pre
+  script:
+    - apt-get update
+    - apt-get install git -y
+    - git branch --show-current > version
+    - git rev-parse --short HEAD >> version
+
 test:
   stage: test
   image: "cirrusci/flutter:stable"
-  script: flutter test test/unit_tests
+  script:
+    - flutter test test/unit_tests
 
 
 web:
@@ -37,7 +46,7 @@ deploy:
     # Ssh refuses to read keyfiles which are globally readable
     - chmod 600 $DeployKey
     - mkdir -p ~/.ssh && touch ~/.ssh/known_hosts
-    # Ssh won't connect to unknown keys in non interactive mode, this figures out the server's keys
+    # Ssh won't connect to unknown keys in non-interactive mode, this figures out the server's keys
     - ssh-keyscan $DeployTargetServer >> ~/.ssh/known_hosts
     - tar -xvf $CI_PROJECT_DIR/web.tar
     - ssh -i $DeployKey $DeployUser@$DeployTargetServer "rm -r /var/www/html/lernapp"

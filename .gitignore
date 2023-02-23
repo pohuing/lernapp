@@ -43,3 +43,6 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 /coverage/lcov.info
+
+# Version name, should only be touched by CI
+version
