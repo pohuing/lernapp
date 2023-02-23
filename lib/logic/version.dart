@@ -10,15 +10,15 @@ String _versionName = '';
 /// Loads the version name from the bundle based on git branch and commit hash
 Future<String> getVersionName() async {
   try {
-    final head = await rootBundle.loadString('.git/HEAD');
-    final commit =
-        (await rootBundle.loadString('.git/ORIG_HEAD')).substring(0, 8);
+    final head =
+        (await rootBundle.loadString('version')).replaceAll('\n', ' ').trim();
 
-    final branch = head.split('/').last.trim();
-
-    return '$branch #$commit';
+    return head;
   } catch (e) {
-    log('Failed to load version string: ${e.toString()}');
+    log(
+      'Failed to load version string: ${e.toString()}',
+      name: 'getVersionName',
+    );
     return '';
   }
 }
