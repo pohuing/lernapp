@@ -1,6 +1,6 @@
 before_script:
-  - echo $CI_COMMIT_REF_NAME > version
-  - echo $CI_COMMIT_SHORT_SHA >> version
+  - echo "const versionName = '$CI_COMMIT_REF_NAME $CI_COMMIT_SHORT_SHA';" > lib/logic/version.dart
+
 
 test:
   stage: test

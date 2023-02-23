@@ -10,7 +10,7 @@ class CustomAboutListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return AboutListTile(
       icon: const Icon(Icons.info),
-      applicationVersion: VERSION_NAME,
+      applicationVersion: versionName,
       applicationIcon: const Image(
         isAntiAlias: false,
         width: 200,
