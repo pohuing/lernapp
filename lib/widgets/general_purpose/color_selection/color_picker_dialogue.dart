@@ -40,22 +40,24 @@ class _ColorPickerDialogueState extends State<ColorPickerDialogue> {
   Color brightThemeColor = Colors.red[900]!;
   bool dualColours = false;
 
+  void finish() {
+    widget.colorController?.colors.add(
+      buildColorPair(),
+    );
+    Navigator.of(context, rootNavigator: false)
+        .pop<ColorPair?>(buildColorPair());
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      scrollable: true,
       title: const Text('Add a new Color'),
       actions: [
-        ElevatedButton(
-          onPressed: () {
-            widget.colorController?.colors.add(
-              buildColorPair(),
-            );
-            Navigator.of(context, rootNavigator: false)
-                .pop<ColorPair?>(buildColorPair());
-          },
-          child: const Text('Confirm'),
-        )
+        OutlinedButton(
+          onPressed: Navigator.of(context).pop,
+          child: const Text('Cancel'),
+        ),
+        FilledButton(onPressed: finish, child: const Text('Finish'))
       ],
       content: Column(
         mainAxisSize: MainAxisSize.min,
