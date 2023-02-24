@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:lernapp/logic/nullable_extensions.dart';
 import 'package:lernapp/model/color_pair.dart';
-import 'package:lernapp/widgets/general_purpose/adaptive_alert_dialog.dart';
 import 'package:lernapp/widgets/general_purpose/color_selection/color_selection.dart';
 
 /// Content for picking colors.
@@ -28,10 +27,7 @@ class _AdaptiveRowColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (MediaQuery
-        .of(context)
-        .size
-        .width > 750) {
+    if (MediaQuery.of(context).size.width > 750) {
       return Row(children: children);
     } else {
       return Column(children: children);
@@ -54,10 +50,15 @@ class _ColorPickerDialogueState extends State<ColorPickerDialogue> {
 
   @override
   Widget build(BuildContext context) {
-    return AdaptiveAlertDialog(
-      title: 'Add a new Color',
-      confirmChild: const Text('Confirm'),
-      onConfirm: finish,
+    return AlertDialog(
+      title: const Text('Add a new Color'),
+      actions: [
+        OutlinedButton(
+          onPressed: Navigator.of(context).pop,
+          child: const Text('Cancel'),
+        ),
+        FilledButton(onPressed: finish, child: const Text('Finish'))
+      ],
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -77,10 +78,7 @@ class _ColorPickerDialogueState extends State<ColorPickerDialogue> {
                     if (dualColours)
                       Text(
                         'Bright Theme Colour',
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .titleMedium,
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ColorPicker(
                       portraitOnly: true,
@@ -103,10 +101,7 @@ class _ColorPickerDialogueState extends State<ColorPickerDialogue> {
                     children: [
                       Text(
                         'Dark Theme Colour',
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .titleMedium,
+                        style: Theme.of(context).textTheme.titleMedium,
                       ),
                       ColorPicker(
                         portraitOnly: true,
@@ -131,7 +126,7 @@ class _ColorPickerDialogueState extends State<ColorPickerDialogue> {
   void initState() {
     super.initState();
     widget.startingColors.map(
-          (value) {
+      (value) {
         brightThemeColor = value.brightTheme;
         darkThemeColor = value.darkTheme;
         dualColours = brightThemeColor != darkThemeColor;
