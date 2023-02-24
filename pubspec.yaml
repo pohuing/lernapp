@@ -46,7 +46,7 @@ dependencies:
   flutter_bloc: ^8.1.1
   flutter_colorpicker: ^1.0.3
   list_diff: ^2.0.1
-  implicitly_animated_list: ^2.1.1
+  implicitly_animated_list: ^2.2.0
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   animations: 2.0.7

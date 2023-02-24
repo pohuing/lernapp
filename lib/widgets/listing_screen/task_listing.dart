@@ -40,6 +40,7 @@ class _TaskListingState extends State<TaskListing> {
 
     return ImplicitlyAnimatedList(
       itemData: flattened,
+      initialAnimation: false,
       shrinkWrap: widget.shrinkWrap ?? false,
       itemBuilder: (context, entry) {
         if (entry is ListingEntryCategory) {

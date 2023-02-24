@@ -230,10 +230,10 @@ packages:
     dependency: "direct main"
     description:
       name: implicitly_animated_list
-      sha256: "6f6761eac00998d9d508f49c9ebfa25f754f395b2dce7a0280ffd41852f2ed2a"
+      sha256: "327074913ed350fbd5089bf433d6268fb98022210e03668035523da7ff64dfdb"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.1"
+    version: "2.2.0"
   integration_test:
     dependency: "direct dev"
     description: flutter
