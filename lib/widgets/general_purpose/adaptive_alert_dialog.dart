@@ -52,7 +52,7 @@ class AdaptiveAlertDialog extends StatelessWidget {
         actions: [
           if (cancelChild != null)
             OutlinedButton(onPressed: onCancel, child: cancelChild),
-          if (cancelChild != null)
+          if (confirmChild != null)
             FilledButton(onPressed: onConfirm, child: confirmChild),
         ],
         content: content,

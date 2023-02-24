@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lernapp/blocs/preferences/preferences_bloc.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
 import 'package:lernapp/logic/list_extensions.dart';
+import 'package:lernapp/model/color_pair.dart';
 import 'package:lernapp/model/line.dart';
 import 'package:lernapp/model/solution_state.dart';
 import 'package:lernapp/model/task.dart';
@@ -175,13 +176,13 @@ class _TaskAreaState extends State<TaskArea> {
               IconButton(
                 tooltip: 'Add a new color',
                 onPressed: () async {
-                  final colourChanged = await showDialog(
+                  final result = await showDialog(
                     context: context,
                     builder: (context) => ColorPickerDialogue(
                       colorController: colorController,
                     ),
                   );
-                  if (colourChanged is bool && colourChanged) {
+                  if (result is ColorPair) {
                     setState(() {
                       colorController.selectedIndex =
                           colorController.colors.length - 1;
