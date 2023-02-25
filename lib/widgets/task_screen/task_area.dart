@@ -26,7 +26,7 @@ class TaskArea extends StatefulWidget {
 }
 
 class _TaskAreaState extends State<TaskArea> {
-  DrawingAreaController controller = DrawingAreaController();
+  final DrawingAreaController controller = DrawingAreaController();
   late final Task? task;
   late final TasksBloc tasksBloc;
   var expandedTopRow = false;
@@ -271,6 +271,8 @@ class _TaskAreaState extends State<TaskArea> {
   void initState() {
     task = widget.task;
     tasksBloc = context.read<TasksBloc>();
+    controller.penSize =
+        context.read<PreferencesBloc>().state.themePreferences.lineWidth;
     colorController.colorChanged =
         (newColor) => setState(() => controller.currentColor = newColor);
     super.initState();
