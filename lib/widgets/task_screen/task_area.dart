@@ -11,9 +11,7 @@ import 'package:lernapp/model/task.dart';
 import 'package:lernapp/widgets/drawing_area/drawing_area.dart';
 import 'package:lernapp/widgets/general_purpose/color_selection/color_picker_dialogue.dart';
 import 'package:lernapp/widgets/general_purpose/color_selection/color_selection.dart';
-import 'package:lernapp/widgets/general_purpose/flippable.dart';
 
-import 'hint_card.dart';
 import 'solution_card.dart';
 import 'task_card.dart';
 
@@ -82,13 +80,10 @@ class _TaskAreaState extends State<TaskArea> {
                   ),
                 ),
                 Expanded(
-                  child: Flippable(
-                    onFlip: (isFlipped) => setState(() {
-                      controller.isCorrecting |= isFlipped;
-                      updateColorController();
-                    }),
-                    front: HintCard(hint: task!.hint),
-                    back: SolutionCard(solution: task!.solution),
+                  child: SolutionCard(
+                    title: task!.hint,
+                    solution: task!.solution,
+                    onReveal: onRevealSolution,
                   ),
                 ),
               ],
@@ -153,6 +148,11 @@ class _TaskAreaState extends State<TaskArea> {
       ),
     );
   }
+
+  void onRevealSolution(isFlipped) => setState(() {
+        controller.isCorrecting |= isFlipped;
+        updateColorController();
+      });
 
   Widget buildControls() => SizedBox(
         child: Row(
