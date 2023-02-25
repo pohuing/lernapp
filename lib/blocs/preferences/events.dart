@@ -25,6 +25,12 @@ class ChangePaintAA implements PreferencesEventBase {
   ChangePaintAA(this.newValue);
 }
 
+class ChangeLineWidth implements PreferencesEventBase {
+  final double newWidth;
+
+  ChangeLineWidth(this.newWidth);
+}
+
 class ChangeRepositoryConfiguration implements PreferencesEventBase {
   final RepositoryConfigurationBase configuration;
 

@@ -22,11 +22,23 @@ class PreferencesBloc extends Bloc<PreferencesEventBase, PreferencesStateBase> {
     on<ChangeBlendAA>(_onChangeBlendAA);
     on<ChangeCorrectionColor>(_onChangeCorrectionColor);
     on<ChangeShowHistory>(_onChangeShowHistory);
+    on<ChangeLineWidth>(_onLineWidthChange);
+
     _loggingSubscription = stream
         .listen((event) => log(event.toString(), name: 'PreferencesBloc'));
     _repositorySubscription = stream.listen((event) async {
       await repository.storePreferences(event);
     });
+  }
+
+  void _onLineWidthChange(event, emit) {
+    emit(
+      ThemeChanged(
+        state.repositorySettings,
+        state.themePreferences.copyWith(lineWidth: event.newWidth),
+        state.generalPreferences,
+      ),
+    );
   }
 
   void _onChangeBlendAA(event, emit) {

@@ -14,6 +14,20 @@ class TaskAreaPreferencesSettings extends StatelessWidget {
       builder: (context, state) => Column(
         children: [
           ListTile(
+            title: const Text('Default line width'),
+            subtitle: const Text('How wide new lines should be in pixels'),
+            trailing: SizedBox(
+              width: 120,
+              child: Slider(
+                min: 1,
+                max: 20,
+                value: state.themePreferences.lineWidth,
+                onChanged: (value) =>
+                    context.read<PreferencesBloc>().add(ChangeLineWidth(value)),
+              ),
+            ),
+          ),
+          ListTile(
             title: const Text('Correction colors'),
             subtitle: const Text('Colors available after showing solution'),
             onTap: () async {
