@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lernapp/blocs/preferences/preferences_bloc.dart';
+import 'package:lernapp/widgets/settings_screen/drawing_preview.dart';
 import 'package:lernapp/widgets/settings_screen/task_area_preferences_settings.dart';
 
 class ThemeSettingsTile extends StatefulWidget {
@@ -39,6 +40,7 @@ class _ThemeSettingsTileState extends State<ThemeSettingsTile> {
                       context.read<PreferencesBloc>().add(ChangePaintAA(value)),
                 ),
                 const TaskAreaPreferencesSettings(),
+                const DrawingPreview(),
               ],
             );
           },

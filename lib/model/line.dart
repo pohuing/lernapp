@@ -41,10 +41,11 @@ class Line {
   Line(this.path, this.colors, this.size, [LineType? type])
       : type = type ?? LineType.regular;
 
-  Line.withDefaultProperties(this.path)
-      : colors = ColorPair.defaultColors.copy(),
-        size = 1,
-        type = LineType.regular;
+  Line.withDefaultProperties(this.path,
+      {double? size, ColorPair? colors, LineType? type})
+      : colors = colors ?? ColorPair.defaultColors.copy(),
+        size = size ?? 1,
+        type = type ?? LineType.regular;
 
   @override
   int get hashCode => path.fold(
