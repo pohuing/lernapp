@@ -5,30 +5,40 @@ class ThemePreferences {
   static const String paintAAKey = 'paintAA';
   static const String blendAAKey = 'blendAA';
   static const String correctionColorsKey = 'correctionColors';
+  static const String lineWidthKey = 'lineWidth';
 
   final bool paintAA;
   static const bool defaultPaintAA = false;
   final bool blendAA;
   static const bool defaultBlendAA = false;
   final ColorPair correctionColors;
+  static const double defaultLineWidth = 1;
+  final double lineWidth;
 
-  ThemePreferences(this.paintAA, this.blendAA, ColorPair? correctionColors)
-      : correctionColors = correctionColors ?? ColorPair.correctionColors;
+  ThemePreferences(
+    this.paintAA,
+    this.blendAA,
+    ColorPair? correctionColors,
+    this.lineWidth,
+  ) : correctionColors = correctionColors ?? ColorPair.correctionColors;
 
   ThemePreferences.defaults()
       : paintAA = defaultPaintAA,
         blendAA = defaultBlendAA,
-        correctionColors = ColorPair.correctionColors;
+        correctionColors = ColorPair.correctionColors,
+        lineWidth = defaultLineWidth;
 
   ThemePreferences copyWith({
     bool? paintAA,
     bool? blendAA,
     ColorPair? correctionColors,
+    double? lineWidth,
   }) {
     return ThemePreferences(
       paintAA ?? this.paintAA,
       blendAA ?? this.blendAA,
       correctionColors ?? this.correctionColors,
+      lineWidth ?? this.lineWidth,
     );
   }
 
@@ -37,6 +47,7 @@ class ThemePreferences {
       paintAAKey: paintAA,
       blendAAKey: blendAA,
       correctionColorsKey: correctionColors.toMap(),
+      lineWidthKey: lineWidth,
     };
   }
 
@@ -45,8 +56,9 @@ class ThemePreferences {
     final paintAA = _extractPaintAA(map) ?? defaultPaintAA;
     final correctionColors =
         _extractCorrectionColors(map) ?? ColorPair.correctionColors;
+    final lineWidth = _extractLineWidth(map) ?? defaultLineWidth;
 
-    return ThemePreferences(paintAA, blendAA, correctionColors);
+    return ThemePreferences(paintAA, blendAA, correctionColors, lineWidth);
   }
 
   static bool? _extractPaintAA(Map map) {
@@ -78,6 +90,17 @@ class ThemePreferences {
       return ColorPair.fromMap(map[correctionColorsKey]);
     }
 
+    return null;
+  }
+
+  static double? _extractLineWidth(Map map) {
+    try {
+      if (map.containsKey(lineWidthKey)) {
+        return map[lineWidthKey] as double;
+      }
+    } catch (e) {
+      log(e.toString(), name: 'ThemePreference._extractLineWidth');
+    }
     return null;
   }
 }

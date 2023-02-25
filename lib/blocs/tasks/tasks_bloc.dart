@@ -38,11 +38,11 @@ class TasksBloc extends Bloc<TaskStorageEventBase, TaskStorageStateBase> {
           add(TaskStorageChanged(newRepository));
           return;
         }
+        log(
+          'Failed setting new Task storage. Incoming event: ${event.toString()}',
+          name: 'TasksBloc',
+        );
       }
-      log(
-        'Failed setting new Task storage. Incoming event: ${event.toString()}',
-        name: 'TasksBloc',
-      );
     });
   }
 
