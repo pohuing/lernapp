@@ -5,6 +5,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+/// A Row for picking a time and date, using the platform native pickers.
+/// The tile does not store any state itself, instead update the [value] through
+/// [onChange].
 class DateTimeTile extends StatelessWidget {
   const DateTimeTile({
     super.key,
@@ -51,10 +54,10 @@ class DateTimeTile extends StatelessWidget {
 
   void iOSTap(BuildContext context) async {
     DateTime? newTime;
-    final result = await showCupertinoModalPopup(
+    await showCupertinoModalPopup(
       context: context,
       barrierDismissible: true,
-      builder: (context) => Container(
+      builder: (context) => SizedBox(
         height: 216,
         child: CupertinoDatePicker(
           use24hFormat: true,
@@ -76,6 +79,7 @@ class DateTimeTile extends StatelessWidget {
     } else {
       final result = await showDatePicker(
         context: context,
+        helpText: title,
         initialDate: DateTime.now(),
         firstDate: DateTime.now().subtract(const Duration(days: 365)),
         lastDate: DateTime.now(),
@@ -98,6 +102,7 @@ class DateTimeTile extends StatelessWidget {
     } else {
       final result = await showTimePicker(
         context: context,
+        helpText: title,
         initialTime: TimeOfDay.fromDateTime(value),
       );
       if (result is TimeOfDay) {
