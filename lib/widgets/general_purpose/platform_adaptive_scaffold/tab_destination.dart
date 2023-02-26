@@ -1,9 +1,15 @@
 import 'package:flutter/widgets.dart';
 
 class TabDestination {
-  final Widget Function() builder;
+  final Widget Function(BuildContext context) builder;
   final String title;
   final Icon icon;
+  final List<Widget>? Function(BuildContext context)? actionsBuilder;
 
-  TabDestination(this.builder, this.title, this.icon);
+  const TabDestination({
+    required this.builder,
+    required this.title,
+    required this.icon,
+    this.actionsBuilder,
+  });
 }

@@ -60,6 +60,7 @@ class _MaterialAdaptiveScaffoldState extends State<MaterialAdaptiveScaffold>
             return [
               SliverAppBar.large(
                 title: getCurrentTitle().map((t) => Text(t)),
+                actions: buildActions(),
               ),
             ];
           },
@@ -68,9 +69,12 @@ class _MaterialAdaptiveScaffoldState extends State<MaterialAdaptiveScaffold>
       );
     } else {
       return Scaffold(
-        appBar: AppBar(
-          title: getCurrentTitle().map((t) => Text(t)),
-        ),
+        appBar: widget.showAppBar
+            ? AppBar(
+                title: getCurrentTitle().map((t) => Text(t)),
+                actions: buildActions(),
+              )
+            : null,
         bottomNavigationBar: buildBottomNavigationBar(),
         primary: widget.primary,
         body: buildCurrentBody(),
@@ -104,10 +108,19 @@ class _MaterialAdaptiveScaffoldState extends State<MaterialAdaptiveScaffold>
     if (useBottomNavigation) {
       return TabBarView(
         controller: tabController,
-        children: widget.destinations!.map((e) => e.builder()).toList(),
+        children: widget.destinations!.map((e) => e.builder(context)).toList(),
       );
     } else {
       return widget.body!;
+    }
+  }
+
+  List<Widget>? buildActions() {
+    if (useBottomNavigation) {
+      return widget.destinations![tabController.index].actionsBuilder
+          ?.call(context);
+    } else {
+      return widget.actions;
     }
   }
 }

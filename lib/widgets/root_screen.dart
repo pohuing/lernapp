@@ -28,11 +28,16 @@ class _RootScreenState extends State<RootScreen>
       builder: (context, state) => PlatformAdaptiveScaffold(
         destinations: [
           TabDestination(
-            () => const ConnectedTaskListing(),
-            'Tasks',
-            const Icon(Icons.list),
+            builder: (context) => const ConnectedTaskListing(),
+            title: 'Tasks',
+            icon: const Icon(Icons.list),
+            actionsBuilder: (context) => buildActions(state),
           ),
-          TabDestination(() => HistoryScreen(), 'History', Icon(Icons.history)),
+          TabDestination(
+            builder: (context) => const HistoryScreen(),
+            title: 'History',
+            icon: const Icon(Icons.history),
+          ),
         ],
         actions: buildActions(state),
         scrollController: scrollController,

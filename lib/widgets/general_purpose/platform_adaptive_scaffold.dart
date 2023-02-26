@@ -91,6 +91,8 @@ class PlatformAdaptiveScaffold extends StatelessWidget {
         useSliverAppBar: useSliverAppBar,
         primary: primary,
         destinations: destinations,
+        body: body,
+        title: title,
       );
     }
 
