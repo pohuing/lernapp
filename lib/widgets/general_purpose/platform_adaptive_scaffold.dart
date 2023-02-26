@@ -1,31 +1,44 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lernapp/logic/nullable_extensions.dart';
+import 'package:lernapp/widgets/general_purpose/platform_adaptive_scaffold/material_adaptive_scaffold.dart';
+
+import 'platform_adaptive_scaffold/tab_destination.dart';
 
 class PlatformAdaptiveScaffold extends StatelessWidget {
   final List<Widget>? actions;
-  final String title;
+  final String? title;
   final String? previousTitle;
-  final Widget body;
+  final Widget? body;
   final bool primary;
   final bool useSliverAppBar;
   final bool allowBackGesture;
   final bool showAppBar;
+  final Widget? bottomNavigationBar;
+  final ScrollController? scrollController;
+  final List<TabDestination>? destinations;
 
-  const PlatformAdaptiveScaffold({
+  PlatformAdaptiveScaffold({
     super.key,
     this.actions,
-    required this.title,
+    this.title,
     this.previousTitle,
-    required this.body,
+    this.body,
     bool? primary,
     bool? useSliverAppBar,
     bool? allowBackGesture,
     bool? showAppBar,
+    this.bottomNavigationBar,
+    this.scrollController,
+    this.destinations,
   })  : primary = primary ?? true,
         useSliverAppBar = useSliverAppBar ?? true,
         allowBackGesture = allowBackGesture ?? true,
-        showAppBar = showAppBar ?? true;
+        showAppBar = showAppBar ?? true,
+        assert(
+          (destinations != null && destinations.length >= 2) || body != null,
+          'Either destinations has to provide a body or, body has to be supplied directly',
+        );
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +50,7 @@ class PlatformAdaptiveScaffold extends StatelessWidget {
             headerSliverBuilder: (context, innerBoxIsScrolled) {
               return [
                 CupertinoSliverNavigationBar(
-                  largeTitle: Text(title),
+                  largeTitle: Text(title!),
                   previousPageTitle: previousTitle,
                   trailing: actions.map(
                     (value) => Row(
@@ -48,7 +61,7 @@ class PlatformAdaptiveScaffold extends StatelessWidget {
                 )
               ];
             },
-            body: body,
+            body: body!,
           ),
         );
       } else {
@@ -56,7 +69,7 @@ class PlatformAdaptiveScaffold extends StatelessWidget {
           navigationBar: showAppBar
               ? CupertinoNavigationBar(
                   previousPageTitle: previousTitle,
-                  middle: Text(title),
+                  middle: Text(title!),
                   trailing: actions.map(
                     (e) => Row(
                       mainAxisSize: MainAxisSize.min,
@@ -65,7 +78,7 @@ class PlatformAdaptiveScaffold extends StatelessWidget {
                   ),
                 )
               : null,
-          child: body,
+          child: body!,
         );
       }
       value = Material(
@@ -73,31 +86,12 @@ class PlatformAdaptiveScaffold extends StatelessWidget {
         child: value,
       );
     } else {
-      if (useSliverAppBar && showAppBar) {
-        value = Scaffold(
-          primary: primary,
-          body: NestedScrollView(
-            headerSliverBuilder: (context, innerBoxIsScrolled) {
-              return [
-                SliverAppBar.large(
-                  title: Text(title),
-                  actions: actions,
-                ),
-              ];
-            },
-            body: body,
-          ),
-        );
-      } else {
-        value = Scaffold(
-          appBar: AppBar(
-            title: Text(title),
-            actions: actions,
-          ),
-          primary: primary,
-          body: body,
-        );
-      }
+      value = MaterialAdaptiveScaffold(
+        showAppBar: showAppBar,
+        useSliverAppBar: useSliverAppBar,
+        primary: primary,
+        destinations: destinations,
+      );
     }
 
     if (!showAppBar) {
