@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -45,31 +49,61 @@ class DateTimeTile extends StatelessWidget {
     );
   }
 
-  void onTapDate(BuildContext context) async {
-    final result = await showDatePicker(
+  void iOSTap(BuildContext context) async {
+    DateTime? newTime;
+    final result = await showCupertinoModalPopup(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now().subtract(const Duration(days: 365)),
-      lastDate: DateTime.now(),
-    );
-    if (result is DateTime) {
-      onChange?.call(
-        value.copyWith(
-          year: result.year,
-          month: result.month,
-          day: result.day,
+      barrierDismissible: true,
+      builder: (context) => Container(
+        height: 216,
+        child: CupertinoDatePicker(
+          use24hFormat: true,
+          mode: CupertinoDatePickerMode.dateAndTime,
+          initialDateTime: value,
+          onDateTimeChanged: (value) => newTime = value,
         ),
+      ),
+    );
+
+    if (newTime != null) {
+      onChange?.call(newTime!);
+    }
+  }
+
+  void onTapDate(BuildContext context) async {
+    if (!kIsWeb && (Platform.isIOS)) {
+      iOSTap(context);
+    } else {
+      final result = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime.now().subtract(const Duration(days: 365)),
+        lastDate: DateTime.now(),
       );
+      if (result is DateTime) {
+        onChange?.call(
+          value.copyWith(
+            year: result.year,
+            month: result.month,
+            day: result.day,
+          ),
+        );
+      }
     }
   }
 
   void onTapTime(BuildContext context) async {
-    final result = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.fromDateTime(value),
-    );
-    if (result is TimeOfDay) {
-      onChange?.call(value.copyWith(hour: result.hour, minute: result.minute));
+    if (!kIsWeb && (Platform.isIOS)) {
+      iOSTap(context);
+    } else {
+      final result = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.fromDateTime(value),
+      );
+      if (result is TimeOfDay) {
+        onChange
+            ?.call(value.copyWith(hour: result.hour, minute: result.minute));
+      }
     }
   }
 }

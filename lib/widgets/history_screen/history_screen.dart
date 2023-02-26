@@ -99,7 +99,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
             .compareTo(const Duration(minutes: 1)) >
         0) {
       setState(() {
-        range = range.copyWith(start: start);
+        range = range.copyWith(start: start).sorted();
         updateLoader();
       });
     }
@@ -114,7 +114,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
             .compareTo(const Duration(minutes: 1)) >
         0) {
       setState(() {
-        range = range.copyWith(end: end);
+        range = range.copyWith(end: end).sorted();
         updateLoader();
       });
     }

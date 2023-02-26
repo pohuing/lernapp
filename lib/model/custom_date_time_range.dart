@@ -32,6 +32,14 @@ class CustomDateTimeRange {
     }
   }
 
+  CustomDateTimeRange sorted(){
+    if (start.isAfter(end)) {
+      return CustomDateTimeRange(end, start);
+    }else{
+      return CustomDateTimeRange(start, end);
+    }
+  }
+
   DateTimeRangeComparisonResult timeIn(DateTime date) {
     if (start.isBefore(date)) {
       if (end.isAfter(date)) {
