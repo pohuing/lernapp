@@ -1,7 +1,10 @@
 import 'package:lernapp/logic/logging.dart';
 import 'package:lernapp/logic/map_extensions.dart';
+import 'package:lernapp/logic/nullable_extensions.dart';
 import 'package:lernapp/model/task.dart';
 import 'package:uuid/uuid.dart';
+
+import 'custom_date_time_range.dart';
 
 class TaskCategory {
   UuidValue uuid;
@@ -62,6 +65,33 @@ class TaskCategory {
       subCategoriesKey: subCategories.map((e) => e.toMap()).toList(),
       tasksKey: tasks.map((e) => e.toMap()).toList(),
     };
+  }
+
+  TaskCategory? tasksInRange(CustomDateTimeRange range) {
+    final List<TaskCategory> subCategoriesInRange =
+        subCategories.fold([], (previousValue, element) {
+      final maybeCategory = element.tasksInRange(range);
+      maybeCategory.map(previousValue.add);
+      return previousValue;
+    });
+    final tasksInRange = tasks
+        .where(
+          (t) => t.solutions.any(
+            (s) =>
+                range.timeIn(s.timestamp) ==
+                DateTimeRangeComparisonResult.within,
+          ),
+        )
+        .toList();
+    if (subCategoriesInRange.isEmpty && tasksInRange.isEmpty) {
+      return null;
+    }
+
+    return TaskCategory(
+      title: title,
+      subCategories: subCategoriesInRange,
+      tasks: tasksInRange,
+    );
   }
 
   static TaskCategory? fromMap(Map map) {

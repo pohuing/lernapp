@@ -144,6 +144,16 @@ class ListingScreen extends StatelessWidget {
               padding: EdgeInsets.zero,
               child: CustomAboutListTile(),
             ),
+            PopupMenuItem(
+              padding: EdgeInsets.zero,
+              onTap: () => context.push('/history'),
+              child: const IgnorePointer(
+                child: ListTile(
+                  title: Text('History'),
+                  leading: Icon(Icons.history),
+                ),
+              ),
+            )
           ],
         )
     ];

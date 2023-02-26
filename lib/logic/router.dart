@@ -2,6 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lernapp/blocs/selection_cubit.dart';
 import 'package:lernapp/widgets/general_purpose/scratchpad.dart';
+import 'package:lernapp/widgets/history_screen/history_screen.dart';
 import 'package:lernapp/widgets/import_flow/import_screen.dart';
 import 'package:lernapp/widgets/listing_screen/listing_screen.dart';
 import 'package:lernapp/widgets/settings_screen/settings_screen.dart';
@@ -54,6 +55,11 @@ class LernappRouter {
         path: '/import',
         name: 'import',
         builder: (context, state) => const ImportScreen(),
+      ),
+      GoRoute(
+        name: 'history',
+        path: '/history',
+        builder: (context, state) => const HistoryScreen(),
       ),
     ],
   );
