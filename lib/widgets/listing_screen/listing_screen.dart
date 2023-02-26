@@ -95,30 +95,9 @@ class ListingScreen extends StatelessWidget {
         PopupMenuButton(
           position: PopupMenuPosition.under,
           itemBuilder: (context) => [
-            PopupMenuItem(
-              padding: EdgeInsets.zero,
-              onTap: () => context.read<TasksBloc>().add(TaskStorageSave()),
-              child: const IgnorePointer(
-                child: ListTile(
-                  leading: Icon(Icons.save),
-                  title: Text('Save'),
-                ),
-              ),
-            ),
             const PopupMenuItem(
               padding: EdgeInsets.zero,
               child: ImportTile(),
-            ),
-            PopupMenuItem(
-              padding: EdgeInsets.zero,
-              onTap: () async =>
-                  context.read<TasksBloc>().add(TaskStorageWipe()),
-              child: const IgnorePointer(
-                child: ListTile(
-                  leading: Icon(Icons.delete_forever),
-                  title: Text('Reset storage'),
-                ),
-              ),
             ),
             PopupMenuItem(
               padding: EdgeInsets.zero,

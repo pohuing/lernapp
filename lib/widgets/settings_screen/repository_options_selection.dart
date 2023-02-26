@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lernapp/blocs/preferences/preferences_bloc.dart';
+import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
+import 'package:lernapp/widgets/general_purpose/adaptive_alert_dialog.dart';
 
 class RepositoryOptionsSelection extends StatefulWidget {
   const RepositoryOptionsSelection({super.key});
@@ -33,7 +35,34 @@ class _RepositoryOptionsSelectionState
             leading: Icon(Icons.add),
             title: Text('Add configuration'),
             onTap: _showConfigurationCreationScreen,
-          )
+          ),
+          ListTile(
+            leading: const Icon(Icons.delete_forever),
+            title: const Text('Reset storage'),
+            subtitle: const Text(
+              'Delete all your loaded tasks as well as entered solutions',
+            ),
+            onTap: () async => showDialog(
+              context: context,
+              builder: (context) => AdaptiveAlertDialog(
+                title: 'Are you sure?',
+                confirmChild: const Text('Delete'),
+                content: const Text(
+                  'This will delete all tasks as well as answers!',
+                ),
+                onConfirm: () async =>
+                    context.read<TasksBloc>().add(TaskStorageWipe()),
+              ),
+            ),
+          ),
+          ListTile(
+            leading: const Icon(Icons.save),
+            title: const Text('Save'),
+            subtitle: const Text(
+              'This should happen automatically in the background',
+            ),
+            onTap: () => context.read<TasksBloc>().add(TaskStorageSave()),
+          ),
         ],
       ),
     );
