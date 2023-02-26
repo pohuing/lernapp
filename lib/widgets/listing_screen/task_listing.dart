@@ -25,11 +25,16 @@ class TaskListing extends StatefulWidget {
   State<TaskListing> createState() => _TaskListingState();
 }
 
-class _TaskListingState extends State<TaskListing> {
+class _TaskListingState extends State<TaskListing>
+    with AutomaticKeepAliveClientMixin {
   late final List<ListingEntryCategory> entries;
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     final flattened = <ListingEntryBase>[];
 
     for (int i = 0; i < entries.length; i++) {

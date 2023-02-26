@@ -36,6 +36,7 @@ class MaterialAdaptiveScaffold extends StatefulWidget {
 class _MaterialAdaptiveScaffoldState extends State<MaterialAdaptiveScaffold>
     with TickerProviderStateMixin {
   late final TabController tabController;
+  late final PageController pageController;
 
   bool get useBottomNavigation =>
       widget.destinations != null && widget.destinations!.isNotEmpty;
@@ -45,6 +46,7 @@ class _MaterialAdaptiveScaffoldState extends State<MaterialAdaptiveScaffold>
     if (useBottomNavigation) {
       tabController =
           TabController(length: widget.destinations!.length, vsync: this);
+      pageController = PageController();
     }
     super.initState();
   }
@@ -94,7 +96,14 @@ class _MaterialAdaptiveScaffoldState extends State<MaterialAdaptiveScaffold>
     if (useBottomNavigation) {
       return NavigationBar(
         selectedIndex: tabController.index,
-        onDestinationSelected: (i) => setState(() => tabController.index = i),
+        onDestinationSelected: (i) => setState(() {
+          tabController.index = i;
+          pageController.animateToPage(
+            i,
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.easeInOutSine,
+          );
+        }),
         destinations: [
           ...widget.destinations!
               .map((e) => NavigationDestination(icon: e.icon, label: e.title))
@@ -106,8 +115,9 @@ class _MaterialAdaptiveScaffoldState extends State<MaterialAdaptiveScaffold>
 
   Widget buildCurrentBody() {
     if (useBottomNavigation) {
-      return TabBarView(
-        controller: tabController,
+      return PageView(
+        onPageChanged: (value) => setState(() => tabController.index = value),
+        controller: pageController,
         children: widget.destinations!.map((e) => e.builder(context)).toList(),
       );
     } else {
