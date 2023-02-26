@@ -67,9 +67,11 @@ class RepositorySettings {
   }
 
   static List<RepositoryConfigurationBase>? _extractConfigurations(Map map) {
-    if (map.containsKey(configurationsKey)) {
-      log('Missing configurationsKey in map',
-          name: 'RepositorySettings.fromMap');
+    if (!map.containsKey(configurationsKey)) {
+      log(
+        'Missing configurationsKey in map',
+        name: 'RepositorySettings.fromMap',
+      );
       return null;
     }
 
