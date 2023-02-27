@@ -4,10 +4,6 @@ import 'package:lernapp/logic/nullable_extensions.dart';
 import 'tab_destination.dart';
 
 class MaterialAdaptiveScaffold extends StatefulWidget {
-  final String? title;
-
-  final Widget? body;
-
   MaterialAdaptiveScaffold({
     super.key,
     required this.showAppBar,
@@ -22,6 +18,8 @@ class MaterialAdaptiveScaffold extends StatefulWidget {
           'Either destinations has to provide a body or, body has to be supplied directly',
         );
 
+  final Widget? body;
+  final String? title;
   final bool showAppBar;
   final bool useSliverAppBar;
   final List<Widget>? actions;

@@ -1,6 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lernapp/logic/nullable_extensions.dart';
+import 'package:lernapp/widgets/general_purpose/platform_adaptive_scaffold/cupertino_adaptive_scaffold.dart';
 import 'package:lernapp/widgets/general_purpose/platform_adaptive_scaffold/material_adaptive_scaffold.dart';
 
 import 'platform_adaptive_scaffold/tab_destination.dart';
@@ -14,7 +13,6 @@ class PlatformAdaptiveScaffold extends StatelessWidget {
   final bool useSliverAppBar;
   final bool allowBackGesture;
   final bool showAppBar;
-  final Widget? bottomNavigationBar;
   final ScrollController? scrollController;
   final List<TabDestination>? destinations;
 
@@ -28,7 +26,6 @@ class PlatformAdaptiveScaffold extends StatelessWidget {
     bool? useSliverAppBar,
     bool? allowBackGesture,
     bool? showAppBar,
-    this.bottomNavigationBar,
     this.scrollController,
     this.destinations,
   })  : primary = primary ?? true,
@@ -44,43 +41,15 @@ class PlatformAdaptiveScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget value;
     if (Theme.of(context).platform == TargetPlatform.iOS) {
-      if (useSliverAppBar && showAppBar) {
-        value = CupertinoPageScaffold(
-          child: NestedScrollView(
-            headerSliverBuilder: (context, innerBoxIsScrolled) {
-              return [
-                CupertinoSliverNavigationBar(
-                  largeTitle: Text(title!),
-                  previousPageTitle: previousTitle,
-                  trailing: actions.map(
-                    (value) => Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: value,
-                    ),
-                  ),
-                )
-              ];
-            },
-            body: body!,
-          ),
-        );
-      } else {
-        value = CupertinoPageScaffold(
-          navigationBar: showAppBar
-              ? CupertinoNavigationBar(
-                  previousPageTitle: previousTitle,
-                  middle: Text(title!),
-                  trailing: actions.map(
-                    (e) => Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: e,
-                    ),
-                  ),
-                )
-              : null,
-          child: body!,
-        );
-      }
+      value = CupertinoAdaptiveScaffold(
+        showAppBar: showAppBar,
+        useSliverAppBar: useSliverAppBar,
+        primary: primary,
+        destinations: destinations,
+        title: title,
+        body: body,
+        previousTitle: previousTitle,
+      );
       value = Material(
         color: Colors.transparent,
         child: value,
