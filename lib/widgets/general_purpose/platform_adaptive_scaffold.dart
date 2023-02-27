@@ -4,19 +4,35 @@ import 'package:lernapp/widgets/general_purpose/platform_adaptive_scaffold/mater
 
 import 'platform_adaptive_scaffold/tab_destination.dart';
 
+/// A Scaffold that supports tabbed and not tabbed navigation with platform
+/// specific looks
+///
+/// Supports iOS and Material styles
 class PlatformAdaptiveScaffold extends StatelessWidget {
+  /// Actions to show in the top right of the app bar
+  /// If there is no app bar, or if [destinations] is not empty, this is ignored
   final List<Widget>? actions;
+
+  /// Title to show, this is ignored if [destinations] is not empty
   final String? title;
   final String? previousTitle;
+
+  /// The contents of the scaffold, this is ignored if [destinations] is not empty
   final Widget? body;
   final bool primary;
+
+  /// Use a platform specific app bar that collapses when the content is scrolled
   final bool useSliverAppBar;
   final bool allowBackGesture;
   final bool showAppBar;
-  final ScrollController? scrollController;
+
+  /// Destinations from which to build the bottom navigation bar, the navigation
+  /// bar as well as the current page's body
+  ///
+  /// This has to have at least two destinations
   final List<TabDestination>? destinations;
 
-  PlatformAdaptiveScaffold({
+  const PlatformAdaptiveScaffold({
     super.key,
     this.actions,
     this.title,
@@ -26,7 +42,6 @@ class PlatformAdaptiveScaffold extends StatelessWidget {
     bool? useSliverAppBar,
     bool? allowBackGesture,
     bool? showAppBar,
-    this.scrollController,
     this.destinations,
   })  : primary = primary ?? true,
         useSliverAppBar = useSliverAppBar ?? true,
@@ -44,7 +59,6 @@ class PlatformAdaptiveScaffold extends StatelessWidget {
       value = CupertinoAdaptiveScaffold(
         showAppBar: showAppBar,
         useSliverAppBar: useSliverAppBar,
-        primary: primary,
         destinations: destinations,
         title: title,
         body: body,

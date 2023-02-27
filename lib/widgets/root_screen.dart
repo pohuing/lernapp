@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lernapp/blocs/selection_cubit.dart';
-import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
 import 'package:lernapp/widgets/general_purpose/platform_adaptive_scaffold.dart';
 import 'package:lernapp/widgets/general_purpose/platform_adaptive_scaffold/tab_destination.dart';
 import 'package:lernapp/widgets/history_screen/history_screen.dart';
@@ -20,8 +19,6 @@ class RootScreen extends StatefulWidget {
 
 class _RootScreenState extends State<RootScreen>
     with SingleTickerProviderStateMixin {
-  final ScrollController scrollController = ScrollController();
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SelectionCubit, SelectionState>(
@@ -40,64 +37,23 @@ class _RootScreenState extends State<RootScreen>
           ),
         ],
         actions: buildActions(state),
-        scrollController: scrollController,
       ),
     );
   }
 
   List<Widget>? buildActions(SelectionState state) {
     return [
-      if (!state.isSelecting)
+      if (!state.isSelecting) ...[
         IconButton(
           onPressed: () => context.read<SelectionCubit>().toggleSelectionMode(),
           icon: const Icon(Icons.check_box_outlined),
         ),
-      if (state.isSelecting)
-        OutlinedButton(
-          onPressed: () => context.read<SelectionCubit>().toggleSelectionMode(),
-          child: const Text('Cancel'),
-        ),
-      if (state.isSelecting)
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: FilledButton(
-            onPressed: state.selectedUuids.isEmpty
-                ? null
-                : () => showDialog(
-                      context: context,
-                      builder: (context) => const StartSessionDialog(),
-                    ),
-            child: const Text('Start'),
-          ),
-        ),
-      if (!state.isSelecting)
         PopupMenuButton(
           position: PopupMenuPosition.under,
           itemBuilder: (context) => [
-            PopupMenuItem(
-              padding: EdgeInsets.zero,
-              onTap: () => context.read<TasksBloc>().add(TaskStorageSave()),
-              child: const IgnorePointer(
-                child: ListTile(
-                  leading: Icon(Icons.save),
-                  title: Text('Save'),
-                ),
-              ),
-            ),
             const PopupMenuItem(
               padding: EdgeInsets.zero,
               child: ImportTile(),
-            ),
-            PopupMenuItem(
-              padding: EdgeInsets.zero,
-              onTap: () async =>
-                  context.read<TasksBloc>().add(TaskStorageWipe()),
-              child: const IgnorePointer(
-                child: ListTile(
-                  leading: Icon(Icons.delete_forever),
-                  title: Text('Reset storage'),
-                ),
-              ),
             ),
             PopupMenuItem(
               padding: EdgeInsets.zero,
@@ -123,18 +79,27 @@ class _RootScreenState extends State<RootScreen>
               padding: EdgeInsets.zero,
               child: CustomAboutListTile(),
             ),
-            PopupMenuItem(
-              padding: EdgeInsets.zero,
-              onTap: () => context.push('/history'),
-              child: const IgnorePointer(
-                child: ListTile(
-                  title: Text('History'),
-                  leading: Icon(Icons.history),
-                ),
-              ),
-            )
           ],
-        )
+        ),
+      ],
+      if (state.isSelecting) ...[
+        OutlinedButton(
+          onPressed: () => context.read<SelectionCubit>().toggleSelectionMode(),
+          child: const Text('Cancel'),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: FilledButton(
+            onPressed: state.selectedUuids.isEmpty
+                ? null
+                : () => showDialog(
+                      context: context,
+                      builder: (context) => const StartSessionDialog(),
+                    ),
+            child: const Text('Start'),
+          ),
+        ),
+      ],
     ];
   }
 }

@@ -1,15 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:lernapp/logic/nullable_extensions.dart';
+import 'package:lernapp/widgets/general_purpose/platform_adaptive_scaffold.dart';
 
 import 'tab_destination.dart';
 
+/// Cupertino styled Scaffold with options for various scaffold styles
+/// See [PlatformAdaptiveScaffold] for parameter descriptions
 class CupertinoAdaptiveScaffold extends StatefulWidget {
-  CupertinoAdaptiveScaffold({
+  const CupertinoAdaptiveScaffold({
     super.key,
     required this.showAppBar,
     required this.useSliverAppBar,
     this.actions,
-    required this.primary,
     required this.destinations,
     this.title,
     this.body,
@@ -25,7 +27,6 @@ class CupertinoAdaptiveScaffold extends StatefulWidget {
   final bool showAppBar;
   final bool useSliverAppBar;
   final List<Widget>? actions;
-  final bool primary;
   final List<TabDestination>? destinations;
 
   @override
@@ -35,7 +36,6 @@ class CupertinoAdaptiveScaffold extends StatefulWidget {
 
 class _CupertinoAdaptiveScaffoldState extends State<CupertinoAdaptiveScaffold>
     with TickerProviderStateMixin {
-  late final PageController pageController;
   late final CupertinoTabController tabController;
 
   bool get useBottomNavigation =>
@@ -45,7 +45,6 @@ class _CupertinoAdaptiveScaffoldState extends State<CupertinoAdaptiveScaffold>
   void initState() {
     if (useBottomNavigation) {
       tabController = CupertinoTabController();
-      pageController = PageController();
     }
     super.initState();
   }
@@ -96,6 +95,7 @@ class _CupertinoAdaptiveScaffoldState extends State<CupertinoAdaptiveScaffold>
     if (useBottomNavigation) {
       return CupertinoTabBar(
         currentIndex: tabController.index,
+        onTap: (value) => setState(() => tabController.index = value),
         items: widget.destinations!
             .map((e) => BottomNavigationBarItem(icon: e.icon, label: e.title))
             .toList(),

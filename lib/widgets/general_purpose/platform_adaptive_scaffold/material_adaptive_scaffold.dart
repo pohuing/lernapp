@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:lernapp/logic/nullable_extensions.dart';
+import 'package:lernapp/widgets/general_purpose/platform_adaptive_scaffold.dart';
 
 import 'tab_destination.dart';
 
+/// Material implementation of a scaffold that supports various styles
+/// See [PlatformAdaptiveScaffold] for a description of the parameters
 class MaterialAdaptiveScaffold extends StatefulWidget {
-  MaterialAdaptiveScaffold({
+  const MaterialAdaptiveScaffold({
     super.key,
     required this.showAppBar,
     required this.useSliverAppBar,
