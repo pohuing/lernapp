@@ -63,6 +63,7 @@ class PlatformAdaptiveScaffold extends StatelessWidget {
         title: title,
         body: body,
         previousTitle: previousTitle,
+        actions: actions,
       );
       value = Material(
         color: Colors.transparent,
@@ -76,6 +77,7 @@ class PlatformAdaptiveScaffold extends StatelessWidget {
         destinations: destinations,
         body: body,
         title: title,
+        actions: actions,
       );
     }
 
