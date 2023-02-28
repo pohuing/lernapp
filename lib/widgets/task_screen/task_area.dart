@@ -46,7 +46,7 @@ class _TaskAreaState extends State<TaskArea> {
     }
   }
 
-  Curve get expandAnimationCurve => Curves.easeInOut;
+  Curve get expandAnimationCurve => Curves.easeInOutCubicEmphasized;
 
   double getInfoRowHeight(double widgetHeight) {
     if (expandedTopRow) {

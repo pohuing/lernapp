@@ -101,8 +101,8 @@ class _MaterialAdaptiveScaffoldState extends State<MaterialAdaptiveScaffold>
           tabController.index = i;
           pageController.animateToPage(
             i,
-            duration: const Duration(milliseconds: 400),
-            curve: Curves.easeInOutSine,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOutCubicEmphasized,
           );
         }),
         destinations: [
