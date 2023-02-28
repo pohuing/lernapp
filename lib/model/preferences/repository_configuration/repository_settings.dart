@@ -60,7 +60,7 @@ class RepositorySettings {
         }
         return index;
       } catch (e) {
-        log(e.toString());
+        log(e.toString(), name: 'RepositorySettings._extractIndex');
       }
     }
     return null;
@@ -76,7 +76,8 @@ class RepositorySettings {
     }
 
     try {
-      final parsed = List<Map<String, dynamic>>.of(map[configurationsKey]);
+      final parsed =
+          List<Map>.from(map[configurationsKey]).map(Map<String, dynamic>.from);
       final converted = parsed
           .map((e) => RepositoryConfigurationBase.fromMap(e))
           .whereType<RepositoryConfigurationBase>()
@@ -84,7 +85,7 @@ class RepositorySettings {
 
       return converted;
     } catch (e) {
-      log(e.toString());
+      log(e.toString(), name: 'RepositorySetting._extractConfigurations');
       return null;
     }
   }
