@@ -1,6 +1,4 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:lernapp/blocs/selection_cubit.dart';
 import 'package:lernapp/widgets/general_purpose/scratchpad.dart';
 import 'package:lernapp/widgets/history_screen/history_screen.dart';
 import 'package:lernapp/widgets/import_flow/import_screen.dart';
@@ -44,7 +42,7 @@ class LernappRouter {
         name: 'session',
         path: '/session',
         builder: (context, state) => SessionScreen(
-          tasks: context.read<SelectionCubit>().state.maybeShuffledUuids,
+          tasks: state.extra as List<UuidValue>,
         ),
       ),
       GoRoute(

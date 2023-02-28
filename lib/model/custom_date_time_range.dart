@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lernapp/logic/logging.dart';
 
 class CustomDateTimeRange {
   final DateTime start;
@@ -8,7 +7,6 @@ class CustomDateTimeRange {
   const CustomDateTimeRange(this.start, this.end);
 
   static CustomDateTimeRange fromRange(DateTimeRange range) {
-    log('message');
     // [DateTimeRange] expresses a whole day by having two identical DateTimes for start and end
     if (range.start.compareTo(range.end) == 0) {
       return CustomDateTimeRange(
@@ -32,10 +30,10 @@ class CustomDateTimeRange {
     }
   }
 
-  CustomDateTimeRange sorted(){
+  CustomDateTimeRange sorted() {
     if (start.isAfter(end)) {
       return CustomDateTimeRange(end, start);
-    }else{
+    } else {
       return CustomDateTimeRange(start, end);
     }
   }

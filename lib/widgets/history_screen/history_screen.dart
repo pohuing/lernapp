@@ -26,10 +26,12 @@ class _HistoryScreenState extends State<HistoryScreen> {
     return Column(
       children: [
         ListTile(
-          leading: Icon(Icons.av_timer),
-          title: Text('Time Frame'),
-          trailing:
-              IconButton(onPressed: onResetPressed, icon: Icon(Icons.undo)),
+          leading: const Icon(Icons.av_timer),
+          title: const Text('Time Frame'),
+          trailing: IconButton(
+            onPressed: onResetPressed,
+            icon: const Icon(Icons.undo),
+          ),
         ),
         DateTimeTile(
           title: 'Start:',
