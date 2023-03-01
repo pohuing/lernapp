@@ -8,6 +8,8 @@ import 'package:lernapp/widgets/general_purpose/platform_adaptive_scaffold.dart'
 import 'package:lernapp/widgets/history_screen/date_time_tile.dart';
 import 'package:lernapp/widgets/listing_screen/task_listing.dart';
 
+/// A Screen which lets the user select a timespan and then shows tasks which
+/// have been answered in the timespan
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key});
 
@@ -20,7 +22,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     DateTime.now().subtract(const Duration(hours: 1)),
     DateTime.now(),
   );
-  final cubit = SelectionCubit();
+  final cubit = SelectionCubit()..toggleSelectionMode();
 
   Future<List<TaskCategory>>? loader;
 
@@ -77,6 +79,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         shrinkWrap: true,
                         categories: snapshot.data!,
                         withNavBarStyle: true,
+                        showMostRecent: true,
                       );
                   }
                 },

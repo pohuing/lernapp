@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter_ameno_ipsum/flutter_ameno_ipsum.dart';
+import 'package:lernapp/logic/list_extensions.dart';
 import 'package:lernapp/logic/logging.dart';
 import 'package:lernapp/logic/map_extensions.dart';
 import 'package:lernapp/model/solution_state.dart';
@@ -46,6 +47,13 @@ class Task {
       solution.hashCode ^
       uuid.hashCode ^
       solutions.hashCode;
+
+  String get mostRecentSummary {
+    if (solutions.isNotEmpty) {
+      return solutions.min().formatted();
+    }
+    return 'Not answered yet';
+  }
 
   @override
   bool operator ==(Object other) =>

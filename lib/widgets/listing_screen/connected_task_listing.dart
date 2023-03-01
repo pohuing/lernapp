@@ -9,7 +9,11 @@ import 'task_listing.dart';
 /// A wrapper around [TaskListing] which connects the listing to the [TasksBloc]
 /// and [SelectionCubit]
 class ConnectedTaskListing extends StatelessWidget {
-  const ConnectedTaskListing({super.key});
+  /// Show the most recent solution's formatted in the subtitle
+  final bool showMostRecent;
+
+  const ConnectedTaskListing({super.key, bool? showMostRecent})
+      : showMostRecent = showMostRecent ?? false;
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +52,7 @@ class ConnectedTaskListing extends StatelessWidget {
               key: Key(state.hashCode.toString()),
               categories: (state as dynamic).contents,
               withNavBarStyle: true,
+              showMostRecent: showMostRecent,
             );
           } else if (state is TaskStorageLoading) {
             return const Center(

@@ -1,5 +1,6 @@
 import 'dart:math' hide log;
 
+import 'package:collection/collection.dart';
 import 'package:lernapp/logic/logging.dart';
 import 'package:lernapp/model/pair.dart';
 
@@ -13,6 +14,58 @@ extension OptionalTransformations<E> on Iterable<E> {
     } else {
       return this;
     }
+  }
+}
+
+extension MinMax<E extends Comparable> on List<E> {
+  /// Find the smallest member in a linear search
+  E min() {
+    assert(isNotEmpty);
+    if (length == 1) {
+      return first;
+    }
+    int minI = 0;
+    // Avoid element 0 comparing with itself
+    skip(1).forEachIndexed((index, element) {
+      switch (element.compareTo(this[minI])) {
+        case -1:
+          minI = index + 1;
+          break;
+        case 0:
+          log(
+            'Multiple equal items in this list, solution might be unpredictable',
+            name: 'List.min',
+          );
+          break;
+      }
+    });
+
+    return this[minI];
+  }
+
+  E max() {
+    assert(isNotEmpty);
+    if (length == 1) {
+      return first;
+    }
+    int maxI = 0;
+
+    // Avoid element 0 comparing with itself
+    skip(1).forEachIndexed((index, element) {
+      switch (element.compareTo(this[maxI])) {
+        case 1:
+          maxI = index + 1;
+          break;
+        case 0:
+          log(
+            'Multiple equal items in this list, solution might be unpredictable',
+            name: 'List.min',
+          );
+          break;
+      }
+    });
+
+    return this[maxI];
   }
 }
 

@@ -12,6 +12,7 @@ class TaskListing extends StatefulWidget {
   final bool withNavBarStyle;
   final bool? shrinkWrap;
   final bool allowTapTasks;
+  final bool showMostRecent;
 
   const TaskListing({
     super.key,
@@ -19,7 +20,9 @@ class TaskListing extends StatefulWidget {
     required this.withNavBarStyle,
     this.shrinkWrap,
     bool? clickableTasks,
-  }) : allowTapTasks = clickableTasks ?? true;
+    bool? showMostRecent,
+  })  : allowTapTasks = clickableTasks ?? true,
+        showMostRecent = showMostRecent ?? false;
 
   @override
   State<TaskListing> createState() => _TaskListingState();
@@ -65,6 +68,7 @@ class _TaskListingState extends State<TaskListing>
             task: entry.task,
             depth: entry.depth,
             allowTap: widget.allowTapTasks,
+            showMostRecent: widget.showMostRecent,
           );
         }
         return DummyHighPerfListingTile();
