@@ -39,6 +39,14 @@ class LernappRouter {
         ),
       ),
       GoRoute(
+        name: 'review',
+        path: '/review',
+        builder: (context, state) => SessionScreen(
+          tasks: state.extra as List<UuidValue>,
+          reviewStyle: true,
+        ),
+      ),
+      GoRoute(
         name: 'preference',
         path: '/preferences',
         builder: (context, state) => const PreferencesScreen(),

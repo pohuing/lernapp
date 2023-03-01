@@ -8,8 +8,10 @@ import 'package:uuid/uuid.dart';
 
 class SessionScreen extends StatefulWidget {
   final List<UuidValue> tasks;
+  final bool reviewStyle;
 
-  const SessionScreen({super.key, required this.tasks});
+  const SessionScreen({super.key, required this.tasks, bool? reviewStyle})
+      : reviewStyle = reviewStyle ?? false;
 
   @override
   State<SessionScreen> createState() => _SessionScreenState();
@@ -21,7 +23,7 @@ class _SessionScreenState extends State<SessionScreen> {
   @override
   Widget build(BuildContext context) {
     return PlatformAdaptiveScaffold(
-      title: 'Session',
+      title: widget.reviewStyle ? 'Review' : 'Session',
       useSliverAppBar: false,
       previousTitle: 'Tasks',
       trailing: Row(
@@ -64,6 +66,7 @@ class _SessionScreenState extends State<SessionScreen> {
                     key: Key(state.currentTask!.uuid.toString()),
                     showBackButton: false,
                     task: snapshot.data!,
+                    reviewStyle: widget.reviewStyle,
                   );
                 } else if (snapshot.connectionState == ConnectionState.done) {
                   return const Center(

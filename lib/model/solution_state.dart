@@ -95,6 +95,6 @@ class SolutionState extends Comparable {
 
   /// A pretty print formatted for user display
   String formatted() {
-    return '${DateFormat(DateFormat.MONTH_DAY).format(timestamp)} ${DateFormat(DateFormat.HOUR24_MINUTE).format(timestamp)}';
+    return '${DateFormat(DateFormat.MONTH_DAY).format(timestamp)}, ${DateFormat(DateFormat.HOUR24_MINUTE).format(timestamp)}';
   }
 }

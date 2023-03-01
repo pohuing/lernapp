@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lernapp/blocs/selection_cubit.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
 import 'package:lernapp/model/custom_date_time_range.dart';
@@ -33,7 +34,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
       child: PlatformAdaptiveScaffold(
         title: 'History',
         primary: true,
-        body: Column(
+        trailing: buildTrailing(),
+        body: ListView(
           children: [
             ListTile(
               leading: const Icon(Icons.av_timer),
@@ -139,5 +141,17 @@ class _HistoryScreenState extends State<HistoryScreen> {
   void initState() {
     updateLoader();
     super.initState();
+  }
+
+  Widget buildTrailing() {
+    return BlocBuilder<SelectionCubit, SelectionState>(
+      bloc: cubit,
+      builder: (context, state) => FilledButton(
+        onPressed: state.maybeShuffledUuids.isEmpty
+            ? null
+            : () => context.push('/review', extra: state.maybeShuffledUuids),
+        child: const Text('Start'),
+      ),
+    );
   }
 }

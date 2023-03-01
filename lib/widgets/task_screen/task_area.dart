@@ -17,9 +17,12 @@ import 'task_card.dart';
 
 class TaskArea extends StatefulWidget {
   final bool? showBackButton;
-  final Task? task;
+  final Task task;
+  final bool reviewStyle;
 
-  const TaskArea({super.key, this.showBackButton, this.task});
+  const TaskArea(
+      {super.key, this.showBackButton, required this.task, bool? reviewStyle})
+      : reviewStyle = reviewStyle ?? false;
 
   @override
   State<TaskArea> createState() => _TaskAreaState();
@@ -27,7 +30,7 @@ class TaskArea extends StatefulWidget {
 
 class _TaskAreaState extends State<TaskArea> {
   final DrawingAreaController controller = DrawingAreaController();
-  late final Task? task;
+  late final Task task;
   late final TasksBloc tasksBloc;
   var expandedTopRow = false;
   ColorSelectionController colorController =
@@ -70,20 +73,21 @@ class _TaskAreaState extends State<TaskArea> {
               children: [
                 Expanded(
                   child: TaskCard(
-                    title: task!.title,
+                    title: task.title,
                     secondaryAction: () => setState(
                       () => expandedTopRow = !expandedTopRow,
                     ),
                     isExpanded: expandedTopRow,
-                    description: task!.description,
+                    description: task.description,
                     showBackButton: widget.showBackButton,
                   ),
                 ),
                 Expanded(
                   child: SolutionCard(
-                    title: task!.hint,
-                    solution: task!.solution,
+                    title: task.hint,
+                    solution: task.solution,
                     onReveal: onRevealSolution,
+                    revealed: widget.reviewStyle,
                   ),
                 ),
               ],
@@ -214,12 +218,12 @@ class _TaskAreaState extends State<TaskArea> {
         ),
         child: ListView.builder(
           shrinkWrap: true,
-          itemCount: task?.solutions.length ?? 0,
+          itemCount: task.solutions.length ?? 0,
           primary: false,
           itemBuilder: (context, i) {
             // Show history in reversed order, newest first
-            final index = task!.solutions.length - i - 1;
-            var solution = task!.solutions[index];
+            final index = task.solutions.length - i - 1;
+            var solution = task.solutions[index];
             var subtitle =
                 '${solution.timestamp.hour}:${solution.timestamp.minute} ${solution.timestamp.day}.${solution.timestamp.month}.${solution.timestamp.year}';
             return Container(
@@ -259,10 +263,10 @@ class _TaskAreaState extends State<TaskArea> {
 
   @override
   void dispose() {
-    if (!(task?.solutions.lastOrNull?.lines.equals(lines) ?? false)) {
-      task?.solutions
+    if (!(task.solutions.lastOrNull?.lines.equals(lines) ?? false)) {
+      task.solutions
           .add(SolutionState(lines, revealedSolution: controller.isCorrecting));
-      tasksBloc.add(TaskStorageSaveTask(task!));
+      tasksBloc.add(TaskStorageSaveTask(task));
     }
     super.dispose();
   }
@@ -271,10 +275,14 @@ class _TaskAreaState extends State<TaskArea> {
   void initState() {
     task = widget.task;
     tasksBloc = context.read<TasksBloc>();
+    controller.isCorrecting = widget.reviewStyle;
+    updateColorController();
     controller.penSize =
         context.read<PreferencesBloc>().state.themePreferences.lineWidth;
     colorController.colorChanged =
         (newColor) => setState(() => controller.currentColor = newColor);
+    lines = task.solutions.min().lines;
+
     super.initState();
   }
 
