@@ -11,7 +11,7 @@ class CupertinoAdaptiveScaffold extends StatefulWidget {
     super.key,
     required this.showAppBar,
     required this.useSliverAppBar,
-    this.actions,
+    this.trailing,
     required this.destinations,
     this.title,
     this.body,
@@ -26,7 +26,7 @@ class CupertinoAdaptiveScaffold extends StatefulWidget {
   final String? previousTitle;
   final bool showAppBar;
   final bool useSliverAppBar;
-  final List<Widget>? actions;
+  final Widget? trailing;
   final List<TabDestination>? destinations;
 
   @override
@@ -146,20 +146,11 @@ class _CupertinoAdaptiveScaffoldState extends State<CupertinoAdaptiveScaffold>
   }
 
   Widget? buildTrailing() {
-    return buildActions().map(
-      (e) => Row(
-        mainAxisSize: MainAxisSize.min,
-        children: e,
-      ),
-    );
-  }
-
-  List<Widget>? buildActions() {
     if (useBottomNavigation) {
-      return widget.destinations![tabController.index].actionsBuilder
+      return widget.destinations![tabController.index].trailingBuilder
           ?.call(context);
     } else {
-      return widget.actions;
+      return widget.trailing;
     }
   }
 }

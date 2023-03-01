@@ -11,7 +11,7 @@ class MaterialAdaptiveScaffold extends StatefulWidget {
     super.key,
     required this.showAppBar,
     required this.useSliverAppBar,
-    this.actions,
+    this.trailing,
     required this.primary,
     required this.destinations,
     this.title,
@@ -25,7 +25,7 @@ class MaterialAdaptiveScaffold extends StatefulWidget {
   final String? title;
   final bool showAppBar;
   final bool useSliverAppBar;
-  final List<Widget>? actions;
+  final Widget? trailing;
   final bool primary;
   final List<TabDestination>? destinations;
 
@@ -63,7 +63,7 @@ class _MaterialAdaptiveScaffoldState extends State<MaterialAdaptiveScaffold>
             return [
               SliverAppBar.large(
                 title: getCurrentTitle().map((t) => Text(t)),
-                actions: buildActions(),
+                actions: buildTrailing().map((t) => [t]),
               ),
             ];
           },
@@ -75,7 +75,7 @@ class _MaterialAdaptiveScaffoldState extends State<MaterialAdaptiveScaffold>
         appBar: widget.showAppBar
             ? AppBar(
                 title: getCurrentTitle().map((t) => Text(t)),
-                actions: buildActions(),
+                actions: buildTrailing().map((t) => [t]),
               )
             : null,
         bottomNavigationBar: buildBottomNavigationBar(),
@@ -126,12 +126,12 @@ class _MaterialAdaptiveScaffoldState extends State<MaterialAdaptiveScaffold>
     }
   }
 
-  List<Widget>? buildActions() {
+  Widget? buildTrailing() {
     if (useBottomNavigation) {
-      return widget.destinations![tabController.index].actionsBuilder
+      return widget.destinations![tabController.index].trailingBuilder
           ?.call(context);
     } else {
-      return widget.actions;
+      return widget.trailing;
     }
   }
 }

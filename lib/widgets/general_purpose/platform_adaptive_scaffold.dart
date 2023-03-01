@@ -11,7 +11,7 @@ import 'platform_adaptive_scaffold/tab_destination.dart';
 class PlatformAdaptiveScaffold extends StatelessWidget {
   /// Actions to show in the top right of the app bar
   /// If there is no app bar, or if [destinations] is not empty, this is ignored
-  final List<Widget>? actions;
+  final Widget? trailing;
 
   /// Title to show, this is ignored if [destinations] is not empty
   final String? title;
@@ -34,7 +34,7 @@ class PlatformAdaptiveScaffold extends StatelessWidget {
 
   const PlatformAdaptiveScaffold({
     super.key,
-    this.actions,
+    this.trailing,
     this.title,
     this.previousTitle,
     this.body,
@@ -63,7 +63,7 @@ class PlatformAdaptiveScaffold extends StatelessWidget {
         title: title,
         body: body,
         previousTitle: previousTitle,
-        actions: actions,
+        trailing: trailing,
       );
       value = Material(
         color: Colors.transparent,
@@ -77,7 +77,7 @@ class PlatformAdaptiveScaffold extends StatelessWidget {
         destinations: destinations,
         body: body,
         title: title,
-        actions: actions,
+        trailing: trailing,
       );
     }
 
