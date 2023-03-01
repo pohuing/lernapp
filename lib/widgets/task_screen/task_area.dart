@@ -20,9 +20,12 @@ class TaskArea extends StatefulWidget {
   final Task task;
   final bool reviewStyle;
 
-  const TaskArea(
-      {super.key, this.showBackButton, required this.task, bool? reviewStyle})
-      : reviewStyle = reviewStyle ?? false;
+  const TaskArea({
+    super.key,
+    this.showBackButton,
+    required this.task,
+    bool? reviewStyle,
+  }) : reviewStyle = reviewStyle ?? false;
 
   @override
   State<TaskArea> createState() => _TaskAreaState();
@@ -218,7 +221,7 @@ class _TaskAreaState extends State<TaskArea> {
         ),
         child: ListView.builder(
           shrinkWrap: true,
-          itemCount: task.solutions.length ?? 0,
+          itemCount: task.solutions.length,
           primary: false,
           itemBuilder: (context, i) {
             // Show history in reversed order, newest first
@@ -275,13 +278,15 @@ class _TaskAreaState extends State<TaskArea> {
   void initState() {
     task = widget.task;
     tasksBloc = context.read<TasksBloc>();
-    controller.isCorrecting = widget.reviewStyle;
-    updateColorController();
     controller.penSize =
         context.read<PreferencesBloc>().state.themePreferences.lineWidth;
     colorController.colorChanged =
         (newColor) => setState(() => controller.currentColor = newColor);
-    lines = task.solutions.min().lines;
+    if (widget.reviewStyle) {
+      lines = task.solutions.min().lines;
+      controller.isCorrecting = widget.reviewStyle;
+      updateColorController();
+    }
 
     super.initState();
   }
