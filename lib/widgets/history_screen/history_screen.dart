@@ -144,13 +144,16 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   Widget buildTrailing() {
-    return BlocBuilder<SelectionCubit, SelectionState>(
-      bloc: cubit,
-      builder: (context, state) => FilledButton(
-        onPressed: state.maybeShuffledUuids.isEmpty
-            ? null
-            : () => context.push('/review', extra: state.maybeShuffledUuids),
-        child: const Text('Start'),
+    return Padding(
+      padding: const EdgeInsets.only(right: 8),
+      child: BlocBuilder<SelectionCubit, SelectionState>(
+        bloc: cubit,
+        builder: (context, state) => FilledButton(
+          onPressed: state.maybeShuffledUuids.isEmpty
+              ? null
+              : () => context.push('/review', extra: state.maybeShuffledUuids),
+          child: const Text('Start'),
+        ),
       ),
     );
   }
