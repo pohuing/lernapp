@@ -50,9 +50,16 @@ class Task {
 
   String get mostRecentSummary {
     if (solutions.isNotEmpty) {
-      return solutions.min().formatted();
+      return solutions.max().formatted();
     }
     return 'Not answered yet';
+  }
+
+  SolutionState? get mostRecentSolution {
+    if (solutions.isNotEmpty) {
+      return solutions.max();
+    }
+    return null;
   }
 
   @override

@@ -283,7 +283,7 @@ class _TaskAreaState extends State<TaskArea> {
     colorController.colorChanged =
         (newColor) => setState(() => controller.currentColor = newColor);
     if (widget.reviewStyle) {
-      lines = task.solutions.min().lines;
+      lines = task.mostRecentSolution!.lines;
       controller.isCorrecting = widget.reviewStyle;
       updateColorController();
     }
