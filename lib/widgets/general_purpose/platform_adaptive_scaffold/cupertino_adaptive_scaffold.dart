@@ -104,9 +104,9 @@ class _CupertinoAdaptiveScaffoldState extends State<CupertinoAdaptiveScaffold>
     return null;
   }
 
-  Widget buildBody() {
+  Widget buildBody([int? index]) {
     if (useBottomNavigation) {
-      return widget.destinations![tabController.index].builder(context);
+      return widget.destinations![index!].builder(context);
     } else {
       return widget.body!;
     }
@@ -115,15 +115,7 @@ class _CupertinoAdaptiveScaffoldState extends State<CupertinoAdaptiveScaffold>
   Widget buildNonSliverBody([BuildContext? context, int? index]) {
     if (useBottomNavigation) {
       return CupertinoTabView(
-        builder: (context) => CupertinoPageScaffold(
-          navigationBar: CupertinoNavigationBar(
-            previousPageTitle: widget.previousTitle,
-            middle: getCurrentTitle().map((t) => Text(t)),
-            transitionBetweenRoutes: true,
-            trailing: buildTrailing(),
-          ),
-          child: SafeArea(child: buildBody()),
-        ),
+        builder: (context) => buildBody(index),
       );
     } else {
       return buildBody();
@@ -132,7 +124,7 @@ class _CupertinoAdaptiveScaffoldState extends State<CupertinoAdaptiveScaffold>
 
   Widget buildSliverBody([BuildContext? context, int? index]) {
     return NestedScrollView(
-      body: buildBody(),
+      body: buildBody(index),
       headerSliverBuilder: (context, innerBoxIsScrolled) {
         return [
           CupertinoSliverNavigationBar(

@@ -18,9 +18,10 @@ class ListingScreen extends StatelessWidget {
       create: (context) => SelectionCubit(),
       child: Builder(
         builder: (context) {
-          return PlatformAdaptiveScaffold(
-            title: 'Listing',
+          return const PlatformAdaptiveScaffold(
+            title: 'Tasks',
             body: ConnectedTaskListing(),
+            primary: true,
             trailing: Trailing(),
           );
         },
@@ -30,11 +31,14 @@ class ListingScreen extends StatelessWidget {
 }
 
 class Trailing extends StatelessWidget {
+  const Trailing({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SelectionCubit, SelectionState>(
       builder: (context, state) {
         return Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             if (!state.isSelecting) ...[
               IconButton(

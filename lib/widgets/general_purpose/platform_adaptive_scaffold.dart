@@ -7,10 +7,14 @@ import 'platform_adaptive_scaffold/tab_destination.dart';
 /// A Scaffold that supports tabbed and not tabbed navigation with platform
 /// specific looks
 ///
-/// Supports iOS and Material styles
+/// Supports iOS and Material styles.
+///
 class PlatformAdaptiveScaffold extends StatelessWidget {
-  /// Actions to show in the top right of the app bar
-  /// If there is no app bar, or if [destinations] is not empty, this is ignored
+  /// Actions to show in the top right of the app bar.
+  /// If there is no app bar, or if [destinations] is not empty, this is ignored.
+  /// Mind that on iOS the trailing widget is sized with an unconstrained width
+  /// any [Row.mainAxisSize] should be set to [MainAxisSize.min], otherwise the
+  /// title might become invisible in the collapsed state.
   final Widget? trailing;
 
   /// Title to show, this is ignored if [destinations] is not empty
@@ -81,9 +85,9 @@ class PlatformAdaptiveScaffold extends StatelessWidget {
       );
     }
 
-    if (!showAppBar) {
-      value = SafeArea(child: value);
-    }
+    //if (!showAppBar) {
+    //  value = SafeArea(child: value);
+    //}
 
     return WillPopScope(
       onWillPop: allowBackGesture

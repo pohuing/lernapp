@@ -27,6 +27,7 @@ class _SessionScreenState extends State<SessionScreen> {
       useSliverAppBar: false,
       previousTitle: 'Tasks',
       trailing: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
           TextButton(
             onPressed: () => cubit.previous(),

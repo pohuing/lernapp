@@ -30,6 +30,7 @@ class _ImportScreenState extends State<ImportScreen> {
     return PlatformAdaptiveScaffold(
       title: 'Import',
       body: ListView(
+        padding: EdgeInsets.zero,
         children: [
           ListTile(
             leading: const Icon(Icons.file_open),
