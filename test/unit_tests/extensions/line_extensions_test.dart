@@ -46,5 +46,37 @@ main() {
 
       expect(list.random(), isNull);
     });
+
+    group('.min', () {
+      test('.min', () {
+        final list = [2, 1, -1, -3];
+
+        expect(list.min(), -3);
+      });
+
+      test('.min empty list', () {
+        expect(<int>[].min, throwsAssertionError);
+      });
+
+      test('.min one element', () {
+        expect([1].min(), 1);
+      });
+    });
+
+    group('max', () {
+      test('.max', () {
+        final list = [1, 2, -1, -3];
+
+        expect(list.max(), 2);
+      });
+
+      test('.min empty list', () {
+        expect(<int>[].max, throwsAssertionError);
+      });
+
+      test('.min one element', () {
+        expect([1].max(), 1);
+      });
+    });
   });
 }

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:lernapp/blocs/preferences/preferences_bloc.dart';
-import 'package:lernapp/blocs/selection_cubit.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
 import 'package:lernapp/logic/router.dart';
 import 'package:lernapp/logic/ui_overlay_setter_observer.dart';
@@ -39,7 +38,6 @@ void main() async {
           BlocProvider.value(value: preferencesBloc),
           BlocProvider<TasksBloc>(
               create: (context) => TasksBloc(tasksRepository, preferencesBloc)),
-          BlocProvider<SelectionCubit>(create: (context) => SelectionCubit()),
         ],
         child: const MyApp(),
       );

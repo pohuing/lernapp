@@ -61,7 +61,10 @@ class _StartSessionDialogState extends State<StartSessionDialog> {
         ),
         onCancel: context.pop,
         cancelChild: const Text('Cancel'),
-        onConfirm: () => context.push('/session'),
+        onConfirm: () => context.push(
+          '/session',
+          extra: context.read<SelectionCubit>().state.maybeShuffledUuids,
+        ),
         confirmChild: const Text('Start'),
       ),
     );

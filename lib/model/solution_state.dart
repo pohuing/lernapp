@@ -1,11 +1,15 @@
 import 'package:collection/collection.dart';
+import 'package:intl/intl.dart';
 import 'package:lernapp/logic/logging.dart';
 import 'package:lernapp/logic/map_extensions.dart';
 import 'package:uuid/uuid.dart';
 
 import 'line.dart';
 
-class SolutionState {
+/// A user created answer to a [Task]
+///
+/// Comparison through [compare] is based on the [timestamp]
+class SolutionState extends Comparable {
   final UuidValue id;
   final List<Line> lines;
   final DateTime timestamp;
@@ -83,4 +87,14 @@ class SolutionState {
       ) ^
       timestamp.hashCode ^
       (revealedSolution ? 1 : 0);
+
+  @override
+  int compareTo(other) {
+    return timestamp.compareTo(other.timestamp);
+  }
+
+  /// A pretty print formatted for user display
+  String formatted() {
+    return '${DateFormat(DateFormat.MONTH_DAY).format(timestamp)}, ${DateFormat(DateFormat.HOUR24_MINUTE).format(timestamp)}';
+  }
 }

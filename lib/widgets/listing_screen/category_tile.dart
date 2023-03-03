@@ -14,7 +14,7 @@ class CategoryTile extends StatelessWidget {
     required this.entry,
     this.onTap,
     bool? asNavigationBarItem,
-  })  : asNavigationBarItem = asNavigationBarItem ?? false;
+  }) : asNavigationBarItem = asNavigationBarItem ?? false;
 
   Widget decoration(BuildContext context, {required Widget child}) {
     if (asNavigationBarItem) {
@@ -39,59 +39,63 @@ class CategoryTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(left: entry.depth * 16),
-      child: BlocBuilder<SelectionCubit, SelectionState>(
-        builder: (context, state) => Stack(
-          children: [
-            decoration(
-              context,
-              child: ListTile(
-                shape: asNavigationBarItem
-                    ? RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
-                      )
-                    : null,
-                onTap: () {
-                  onTap?.call();
-                },
-                tileColor: entry.isExpanded && asNavigationBarItem
-                    ? Theme.of(context).colorScheme.secondaryContainer
-                    : null,
-                leading: leading(context, state),
-                trailing: IgnorePointer(
-                  child: ExpandIcon(
-                    onPressed: (_) => onTap?.call(),
-                    isExpanded: entry.isExpanded,
+    return Material(
+      child: Padding(
+        padding: EdgeInsets.only(left: entry.depth * 16),
+        child: BlocBuilder<SelectionCubit, SelectionState>(
+          builder: (context, state) => Stack(
+            children: [
+              decoration(
+                context,
+                child: ListTile(
+                  shape: asNavigationBarItem
+                      ? RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        )
+                      : null,
+                  onTap: () {
+                    onTap?.call();
+                  },
+                  tileColor: entry.isExpanded && asNavigationBarItem
+                      ? Theme.of(context).colorScheme.secondaryContainer
+                      : null,
+                  leading: leading(context, state),
+                  trailing: IgnorePointer(
+                    child: ExpandIcon(
+                      onPressed: (_) => onTap?.call(),
+                      isExpanded: entry.isExpanded,
+                    ),
+                  ),
+                  title: Text(
+                    entry.category.title,
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          color: entry.isExpanded
+                              ? Theme.of(context)
+                                  .colorScheme
+                                  .onSecondaryContainer
+                              : Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
                   ),
                 ),
-                title: Text(
-                  entry.category.title,
-                  style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        color: entry.isExpanded
-                            ? Theme.of(context).colorScheme.onSecondaryContainer
-                            : Theme.of(context).colorScheme.onSurfaceVariant,
-                      ),
-                ),
               ),
-            ),
-            if (entry.isExpanded && !asNavigationBarItem)
-              Positioned(
-                bottom: 0,
-                left: 0,
-                child: Container(
-                  width: 16,
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        width: 1,
-                        color: Theme.of(context).dividerColor,
+              if (entry.isExpanded && !asNavigationBarItem)
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  child: Container(
+                    width: 16,
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          width: 1,
+                          color: Theme.of(context).dividerColor,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              )
-          ],
+                )
+            ],
+          ),
         ),
       ),
     );
@@ -111,6 +115,5 @@ class CategoryTile extends StatelessWidget {
 }
 
 class DummyHighPerfListingTile extends CategoryTile {
-  DummyHighPerfListingTile({super.key})
-      : super(entry: ListingEntryCategory());
+  DummyHighPerfListingTile({super.key}) : super(entry: ListingEntryCategory());
 }

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_schema2/json_schema2.dart';
+import 'package:lernapp/blocs/selection_cubit.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
 import 'package:lernapp/logic/import/file_reading.dart';
 import 'package:lernapp/logic/logging.dart';
@@ -30,6 +31,7 @@ class _ImportScreenState extends State<ImportScreen> {
     return PlatformAdaptiveScaffold(
       title: 'Import',
       body: ListView(
+        padding: EdgeInsets.zero,
         children: [
           ListTile(
             leading: const Icon(Icons.file_open),
@@ -54,11 +56,14 @@ class _ImportScreenState extends State<ImportScreen> {
               key: Key(parsedContents.hashCode.toString()),
               title: const Text('Result:'),
               children: [
-                TaskListing(
-                  categories: parsedContents!,
-                  withNavBarStyle: true,
-                  shrinkWrap: true,
-                  clickableTasks: false,
+                BlocProvider(
+                  create: (context) => SelectionCubit(),
+                  child: TaskListing(
+                    categories: parsedContents!,
+                    withNavBarStyle: true,
+                    shrinkWrap: true,
+                    clickableTasks: false,
+                  ),
                 ),
               ],
             ),

@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:lernapp/logic/logging.dart';
+import 'package:lernapp/model/custom_date_time_range.dart';
 import 'package:uuid/uuid.dart';
 
 import '../model/task.dart';
@@ -153,6 +154,16 @@ class HiveTaskRepository implements TaskRepositoryBase {
     categories.addAll(newCategories);
     await save();
   }
+
+  @override
+  Future<List<TaskCategory>> recent(CustomDateTimeRange range) {
+    final results = categories
+        .map((e) => e.tasksInRange(range))
+        .whereType<TaskCategory>()
+        .toList();
+
+    return Future.value(results);
+  }
 }
 
 abstract class TaskRepositoryBase {
@@ -176,6 +187,8 @@ abstract class TaskRepositoryBase {
   /// Save just a task.
   /// Throws if task was not found in hierarchy
   Future<void> saveTask(Task task);
+
+  Future<List<TaskCategory>> recent(CustomDateTimeRange range);
 
   void dispose();
 

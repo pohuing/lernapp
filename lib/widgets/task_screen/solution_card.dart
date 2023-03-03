@@ -5,12 +5,16 @@ class SolutionCard extends StatefulWidget {
   final String solution;
   final void Function(dynamic isFlipped) onReveal;
 
+  /// Instantly reveal solution, does not trigger [onReveal]
+  final bool revealed;
+
   const SolutionCard({
     super.key,
     required this.title,
     required this.solution,
     required this.onReveal,
-  });
+    bool? revealed,
+  }) : revealed = revealed ?? false;
 
   @override
   State<SolutionCard> createState() => _SolutionCardState();
@@ -66,6 +70,12 @@ class _SolutionCardState extends State<SolutionCard> {
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    revealSolution = widget.revealed;
+    super.initState();
   }
 
   void onTap() {

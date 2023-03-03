@@ -9,9 +9,16 @@ class TaskTile extends StatelessWidget {
   final Task task;
   final int? depth;
   final bool allowTap;
+  final bool showMostRecent;
 
-  const TaskTile({super.key, required this.task, this.depth, bool? allowTap})
-      : allowTap = allowTap ?? true;
+  const TaskTile(
+      {super.key,
+      required this.task,
+      this.depth,
+      bool? allowTap,
+      bool? showMostRecent})
+      : allowTap = allowTap ?? true,
+        showMostRecent = showMostRecent ?? false;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +36,7 @@ class TaskTile extends StatelessWidget {
               ),
             ),
             child: ListTile(
+              subtitle: showMostRecent ? Text(task.mostRecentSummary) : null,
               title: Text(
                 task.title,
                 maxLines: 1,

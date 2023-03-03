@@ -1,108 +1,93 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:lernapp/logic/nullable_extensions.dart';
+import 'package:lernapp/widgets/general_purpose/platform_adaptive_scaffold/cupertino_adaptive_scaffold.dart';
+import 'package:lernapp/widgets/general_purpose/platform_adaptive_scaffold/material_adaptive_scaffold.dart';
 
+import 'platform_adaptive_scaffold/tab_destination.dart';
+
+/// A Scaffold that supports tabbed and not tabbed navigation with platform
+/// specific looks
+///
+/// Supports iOS and Material styles.
+///
 class PlatformAdaptiveScaffold extends StatelessWidget {
-  final List<Widget>? actions;
-  final String title;
+  /// Actions to show in the top right of the app bar.
+  /// If there is no app bar, or if [destinations] is not empty, this is ignored.
+  /// Mind that on iOS the trailing widget is sized with an unconstrained width
+  /// any [Row.mainAxisSize] should be set to [MainAxisSize.min], otherwise the
+  /// title might become invisible in the collapsed state.
+  final Widget? trailing;
+
+  /// Title to show, this is ignored if [destinations] is not empty
+  final String? title;
   final String? previousTitle;
-  final Widget body;
+
+  /// The contents of the scaffold, this is ignored if [destinations] is not empty
+  final Widget? body;
   final bool primary;
+
+  /// Use a platform specific app bar that collapses when the content is scrolled
   final bool useSliverAppBar;
   final bool allowBackGesture;
   final bool showAppBar;
 
+  /// Destinations from which to build the bottom navigation bar, the navigation
+  /// bar as well as the current page's body
+  ///
+  /// This has to have at least two destinations
+  final List<TabDestination>? destinations;
+
   const PlatformAdaptiveScaffold({
     super.key,
-    this.actions,
-    required this.title,
+    this.trailing,
+    this.title,
     this.previousTitle,
-    required this.body,
+    this.body,
     bool? primary,
     bool? useSliverAppBar,
     bool? allowBackGesture,
     bool? showAppBar,
+    this.destinations,
   })  : primary = primary ?? true,
         useSliverAppBar = useSliverAppBar ?? true,
         allowBackGesture = allowBackGesture ?? true,
-        showAppBar = showAppBar ?? true;
+        showAppBar = showAppBar ?? true,
+        assert(
+          (destinations != null && destinations.length >= 2) || body != null,
+          'Either destinations has to provide a body or, body has to be supplied directly',
+        );
 
   @override
   Widget build(BuildContext context) {
     Widget value;
     if (Theme.of(context).platform == TargetPlatform.iOS) {
-      if (useSliverAppBar && showAppBar) {
-        value = CupertinoPageScaffold(
-          child: NestedScrollView(
-            headerSliverBuilder: (context, innerBoxIsScrolled) {
-              return [
-                CupertinoSliverNavigationBar(
-                  largeTitle: Text(title),
-                  previousPageTitle: previousTitle,
-                  trailing: actions.map(
-                    (value) => Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: value,
-                    ),
-                  ),
-                )
-              ];
-            },
-            body: body,
-          ),
-        );
-      } else {
-        value = CupertinoPageScaffold(
-          navigationBar: showAppBar
-              ? CupertinoNavigationBar(
-                  previousPageTitle: previousTitle,
-                  middle: Text(title),
-                  trailing: actions.map(
-                    (e) => Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: e,
-                    ),
-                  ),
-                )
-              : null,
-          child: body,
-        );
-      }
+      value = CupertinoAdaptiveScaffold(
+        showAppBar: showAppBar,
+        useSliverAppBar: useSliverAppBar,
+        destinations: destinations,
+        title: title,
+        body: body,
+        previousTitle: previousTitle,
+        trailing: trailing,
+      );
       value = Material(
         color: Colors.transparent,
         child: value,
       );
     } else {
-      if (useSliverAppBar && showAppBar) {
-        value = Scaffold(
-          primary: primary,
-          body: NestedScrollView(
-            headerSliverBuilder: (context, innerBoxIsScrolled) {
-              return [
-                SliverAppBar.large(
-                  title: Text(title),
-                  actions: actions,
-                ),
-              ];
-            },
-            body: body,
-          ),
-        );
-      } else {
-        value = Scaffold(
-          appBar: AppBar(
-            title: Text(title),
-            actions: actions,
-          ),
-          primary: primary,
-          body: body,
-        );
-      }
+      value = MaterialAdaptiveScaffold(
+        showAppBar: showAppBar,
+        useSliverAppBar: useSliverAppBar,
+        primary: primary,
+        destinations: destinations,
+        body: body,
+        title: title,
+        trailing: trailing,
+      );
     }
 
-    if (!showAppBar) {
-      value = SafeArea(child: value);
-    }
+    //if (!showAppBar) {
+    //  value = SafeArea(child: value);
+    //}
 
     return WillPopScope(
       onWillPop: allowBackGesture

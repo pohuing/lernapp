@@ -12,6 +12,7 @@ class TaskListing extends StatefulWidget {
   final bool withNavBarStyle;
   final bool? shrinkWrap;
   final bool allowTapTasks;
+  final bool showMostRecent;
 
   const TaskListing({
     super.key,
@@ -19,17 +20,24 @@ class TaskListing extends StatefulWidget {
     required this.withNavBarStyle,
     this.shrinkWrap,
     bool? clickableTasks,
-  }) : allowTapTasks = clickableTasks ?? true;
+    bool? showMostRecent,
+  })  : allowTapTasks = clickableTasks ?? true,
+        showMostRecent = showMostRecent ?? false;
 
   @override
   State<TaskListing> createState() => _TaskListingState();
 }
 
-class _TaskListingState extends State<TaskListing> {
+class _TaskListingState extends State<TaskListing>
+    with AutomaticKeepAliveClientMixin {
   late final List<ListingEntryCategory> entries;
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     final flattened = <ListingEntryBase>[];
 
     for (int i = 0; i < entries.length; i++) {
@@ -42,6 +50,7 @@ class _TaskListingState extends State<TaskListing> {
       itemData: flattened,
       initialAnimation: false,
       shrinkWrap: widget.shrinkWrap ?? false,
+      physics: const PageScrollPhysics(),
       itemBuilder: (context, entry) {
         if (entry is ListingEntryCategory) {
           return CategoryTile(
@@ -60,6 +69,7 @@ class _TaskListingState extends State<TaskListing> {
             task: entry.task,
             depth: entry.depth,
             allowTap: widget.allowTapTasks,
+            showMostRecent: widget.showMostRecent,
           );
         }
         return DummyHighPerfListingTile();

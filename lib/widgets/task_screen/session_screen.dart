@@ -8,8 +8,10 @@ import 'package:uuid/uuid.dart';
 
 class SessionScreen extends StatefulWidget {
   final List<UuidValue> tasks;
+  final bool reviewStyle;
 
-  const SessionScreen({super.key, required this.tasks});
+  const SessionScreen({super.key, required this.tasks, bool? reviewStyle})
+      : reviewStyle = reviewStyle ?? false;
 
   @override
   State<SessionScreen> createState() => _SessionScreenState();
@@ -21,31 +23,34 @@ class _SessionScreenState extends State<SessionScreen> {
   @override
   Widget build(BuildContext context) {
     return PlatformAdaptiveScaffold(
-      title: 'Session',
+      title: widget.reviewStyle ? 'Review' : 'Session',
       useSliverAppBar: false,
       previousTitle: 'Tasks',
-      actions: [
-        TextButton(
-          onPressed: () => cubit.previous(),
-          child: const Text('Previous'),
-        ),
-        BlocBuilder<SessionCubit, SessionState>(
-          bloc: cubit,
-          builder: (context, state) => Padding(
-            padding: const EdgeInsets.all(8),
-            child: Center(
-              child: Text(
-                '${state.index + 1}/${state.tasks.length}',
-                style: Theme.of(context).textTheme.bodyMedium,
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextButton(
+            onPressed: () => cubit.previous(),
+            child: const Text('Previous'),
+          ),
+          BlocBuilder<SessionCubit, SessionState>(
+            bloc: cubit,
+            builder: (context, state) => Padding(
+              padding: const EdgeInsets.all(8),
+              child: Center(
+                child: Text(
+                  '${state.index + 1}/${state.tasks.length}',
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
               ),
             ),
           ),
-        ),
-        ElevatedButton(
-          onPressed: () => cubit.next(),
-          child: const Text('Next'),
-        ),
-      ],
+          ElevatedButton(
+            onPressed: () => cubit.next(),
+            child: const Text('Next'),
+          ),
+        ],
+      ),
       body: SafeArea(
         child: BlocBuilder<SessionCubit, SessionState>(
           bloc: cubit,
@@ -62,6 +67,7 @@ class _SessionScreenState extends State<SessionScreen> {
                     key: Key(state.currentTask!.uuid.toString()),
                     showBackButton: false,
                     task: snapshot.data!,
+                    reviewStyle: widget.reviewStyle,
                   );
                 } else if (snapshot.connectionState == ConnectionState.done) {
                   return const Center(
