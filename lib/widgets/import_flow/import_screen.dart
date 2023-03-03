@@ -64,7 +64,6 @@ class _ImportScreenState extends State<ImportScreen> {
                   create: (context) => SelectionCubit(),
                   child: TaskListing(
                     categories: parsedContents!,
-                    withNavBarStyle: true,
                     shrinkWrap: true,
                     clickableTasks: false,
                   ),

@@ -51,7 +51,6 @@ class ConnectedTaskListing extends StatelessWidget {
             return TaskListing(
               key: Key(state.hashCode.toString()),
               categories: (state as dynamic).contents,
-              withNavBarStyle: true,
               showMostRecent: showMostRecent,
             );
           } else if (state is TaskStorageLoading) {

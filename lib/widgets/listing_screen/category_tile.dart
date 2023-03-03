@@ -7,35 +7,12 @@ import '../../blocs/selection_cubit.dart';
 class CategoryTile extends StatelessWidget {
   final ListingEntryCategory entry;
   final Function()? onTap;
-  final bool asNavigationBarItem;
 
   const CategoryTile({
     super.key,
     required this.entry,
     this.onTap,
-    bool? asNavigationBarItem,
-  }) : asNavigationBarItem = asNavigationBarItem ?? false;
-
-  Widget decoration(BuildContext context, {required Widget child}) {
-    if (asNavigationBarItem) {
-      return Padding(
-        padding: const EdgeInsets.all(2),
-        child: child,
-      );
-    } else {
-      return Container(
-        decoration: BoxDecoration(
-          border: BorderDirectional(
-            top: BorderSide(color: Theme.of(context).dividerColor),
-            start: BorderSide(
-              color: Theme.of(context).dividerColor,
-            ),
-          ),
-        ),
-        child: child,
-      );
-    }
-  }
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -45,18 +22,16 @@ class CategoryTile extends StatelessWidget {
         child: BlocBuilder<SelectionCubit, SelectionState>(
           builder: (context, state) => Stack(
             children: [
-              decoration(
-                context,
+              Padding(
+                padding: const EdgeInsets.all(2),
                 child: ListTile(
-                  shape: asNavigationBarItem
-                      ? RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        )
-                      : null,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
                   onTap: () {
                     onTap?.call();
                   },
-                  tileColor: entry.isExpanded && asNavigationBarItem
+                  tileColor: entry.isExpanded
                       ? Theme.of(context).colorScheme.secondaryContainer
                       : null,
                   leading: leading(context, state),
@@ -78,22 +53,6 @@ class CategoryTile extends StatelessWidget {
                   ),
                 ),
               ),
-              if (entry.isExpanded && !asNavigationBarItem)
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  child: Container(
-                    width: 16,
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          width: 1,
-                          color: Theme.of(context).dividerColor,
-                        ),
-                      ),
-                    ),
-                  ),
-                )
             ],
           ),
         ),

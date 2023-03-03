@@ -9,7 +9,6 @@ import 'task_tile.dart';
 
 class TaskListing extends StatefulWidget {
   final List<TaskCategory> categories;
-  final bool withNavBarStyle;
   final bool? shrinkWrap;
   final bool allowTapTasks;
   final bool showMostRecent;
@@ -17,7 +16,6 @@ class TaskListing extends StatefulWidget {
   const TaskListing({
     super.key,
     required this.categories,
-    required this.withNavBarStyle,
     this.shrinkWrap,
     bool? clickableTasks,
     bool? showMostRecent,
@@ -56,7 +54,6 @@ class _TaskListingState extends State<TaskListing>
           return CategoryTile(
             key: Key(entry.category.uuid.toString()),
             entry: entry,
-            asNavigationBarItem: widget.withNavBarStyle,
             onTap: () {
               setState(() {
                 entry.isExpanded = !entry.isExpanded;

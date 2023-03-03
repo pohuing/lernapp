@@ -81,7 +81,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         return TaskListing(
                           shrinkWrap: true,
                           categories: snapshot.data!,
-                          withNavBarStyle: true,
                           showMostRecent: true,
                         );
                     }
