@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:collection/collection.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -73,6 +76,9 @@ class _ImportScreenState extends State<ImportScreen> {
   }
 
   Future<void> loadFiles() async {
+    if (!kIsWeb && Platform.isAndroid) {
+      await FilePicker.platform.clearTemporaryFiles();
+    }
     final result = await FilePicker.platform.pickFiles(
       allowedExtensions: ['json', 'txt'],
       allowMultiple: false,
