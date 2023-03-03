@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 
 class SolutionCard extends StatefulWidget {
   final String title;
@@ -53,10 +54,9 @@ class _SolutionCardState extends State<SolutionCard> {
                                   style: Theme.of(context).textTheme.titleLarge,
                                   textAlign: TextAlign.start,
                                 ),
-                                Text(
-                                  widget.solution,
-                                  style: Theme.of(context).textTheme.bodyLarge,
-                                  overflow: TextOverflow.fade,
+                                Markdown(
+                                  data: widget.solution,
+                                  shrinkWrap: true,
                                 ),
                               ],
                             ),

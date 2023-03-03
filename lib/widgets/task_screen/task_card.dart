@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:go_router/go_router.dart';
 
 class TaskCard extends StatelessWidget {
@@ -67,10 +68,9 @@ class TaskCard extends StatelessWidget {
                             style: Theme.of(context).textTheme.titleLarge,
                             textAlign: TextAlign.start,
                           ),
-                          Text(
-                            description,
-                            style: Theme.of(context).textTheme.bodyLarge,
-                            overflow: TextOverflow.fade,
+                          Markdown(
+                            data: description,
+                            shrinkWrap: true,
                           ),
                         ],
                       ),
