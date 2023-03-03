@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lernapp/blocs/preferences/preferences_bloc.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
+import 'package:lernapp/model/preferences/repository_configuration/hive_repository_configuration.dart';
 import 'package:lernapp/widgets/general_purpose/adaptive_alert_dialog.dart';
 
-class RepositoryOptionsSelection extends StatefulWidget {
+import 'export_native.dart' if (dart.library.html) 'export_web.dart'
+    as exportMP;
+
+class RepositoryOptionsSelection extends StatelessWidget {
   const RepositoryOptionsSelection({super.key});
 
-  @override
-  State<RepositoryOptionsSelection> createState() =>
-      _RepositoryOptionsSelectionState();
-}
-
-class _RepositoryOptionsSelectionState
-    extends State<RepositoryOptionsSelection> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<PreferencesBloc, PreferencesStateBase>(
@@ -50,11 +48,21 @@ class _RepositoryOptionsSelectionState
                 content: const Text(
                   'This will delete all tasks as well as answers!',
                 ),
-                onConfirm: () async =>
-                    context.read<TasksBloc>().add(TaskStorageWipe()),
+                onConfirm: () async {
+                  context.read<TasksBloc>().add(TaskStorageWipe());
+                  context.pop();
+                },
               ),
             ),
           ),
+          if (state.repositorySettings.currentConfiguration
+              is HiveRepositoryConfiguration)
+            ListTile(
+              leading: const Icon(Icons.import_export),
+              title: const Text('Export'),
+              subtitle: const Text('Export current storage to file'),
+              onTap: () => exportMP.export(context, 'lernapp_export'),
+            ),
           ListTile(
             leading: const Icon(Icons.save),
             title: const Text('Save'),

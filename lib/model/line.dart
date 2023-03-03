@@ -245,7 +245,8 @@ class Line {
     try {
       final size = (map[sizeKey] as num).toDouble();
       final colors = ColorPair.fromMap(map[colorsKey])!;
-      final offsets = List<double>.from(map[pathKey]);
+      final offsets =
+          List<num>.from(map[pathKey]).map((e) => e.toDouble()).toList();
       assert(offsets.length % 2 == 0);
       final path = offsets.pairwise().map((e) => Offset(e.one, e.two)).toList();
       final type = LineType.values[map[typeKey]];

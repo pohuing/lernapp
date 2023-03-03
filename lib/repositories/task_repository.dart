@@ -63,12 +63,15 @@ class HiveTaskRepository implements TaskRepositoryBase {
     final start = DateTime.now();
     log('Starting save', name: 'TaskRepository.save');
     await box?.delete(tasksKey);
-    await box?.put(tasksKey, categories.map((e) => e.toMap()).toList());
+    await box?.put(tasksKey, asMap());
     log(
       'Finished save, duration: ${DateTime.now().difference(start).inMilliseconds}ms',
       name: 'HiveTaskRepository.save',
     );
   }
+
+  List<Map<String, dynamic>> asMap() =>
+      categories.map((e) => e.toMap()).toList();
 
   @override
   Future<void> reload() async {

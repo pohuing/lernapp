@@ -23,71 +23,73 @@ class _HistoryScreenState extends State<HistoryScreen> {
     DateTime.now().subtract(const Duration(hours: 1)),
     DateTime.now(),
   );
-  final cubit = SelectionCubit()..toggleSelectionMode();
 
   Future<List<TaskCategory>>? loader;
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: cubit,
-      child: PlatformAdaptiveScaffold(
-        title: 'History',
-        primary: true,
-        trailing: buildTrailing(),
-        body: ListView(
-          children: [
-            ListTile(
-              leading: const Icon(Icons.av_timer),
-              title: const Text('Time Frame'),
-              trailing: IconButton(
-                onPressed: onResetPressed,
-                icon: const Icon(Icons.undo),
+    return BlocListener<TasksBloc, TaskStorageStateBase>(
+      listener: (context, state) => setState(() => updateLoader()),
+      child: BlocProvider(
+        create: (context) => SelectionCubit()..toggleSelectionMode(),
+        child: PlatformAdaptiveScaffold(
+          title: 'History',
+          primary: true,
+          trailing: buildTrailing(),
+          body: ListView(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.av_timer),
+                title: const Text('Time Frame'),
+                trailing: IconButton(
+                  onPressed: onResetPressed,
+                  icon: const Icon(Icons.undo),
+                ),
               ),
-            ),
-            DateTimeTile(
-              title: 'Start:',
-              value: range.start,
-              onChange: onStartChange,
-            ),
-            DateTimeTile(
-              title: 'End:',
-              value: range.end,
-              onChange: onEndChange,
-            ),
-            const Divider(),
-            SizedBox(
-              child: FutureBuilder<List<TaskCategory>>(
-                future: loader,
-                builder: (context, snapshot) {
-                  switch (snapshot.connectionState) {
-                    case ConnectionState.none:
-                    case ConnectionState.waiting:
-                    case ConnectionState.active:
-                      return const CircularProgressIndicator.adaptive();
-                    case ConnectionState.done:
-                      if (snapshot.data!.isEmpty) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Center(
-                            child: Text(
-                              'No questions have been answered in this time frame',
-                              style: Theme.of(context).textTheme.titleLarge,
+              DateTimeTile(
+                title: 'Start:',
+                value: range.start,
+                onChange: onStartChange,
+              ),
+              DateTimeTile(
+                title: 'End:',
+                value: range.end,
+                onChange: onEndChange,
+              ),
+              const Divider(),
+              SizedBox(
+                child: FutureBuilder<List<TaskCategory>>(
+                  future: loader,
+                  builder: (context, snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.none:
+                      case ConnectionState.waiting:
+                      case ConnectionState.active:
+                        return const CircularProgressIndicator.adaptive();
+                      case ConnectionState.done:
+                        if (snapshot.data!.isEmpty) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: Center(
+                              child: Text(
+                                'No questions have been answered in this time frame',
+                                style: Theme.of(context).textTheme.titleLarge,
+                              ),
                             ),
-                          ),
+                          );
+                        }
+                        return TaskListing(
+                          shrinkWrap: true,
+                          categories: snapshot.data!,
+                          withNavBarStyle: true,
+                          showMostRecent: true,
                         );
-                      }
-                      return TaskListing(
-                        shrinkWrap: true,
-                        categories: snapshot.data!,
-                        withNavBarStyle: true,
-                        showMostRecent: true,
-                      );
-                  }
-                },
-              ),
-            )
-          ],
+                    }
+                  },
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -147,7 +149,6 @@ class _HistoryScreenState extends State<HistoryScreen> {
     return Padding(
       padding: const EdgeInsets.only(right: 8),
       child: BlocBuilder<SelectionCubit, SelectionState>(
-        bloc: cubit,
         builder: (context, state) => FilledButton(
           onPressed: state.maybeShuffledUuids.isEmpty
               ? null
