@@ -36,7 +36,7 @@ class _TaskListingState extends State<TaskListing>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final flattened = <ListingEntryBase>[];
+    final List<ListingEntryBase> flattened = [];
 
     for (int i = 0; i < entries.length; i++) {
       flattened.add(entries[i]);

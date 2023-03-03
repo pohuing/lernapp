@@ -29,22 +29,24 @@ class ListingEntryTask extends ListingEntryBase {
 class ListingEntryCategory extends ListingEntryBase {
   List<ListingEntryCategory> childCategories;
   TaskCategory category;
-  bool isExpanded;
+
+  // TODO: Don't let this get into master, this breaks encapsulation
+  bool get isExpanded => category.expanded;
+
+  set isExpanded(v) => category.expanded = v;
   @override
   int depth = 0;
 
   ListingEntryCategory()
       : childCategories = [],
-        category = TaskCategory(title: 'Dummy'),
-        isExpanded = false;
+        category = TaskCategory(title: 'Dummy');
 
   ListingEntryCategory.fromCategory(this.category, this.depth)
       : childCategories = category.subCategories
             .map(
               (e) => ListingEntryCategory.fromCategory(e, depth + 1),
             )
-            .toList(),
-        isExpanded = false;
+            .toList();
 
   Iterable<Iterable<ListingEntryBase>> getVisibleChildren() sync* {
     if (isExpanded) {
