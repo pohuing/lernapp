@@ -30,10 +30,11 @@ class ListingEntryCategory extends ListingEntryBase {
   List<ListingEntryCategory> childCategories;
   TaskCategory category;
 
-  // TODO: Don't let this get into master, this breaks encapsulation
-  bool get isExpanded => category.expanded;
+  bool _isExpanded = false;
 
-  set isExpanded(v) => category.expanded = v;
+  bool get isExpanded => _isExpanded;
+
+  set isExpanded(v) => _isExpanded = v;
   @override
   int depth = 0;
 
@@ -58,6 +59,13 @@ class ListingEntryCategory extends ListingEntryBase {
       }
       yield category.tasks.map((e) => ListingEntryTask(e, depth));
     }
+  }
+
+  /// Calls [action] on all [childCategories], as well as their
+  /// [childCategories]
+  void traverse(void Function(ListingEntryCategory category) action) {
+    childCategories.forEach(action);
+    childCategories.forEach((element) => element.traverse(action));
   }
 
   @override

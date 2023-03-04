@@ -2,35 +2,52 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lernapp/blocs/selection_cubit.dart';
+import 'package:lernapp/widgets/general_purpose/optionally_wrapped.dart';
 
 import '../../model/task.dart';
 
 class TaskTile extends StatelessWidget {
   final Task task;
+
+  /// Indent the tile based on the depth.
   final int? depth;
+
+  /// Allow tapping on tiles to open the task in a separate screen.
   final bool allowTap;
+
+  /// Show the most recent [SolutionState] in the subtitle.
   final bool showMostRecent;
 
-  const TaskTile(
-      {super.key,
-      required this.task,
-      this.depth,
-      bool? allowTap,
-      bool? showMostRecent})
-      : allowTap = allowTap ?? true,
-        showMostRecent = showMostRecent ?? false;
+  /// Wraps the tile in a [LongPressDraggable]
+  final bool allowDragging;
+
+  const TaskTile({
+    super.key,
+    required this.task,
+    this.depth,
+    bool? allowTap,
+    bool? showMostRecent,
+    bool? allowDragging,
+  })  : allowTap = allowTap ?? true,
+        showMostRecent = showMostRecent ?? false,
+        allowDragging = allowDragging ?? false;
 
   @override
   Widget build(BuildContext context) {
-    return LongPressDraggable(
-      data: task,
-      feedback: Material(
-        child: Card(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(task.title),
+    return OptionallyWrapped(
+      applyWrapper: allowDragging,
+      wrapper: (BuildContext context, Widget child) => LongPressDraggable(
+        data: task,
+        dragAnchorStrategy: pointerDragAnchorStrategy,
+        feedback: Material(
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(task.title),
+            ),
           ),
         ),
+        child: child,
       ),
       child: Material(
         child: BlocBuilder<SelectionCubit, SelectionState>(
