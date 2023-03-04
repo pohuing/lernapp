@@ -13,6 +13,7 @@ import 'package:lernapp/logic/import/file_reading.dart';
 import 'package:lernapp/logic/logging.dart';
 import 'package:lernapp/logic/nullable_extensions.dart';
 import 'package:lernapp/model/task_category.dart';
+import 'package:lernapp/widgets/general_purpose/adaptive_alert_dialog.dart';
 import 'package:lernapp/widgets/general_purpose/platform_adaptive_scaffold.dart';
 import 'package:lernapp/widgets/general_purpose/timed_snackbar.dart';
 import 'package:lernapp/widgets/listing_screen/task_listing.dart';
@@ -101,10 +102,13 @@ class _ImportScreenState extends State<ImportScreen> {
         log(e.toString(), name: 'ImportScreen');
         await showDialog(
           context: context,
-          builder: (context) => AlertDialog(
-            title: const Text('Error parsing file'),
-            content: SingleChildScrollView(
-              child: Text(e.message),
+          builder: (context) => AdaptiveAlertDialog(
+            title: 'Error parsing file',
+            content: Column(
+              children: [
+                Text(e.message),
+                Text(e.toString()),
+              ],
             ),
           ),
         );
@@ -112,34 +116,45 @@ class _ImportScreenState extends State<ImportScreen> {
     }
   }
 
-  Future<void> validateJson(String json) async {
+  Future<bool> validateJson(String json) async {
     final schema = await rootBundle.loadString('assets/importSchema.json');
     final validator =
         JsonSchema.createSchema(schema, schemaVersion: SchemaVersion.draft6);
-    final result = validator.validateWithErrors(json, parseJson: true);
-    if (result.isNotEmpty) {
-      await showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: const Text('Data does not adhere to the spec'),
-            content: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: SelectionArea(
-                  child: Column(
-                    children: [
-                      ...result
-                          .map((e) => [Text(e.message), Divider()])
-                          .flattened
-                    ],
+    try {
+      final result = validator.validateWithErrors(json, parseJson: true);
+      if (result.isNotEmpty) {
+        await showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('Data does not adhere to the spec'),
+              content: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: SelectionArea(
+                    child: Column(
+                      children: [
+                        ...result
+                            .map((e) => [Text(e.message), Divider()])
+                            .flattened
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        );
+        return false;
+      }
+    } catch (e) {
+      log(
+        'Error validating file: ${e.toString()}',
+        name: 'ImportScreen.validateJson',
       );
+      return false;
     }
+
+    return true;
   }
 }
