@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lernapp/blocs/selection_cubit.dart';
+import 'package:lernapp/model/task.dart';
 import 'package:lernapp/widgets/general_purpose/optionally_wrapped.dart';
-
-import '../../model/task.dart';
 
 class TaskTile extends StatelessWidget {
   final Task task;
