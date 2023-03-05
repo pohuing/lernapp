@@ -53,6 +53,9 @@ class _ListingScreenState extends State<ListingScreen> {
                   if (showAddScreen)
                     Breakpoints.mediumAndUp: SlotLayout.from(
                       key: const Key('editor'),
+                      outAnimation: (widget, animation) {
+                        return widget;
+                      },
                       builder: (context) => CreateTaskDialog(
                         secondaryAction: (task) => buildDraggable(task),
                       ),
