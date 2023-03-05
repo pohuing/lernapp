@@ -12,7 +12,7 @@ class DrawingPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 0),
+      padding: EdgeInsets.zero,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -20,7 +20,8 @@ class DrawingPreview extends StatelessWidget {
             child: ListTile(
               title: Text('Preview'),
               subtitle: Text(
-                  'Currently an A with a correction circle would look like this'),
+                'Currently an A with a correction circle would look like this',
+              ),
               contentPadding: EdgeInsets.only(left: 16),
             ),
           ),

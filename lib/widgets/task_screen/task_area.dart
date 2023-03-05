@@ -189,7 +189,7 @@ class _TaskAreaState extends State<TaskArea> {
               child: ColorSelectionRow(controller: colorController),
             ),
             AnimatedSize(
-              duration: Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 200),
               child: !controller.isCorrecting
                   ? IconButton(
                       tooltip: 'Add a new color',

@@ -7,7 +7,7 @@ import 'package:lernapp/model/preferences/repository_configuration/hive_reposito
 import 'package:lernapp/widgets/general_purpose/adaptive_alert_dialog.dart';
 
 import 'export_native.dart' if (dart.library.html) 'export_web.dart'
-    as exportMP;
+    as export_mp;
 
 class RepositoryOptionsSelection extends StatelessWidget {
   const RepositoryOptionsSelection({super.key});
@@ -61,7 +61,7 @@ class RepositoryOptionsSelection extends StatelessWidget {
               leading: const Icon(Icons.import_export),
               title: const Text('Export'),
               subtitle: const Text('Export current storage to file'),
-              onTap: () => exportMP.export(context, 'lernapp_export'),
+              onTap: () => export_mp.export(context, 'lernapp_export'),
             ),
           ListTile(
             leading: const Icon(Icons.save),

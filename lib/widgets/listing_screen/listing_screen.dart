@@ -101,8 +101,8 @@ class _ListingScreenState extends State<ListingScreen> {
         builder: (context) => Scaffold(
           floatingActionButton: FloatingActionButton.extended(
             onPressed: context.pop,
-            label: Text('confirm'),
-            icon: Icon(Icons.fullscreen_exit),
+            label: const Text('confirm'),
+            icon: const Icon(Icons.fullscreen_exit),
           ),
           body: const CreateTaskDialog(),
         ),

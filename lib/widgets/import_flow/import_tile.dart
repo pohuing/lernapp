@@ -7,8 +7,8 @@ class ImportTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(Icons.download),
-      title: Text('import'),
+      leading: const Icon(Icons.download),
+      title: const Text('import'),
       onTap: () {
         context.push('/import');
       },

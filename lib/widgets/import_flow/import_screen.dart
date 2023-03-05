@@ -100,18 +100,20 @@ class _ImportScreenState extends State<ImportScreen> {
         });
       } on FormatException catch (e) {
         log(e.toString(), name: 'ImportScreen');
-        await showDialog(
-          context: context,
-          builder: (context) => AdaptiveAlertDialog(
-            title: 'Error parsing file',
-            content: Column(
-              children: [
-                Text(e.message),
-                Text(e.toString()),
-              ],
+        if (mounted) {
+          await showDialog(
+            context: context,
+            builder: (context) => AdaptiveAlertDialog(
+              title: 'Error parsing file',
+              content: Column(
+                children: [
+                  Text(e.message),
+                  Text(e.toString()),
+                ],
+              ),
             ),
-          ),
-        );
+          );
+        }
       }
     }
   }
@@ -123,28 +125,30 @@ class _ImportScreenState extends State<ImportScreen> {
     try {
       final result = validator.validateWithErrors(json, parseJson: true);
       if (result.isNotEmpty) {
-        await showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: const Text('Data does not adhere to the spec'),
-              content: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: SelectionArea(
-                    child: Column(
-                      children: [
-                        ...result
-                            .map((e) => [Text(e.message), Divider()])
-                            .flattened
-                      ],
+        if (mounted) {
+          await showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: const Text('Data does not adhere to the spec'),
+                content: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: SelectionArea(
+                      child: Column(
+                        children: [
+                          ...result
+                              .map((e) => [Text(e.message), const Divider()])
+                              .flattened
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            );
-          },
-        );
+              );
+            },
+          );
+        }
         return false;
       }
     } catch (e) {

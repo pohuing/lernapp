@@ -133,4 +133,14 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    taskTitleController.dispose();
+    taskController.dispose();
+    solutionTitleController.dispose();
+    solutionController.dispose();
+    scrollController.dispose();
+    super.dispose();
+  }
 }

@@ -87,7 +87,11 @@ class SelectionState {
       isRandomized ? shuffled : asList;
 
   SelectionState(
-      this.selectedUuids, this.isSelecting, this.isRandomized, this.limit);
+    this.selectedUuids,
+    this.isSelecting,
+    this.isRandomized,
+    this.limit,
+  );
 
   /// Returns true if [selectedUuids] contains all Uuids of [category]
   bool entireCategoryIsSelected(TaskCategory category) {

@@ -8,10 +8,10 @@ class CustomAboutListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AboutListTile(
-      icon: const Icon(Icons.info),
+    return const AboutListTile(
+      icon: Icon(Icons.info),
       applicationVersion: versionName,
-      applicationIcon: const Image(
+      applicationIcon: Image(
         isAntiAlias: false,
         width: 200,
         image: AssetImage('images/dorime.gif'),
