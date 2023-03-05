@@ -4,16 +4,25 @@ import 'package:lernapp/widgets/task_screen/solution_card.dart';
 import 'package:lernapp/widgets/task_screen/task_card.dart';
 
 class CreateTaskDialog extends StatefulWidget {
-  const CreateTaskDialog({super.key});
+  final Widget? Function(Task task)? secondaryAction;
+
+  const CreateTaskDialog({super.key, this.secondaryAction});
 
   @override
   State<CreateTaskDialog> createState() => _CreateTaskDialogState();
 
   static Future<Task?> show(BuildContext context) async {
-    return await showGeneralDialog<Task?>(
+    return await showModalBottomSheet(
       context: context,
-      pageBuilder: (context, animation, secondaryAnimation) {
-        return const CreateTaskDialog();
+      useRootNavigator: true,
+      isScrollControlled: true,
+      builder: (context) {
+        return const Material(
+          child: Padding(
+            padding: EdgeInsets.all(8.0),
+            child: CreateTaskDialog(),
+          ),
+        );
       },
     );
   }
@@ -24,33 +33,37 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
   final taskController = TextEditingController();
   final solutionTitleController = TextEditingController();
   final solutionController = TextEditingController();
+  final scrollController = ScrollController();
 
-  String taskTitle = '';
-  String task = '';
-  String solutionTitle = '';
-  String solution = '';
+  String _taskTitle = '';
+  String _taskContents = '';
+  String _solutionTitle = '';
+  String _solutionContents = '';
+
+  Task get task =>
+      Task(_taskTitle, _taskContents, _solutionTitle, _solutionContents);
 
   @override
   void initState() {
     super.initState();
     taskTitleController.addListener(() {
       setState(() {
-        taskTitle = taskTitleController.text;
+        _taskTitle = taskTitleController.text;
       });
     });
     taskController.addListener(() {
       setState(() {
-        task = taskController.text;
+        _taskContents = taskController.text;
       });
     });
     solutionTitleController.addListener(() {
       setState(() {
-        solutionTitle = solutionTitleController.text;
+        _solutionTitle = solutionTitleController.text;
       });
     });
     solutionController.addListener(() {
       setState(() {
-        solution = solutionController.text;
+        _solutionContents = solutionController.text;
       });
     });
   }
@@ -60,7 +73,8 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
     return Form(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
+        child: ListView(
+          controller: scrollController,
           children: [
             TextFormField(
               controller: taskTitleController,
@@ -75,13 +89,26 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
               minLines: 1,
               maxLines: 20,
               decoration: const InputDecoration(
-                  label: Text('Task'), border: OutlineInputBorder()),
+                label: Text('Task'),
+                border: OutlineInputBorder(),
+              ),
             ),
             const SizedBox(height: 8),
+            SizedBox(
+              height: 300,
+              child: TaskCard(
+                title: _taskTitle,
+                description: _taskContents,
+                showBackButton: false,
+                secondaryAction: widget.secondaryAction?.call(task),
+              ),
+            ),
             TextFormField(
               controller: solutionTitleController,
               decoration: const InputDecoration(
-                  label: Text('Solution Title'), border: OutlineInputBorder()),
+                label: Text('Solution Title'),
+                border: OutlineInputBorder(),
+              ),
             ),
             const SizedBox(height: 8),
             TextFormField(
@@ -89,30 +116,19 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
               minLines: 1,
               maxLines: 20,
               decoration: const InputDecoration(
-                  label: Text('Solution'), border: OutlineInputBorder()),
+                label: Text('Solution'),
+                border: OutlineInputBorder(),
+              ),
             ),
-            const SizedBox(height: 8),
-            Expanded(
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TaskCard(
-                      title: taskTitle,
-                      description: task,
-                    ),
-                  ),
-                  Expanded(
-                    child: SolutionCard(
-                      title: solutionTitle,
-                      solution: solution,
-                      onReveal: (isFlipped) => null,
-                      revealed: true,
-                    ),
-                  )
-                ],
+            SizedBox(
+              height: 300,
+              child: SolutionCard(
+                title: _solutionTitle,
+                solution: _solutionContents,
+                revealed: true,
               ),
             )
-          ].toList(),
+          ],
         ),
       ),
     );

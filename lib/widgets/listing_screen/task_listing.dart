@@ -68,7 +68,7 @@ class _TaskListingState extends State<TaskListing>
       itemData: flattened,
       initialAnimation: false,
       shrinkWrap: widget.shrinkWrap,
-      physics: const PageScrollPhysics(),
+      physics: const ClampingScrollPhysics(),
       itemBuilder: (context, entry) {
         if (entry is ListingEntryCategory) {
           return CategoryTile(

@@ -77,8 +77,13 @@ class _TaskAreaState extends State<TaskArea> {
                 Expanded(
                   child: TaskCard(
                     title: task.title,
-                    secondaryAction: () => setState(
-                      () => expandedTopRow = !expandedTopRow,
+                    secondaryAction: Expanded(
+                      child: ExpandIcon(
+                        isExpanded: expandedTopRow,
+                        onPressed: (v) => setState(
+                          () => expandedTopRow = !expandedTopRow,
+                        ),
+                      ),
                     ),
                     isExpanded: expandedTopRow,
                     description: task.description,

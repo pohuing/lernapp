@@ -85,10 +85,6 @@ class PlatformAdaptiveScaffold extends StatelessWidget {
       );
     }
 
-    //if (!showAppBar) {
-    //  value = SafeArea(child: value);
-    //}
-
     return WillPopScope(
       onWillPop: allowBackGesture
           ? null
