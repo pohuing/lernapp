@@ -37,7 +37,13 @@ void main() async {
         providers: [
           BlocProvider.value(value: preferencesBloc),
           BlocProvider<TasksBloc>(
-              create: (context) => TasksBloc(tasksRepository, preferencesBloc)),
+            lazy: false,
+            create: (context) {
+              final a = TasksBloc(tasksRepository, preferencesBloc);
+              a.add(TaskStorageLoad());
+              return a;
+            },
+          ),
         ],
         child: const MyApp(),
       );
