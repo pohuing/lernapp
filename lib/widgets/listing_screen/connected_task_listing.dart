@@ -40,7 +40,8 @@ class _ConnectedTaskListingState extends State<ConnectedTaskListing> {
           current is TaskStorageLoaded ||
           current is TaskStorageLoading ||
           current is TaskStorageUninitialized ||
-          current is TaskStorageChanged,
+          current is TaskStorageChanged ||
+          current is TaskStorageDataChanged,
       builder: (context, state) {
         if (state is TaskStorageUninitialized) {
           context.read<TasksBloc>().add(TaskStorageLoad());
@@ -48,7 +49,8 @@ class _ConnectedTaskListingState extends State<ConnectedTaskListing> {
             child: Text('Storage is uninitialized'),
           );
         } else if (state is TaskStorageLoaded ||
-            state is TaskStorageRepositoryFinishedSaving) {
+            state is TaskStorageRepositoryFinishedSaving ||
+            state is TaskStorageDataChanged) {
           if ((state as dynamic).contents.isEmpty) {
             return Padding(
               padding: const EdgeInsets.all(8),
@@ -65,10 +67,10 @@ class _ConnectedTaskListingState extends State<ConnectedTaskListing> {
               ),
             );
           }
+
           updateEntries(state);
 
           return TaskListing(
-            key: Key(state.hashCode.toString()),
             listingEntries: listingEntries,
             showMostRecent: widget.showMostRecent,
             allowReordering: widget.allowReordering,

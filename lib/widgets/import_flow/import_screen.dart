@@ -63,6 +63,7 @@ class _ImportScreenState extends State<ImportScreen> {
                 BlocProvider(
                   create: (context) => SelectionCubit(),
                   child: TaskListing(
+                    showMostRecent: true,
                     categories: parsedContents!,
                     shrinkWrap: true,
                     clickableTasks: false,

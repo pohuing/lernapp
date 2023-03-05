@@ -1,9 +1,12 @@
 import 'package:collection/collection.dart';
 import 'package:lernapp/model/task.dart';
 import 'package:lernapp/model/task_category.dart';
+import 'package:uuid/uuid.dart';
 
 abstract class ListingEntryBase {
   int get depth;
+
+  UuidValue get uuid;
 }
 
 class ListingEntryTask extends ListingEntryBase {
@@ -24,6 +27,9 @@ class ListingEntryTask extends ListingEntryBase {
 
   @override
   int get hashCode => task.hashCode ^ depth.hashCode;
+
+  @override
+  UuidValue get uuid => task.uuid;
 }
 
 class ListingEntryCategory extends ListingEntryBase {
@@ -84,4 +90,7 @@ class ListingEntryCategory extends ListingEntryBase {
       category.hashCode ^
       isExpanded.hashCode ^
       depth.hashCode;
+
+  @override
+  UuidValue get uuid => category.uuid;
 }

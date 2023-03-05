@@ -19,3 +19,9 @@ class TaskStorageRepositoryFinishedSaving implements TaskStorageStateBase {
 }
 
 class TaskStorageSaving implements TaskStorageStateBase {}
+
+class TaskStorageDataChanged implements TaskStorageStateBase {
+  final List<TaskCategory> contents;
+
+  TaskStorageDataChanged(this.contents);
+}

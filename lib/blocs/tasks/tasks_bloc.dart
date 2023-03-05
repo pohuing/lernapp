@@ -47,9 +47,13 @@ class TasksBloc extends Bloc<TaskStorageEventBase, TaskStorageStateBase> {
     });
   }
 
-  Future<void> _onTaskStorageMove(event, emit) async {
+  Future<void> _onTaskStorageMove(
+    TaskStorageMoveTask event,
+    Emitter<TaskStorageStateBase> emit,
+  ) async {
     await repository.moveTask(event.task, event.to);
-    emit(TaskStorageLoaded(repository.categories));
+    await _onSave(event, emit);
+    emit(TaskStorageDataChanged(repository.categories));
   }
 
   Future<void> _onImport(event, emit) async {

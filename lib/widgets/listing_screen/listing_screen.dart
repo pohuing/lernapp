@@ -41,6 +41,7 @@ class _ListingScreenState extends State<ListingScreen> {
                   Breakpoints.standard: SlotLayout.from(
                     builder: (context) => const ConnectedTaskListing(
                       key: Key('body'),
+                      allowReordering: true,
                     ),
                     key: const Key('body'),
                   ),

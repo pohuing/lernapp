@@ -65,6 +65,7 @@ class _TaskListingState extends State<TaskListing>
     }
 
     return ImplicitlyAnimatedList(
+      itemEquality: (a, b) => a.uuid == b.uuid,
       itemData: flattened,
       initialAnimation: false,
       shrinkWrap: widget.shrinkWrap,
@@ -87,6 +88,7 @@ class _TaskListingState extends State<TaskListing>
             depth: entry.depth,
             allowTap: widget.allowTapTasks,
             showMostRecent: widget.showMostRecent,
+            allowDragging: widget.allowReordering,
           );
         }
         return DummyHighPerfListingTile();
