@@ -19,6 +19,8 @@ class EditorScreen extends StatefulWidget {
 }
 
 class _EditorScreenState extends State<EditorScreen> {
+  Task? newTask;
+
   @override
   Widget build(BuildContext context) {
     IconButton(onPressed: onTapAdd, icon: const Icon(Icons.add));
@@ -29,6 +31,7 @@ class _EditorScreenState extends State<EditorScreen> {
         title: 'Tasks',
         primary: true,
         useSliverAppBar: false,
+        trailing: buildTrailing(),
         body: AdaptiveLayout(
           body: SlotLayout(
             config: {
@@ -50,7 +53,8 @@ class _EditorScreenState extends State<EditorScreen> {
                   return widget;
                 },
                 builder: (context) => CreateTaskDialog(
-                  secondaryAction: (task) => buildDraggable(task),
+                  secondaryAction: (task) =>
+                      buildDraggable(task, const Icon(Icons.drag_indicator)),
                 ),
               )
             },
@@ -60,7 +64,35 @@ class _EditorScreenState extends State<EditorScreen> {
     );
   }
 
-  Draggable<Task> buildDraggable(Task task) {
+  Widget? buildTrailing() {
+    return Row(children: [
+      if (newTask != null)
+        Container(
+          decoration: ShapeDecoration(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(8)),
+            ),
+            color: Theme.of(context).colorScheme.surface,
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: buildDraggable(
+              newTask!,
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  Icon(Icons.drag_indicator),
+                  Text('Task'),
+                ],
+              ),
+            ),
+          ),
+        ),
+      IconButton(onPressed: onTapAdd, icon: const Icon(Icons.add)),
+    ]);
+  }
+
+  Draggable<Task> buildDraggable(Task task, Widget child) {
     return Draggable(
       dragAnchorStrategy: pointerDragAnchorStrategy,
       data: task,
@@ -78,16 +110,14 @@ class _EditorScreenState extends State<EditorScreen> {
         ),
       ),
       childWhenDragging: null,
-      child: const Padding(
-        padding: EdgeInsets.all(8.0),
-        child: Icon(Icons.drag_indicator),
-      ),
+      child: child,
     );
   }
 
-  void onTapAdd() {
+  void onTapAdd() async {
     if (Breakpoints.small.isActive(context)) {
-      showModal<Task?>(
+      Task? value;
+      await showModal(
         context: context,
         builder: (context) => Scaffold(
           floatingActionButton: FloatingActionButton.extended(
@@ -95,12 +125,23 @@ class _EditorScreenState extends State<EditorScreen> {
             label: const Text('confirm'),
             icon: const Icon(Icons.fullscreen_exit),
           ),
-          body: const Padding(
-            padding: EdgeInsets.fromLTRB(8, 8, 8, 0),
-            child: CreateTaskDialog(),
+          body: Padding(
+            padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+            child: CreateTaskDialog(
+              secondaryAction: (task) {
+                value = task;
+                return null;
+              },
+            ),
           ),
         ),
       );
+
+      if (value != null) {
+        setState(() {
+          newTask = value;
+        });
+      }
     }
   }
 }
