@@ -8,6 +8,9 @@ import 'package:lernapp/widgets/task_screen/session_screen.dart';
 import 'package:lernapp/widgets/task_screen/task_screen.dart';
 import 'package:uuid/uuid.dart';
 
+import '../model/task.dart';
+import '../widgets/editor_screen/create_task_screen.dart';
+
 class LernappRouter {
   static final GoRouter router = GoRouter(
     initialLocation: '/',
@@ -61,6 +64,15 @@ class LernappRouter {
         name: 'editor',
         path: '/editor',
         builder: (context, state) => const EditorScreen(),
+        routes: [
+          GoRoute(
+            path: 'new',
+            name: 'newTask',
+            builder: (context, state) => CreateTaskScreen(
+              onChange: state.extra as void Function(Task?),
+            ),
+          ),
+        ],
       ),
     ],
   );

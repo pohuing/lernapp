@@ -1,4 +1,3 @@
-import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,7 +8,7 @@ import 'package:lernapp/widgets/general_purpose/platform_adaptive_scaffold.dart'
 import 'package:lernapp/widgets/listing_screen/connected_task_listing.dart';
 import 'package:lernapp/widgets/task_screen/task_card.dart';
 
-import 'create_task_screen.dart';
+import 'create_task_dialog.dart';
 
 class EditorScreen extends StatefulWidget {
   const EditorScreen({super.key});
@@ -23,41 +22,43 @@ class _EditorScreenState extends State<EditorScreen> {
 
   @override
   Widget build(BuildContext context) {
-    IconButton(onPressed: onTapAdd, icon: const Icon(Icons.add));
-
     return BlocProvider(
       create: (BuildContext context) => SelectionCubit(),
       child: PlatformAdaptiveScaffold(
-        title: 'Tasks',
+        title: 'Editor',
+        previousTitle: 'Tasks',
         primary: true,
         useSliverAppBar: false,
         trailing: buildTrailing(),
-        body: AdaptiveLayout(
-          body: SlotLayout(
-            config: {
-              Breakpoints.standard: SlotLayout.from(
-                builder: (context) => const ConnectedTaskListing(
-                  key: Key('body'),
-                  allowReordering: true,
+        transitionBetweenRoutes: false,
+        body: SafeArea(
+          child: AdaptiveLayout(
+            body: SlotLayout(
+              config: {
+                Breakpoints.standard: SlotLayout.from(
+                  builder: (context) => const ConnectedTaskListing(
+                    key: Key('body'),
+                    allowReordering: true,
+                  ),
+                  key: const Key('body'),
                 ),
-                key: const Key('body'),
-              ),
-            },
-          ),
-          secondaryBody: SlotLayout(
-            key: const Key('secondary'),
-            config: {
-              Breakpoints.mediumAndUp: SlotLayout.from(
-                key: const Key('editor'),
-                outAnimation: (widget, animation) {
-                  return widget;
-                },
-                builder: (context) => CreateTaskDialog(
-                  secondaryAction: (task) =>
-                      buildDraggable(task, const Icon(Icons.drag_indicator)),
-                ),
-              )
-            },
+              },
+            ),
+            secondaryBody: SlotLayout(
+              key: const Key('secondary'),
+              config: {
+                Breakpoints.mediumAndUp: SlotLayout.from(
+                  key: const Key('editor'),
+                  outAnimation: (widget, animation) {
+                    return widget;
+                  },
+                  builder: (context) => CreateTaskDialog(
+                    secondaryAction: (task) =>
+                        buildDraggable(task, const Icon(Icons.drag_indicator)),
+                  ),
+                )
+              },
+            ),
           ),
         ),
       ),
@@ -65,31 +66,37 @@ class _EditorScreenState extends State<EditorScreen> {
   }
 
   Widget? buildTrailing() {
-    return Row(children: [
-      if (newTask != null)
-        Container(
-          decoration: ShapeDecoration(
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8)),
-            ),
-            color: Theme.of(context).colorScheme.surface,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: buildDraggable(
-              newTask!,
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: const [
-                  Icon(Icons.drag_indicator),
-                  Text('Task'),
-                ],
+    if (Breakpoints.small.isActive(context)) {
+      return Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (newTask != null)
+            Hero(
+              tag: 'taskDraggable',
+              transitionOnUserGestures: true,
+              flightShuttleBuilder: (flightContext, animation, flightDirection,
+                  fromHeroContext, toHeroContext) {
+                return TaskCard(
+                  title: newTask!.title,
+                  description: newTask!.description,
+                  showBackButton: false,
+                );
+              },
+              child: buildDraggable(
+                newTask!,
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const [
+                    Icon(Icons.drag_indicator),
+                    Text('Task'),
+                  ],
+                ),
               ),
             ),
-          ),
-        ),
-      IconButton(onPressed: onTapAdd, icon: const Icon(Icons.add)),
-    ]);
+          IconButton(onPressed: onTapAdd, icon: const Icon(Icons.add)),
+        ],
+      );
+    }
   }
 
   Draggable<Task> buildDraggable(Task task, Widget child) {
@@ -102,10 +109,13 @@ class _EditorScreenState extends State<EditorScreen> {
         child: SizedBox(
           height: 100,
           width: 100,
-          child: TaskCard(
-            title: task.title,
-            description: task.description,
-            showBackButton: false,
+          child: Transform.translate(
+            offset: const Offset(-50, -100),
+            child: TaskCard(
+              title: task.title,
+              description: task.description,
+              showBackButton: false,
+            ),
           ),
         ),
       ),
@@ -116,32 +126,12 @@ class _EditorScreenState extends State<EditorScreen> {
 
   void onTapAdd() async {
     if (Breakpoints.small.isActive(context)) {
-      Task? value;
-      await showModal(
-        context: context,
-        builder: (context) => Scaffold(
-          floatingActionButton: FloatingActionButton.extended(
-            onPressed: context.pop,
-            label: const Text('confirm'),
-            icon: const Icon(Icons.fullscreen_exit),
-          ),
-          body: Padding(
-            padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-            child: CreateTaskDialog(
-              secondaryAction: (task) {
-                value = task;
-                return null;
-              },
-            ),
-          ),
-        ),
+      context.push(
+        '/editor/new',
+        extra: (Task? task) {
+          setState(() => newTask = task);
+        },
       );
-
-      if (value != null) {
-        setState(() {
-          newTask = value;
-        });
-      }
     }
   }
 }

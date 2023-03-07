@@ -16,6 +16,7 @@ class CupertinoAdaptiveScaffold extends StatefulWidget {
     this.title,
     this.body,
     this.previousTitle,
+    this.transitionBetweenRoutes,
   }) : assert(
           (destinations != null && destinations.length >= 2) || body != null,
           'Either destinations has to provide a body or, body has to be supplied directly',
@@ -28,6 +29,7 @@ class CupertinoAdaptiveScaffold extends StatefulWidget {
   final bool useSliverAppBar;
   final Widget? trailing;
   final List<TabDestination>? destinations;
+  final bool? transitionBetweenRoutes;
 
   @override
   State<CupertinoAdaptiveScaffold> createState() =>
@@ -76,6 +78,7 @@ class _CupertinoAdaptiveScaffoldState extends State<CupertinoAdaptiveScaffold>
                 previousPageTitle: widget.previousTitle,
                 middle: widget.title.map((t) => Text(t)),
                 trailing: buildTrailing(),
+                transitionBetweenRoutes: widget.transitionBetweenRoutes ?? true,
               )
             : null,
         child: buildNonSliverBody(),
@@ -131,6 +134,7 @@ class _CupertinoAdaptiveScaffoldState extends State<CupertinoAdaptiveScaffold>
             largeTitle: getCurrentTitle().map((e) => Text(e)),
             previousPageTitle: widget.previousTitle,
             trailing: buildTrailing(),
+            transitionBetweenRoutes: widget.transitionBetweenRoutes ?? true,
           )
         ];
       },

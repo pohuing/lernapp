@@ -30,6 +30,9 @@ class PlatformAdaptiveScaffold extends StatelessWidget {
   final bool allowBackGesture;
   final bool showAppBar;
 
+  /// Enable the default hero transitions in [CupertinoNavBar]s
+  final bool? transitionBetweenRoutes;
+
   /// Destinations from which to build the bottom navigation bar, the navigation
   /// bar as well as the current page's body
   ///
@@ -47,6 +50,7 @@ class PlatformAdaptiveScaffold extends StatelessWidget {
     bool? allowBackGesture,
     bool? showAppBar,
     this.destinations,
+    this.transitionBetweenRoutes,
   })  : primary = primary ?? true,
         useSliverAppBar = useSliverAppBar ?? true,
         allowBackGesture = allowBackGesture ?? true,
@@ -68,6 +72,7 @@ class PlatformAdaptiveScaffold extends StatelessWidget {
         body: body,
         previousTitle: previousTitle,
         trailing: trailing,
+        transitionBetweenRoutes: transitionBetweenRoutes,
       );
       value = Material(
         color: Colors.transparent,
