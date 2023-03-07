@@ -58,80 +58,84 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      autovalidateMode: AutovalidateMode.always,
-      child: ListView(
-        controller: scrollController,
-        children: [
-          const SizedBox(height: 8),
-          TextFormField(
-            controller: taskTitleController,
-            decoration: const InputDecoration(
-              label: Text('Task Title'),
-              border: OutlineInputBorder(),
+    return FocusTraversalGroup(
+      policy: OrderedTraversalPolicy(),
+      child: Form(
+        autovalidateMode: AutovalidateMode.always,
+        child: ListView(
+          controller: scrollController,
+          children: [
+            const SizedBox(height: 8),
+            TextFormField(
+              controller: taskTitleController,
+              decoration: const InputDecoration(
+                label: Text('Task Title'),
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) =>
+                  (value?.isEmpty ?? true) && _taskContents.isEmpty
+                      ? 'Missing text'
+                      : null,
             ),
-            validator: (value) =>
-                (value?.isEmpty ?? true) && _taskContents.isEmpty
-                    ? 'Missing text'
-                    : null,
-          ),
-          const SizedBox(height: 8),
-          TextFormField(
-            controller: taskController,
-            minLines: 1,
-            maxLines: 20,
-            decoration: const InputDecoration(
-              label: Text('Task'),
-              border: OutlineInputBorder(),
+            const SizedBox(height: 8),
+            TextFormField(
+              controller: taskController,
+              minLines: 1,
+              maxLines: 20,
+              decoration: const InputDecoration(
+                label: Text('Task'),
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) =>
+                  (value?.isEmpty ?? true) && _taskTitle.isEmpty
+                      ? 'Missing text'
+                      : null,
             ),
-            validator: (value) => (value?.isEmpty ?? true) && _taskTitle.isEmpty
-                ? 'Missing text'
-                : null,
-          ),
-          const SizedBox(height: 8),
-          SizedBox(
-            height: 300,
-            child: TaskCard(
-              title: _taskTitle,
-              description: _taskContents,
-              showBackButton: false,
-              secondaryAction: widget.secondaryAction?.call(task),
+            const SizedBox(height: 8),
+            SizedBox(
+              height: 300,
+              child: TaskCard(
+                title: _taskTitle,
+                description: _taskContents,
+                showBackButton: false,
+                secondaryAction: widget.secondaryAction?.call(task),
+              ),
             ),
-          ),
-          TextFormField(
-            controller: solutionTitleController,
-            decoration: const InputDecoration(
-              label: Text('Solution Title'),
-              border: OutlineInputBorder(),
+            TextFormField(
+              controller: solutionTitleController,
+              decoration: const InputDecoration(
+                label: Text('Solution Title'),
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) =>
+                  (value?.isEmpty ?? true) && _solutionContents.isEmpty
+                      ? 'Missing text'
+                      : null,
             ),
-            validator: (value) =>
-                (value?.isEmpty ?? true) && _solutionContents.isEmpty
-                    ? 'Missing text'
-                    : null,
-          ),
-          const SizedBox(height: 8),
-          TextFormField(
-            controller: solutionController,
-            minLines: 1,
-            maxLines: 20,
-            decoration: const InputDecoration(
-              label: Text('Solution'),
-              border: OutlineInputBorder(),
+            const SizedBox(height: 8),
+            TextFormField(
+              controller: solutionController,
+              minLines: 1,
+              maxLines: 20,
+              decoration: const InputDecoration(
+                label: Text('Solution'),
+                border: OutlineInputBorder(),
+              ),
+              validator: (value) =>
+                  (value?.isEmpty ?? true) && _solutionTitle.isEmpty
+                      ? 'Missing text'
+                      : null,
             ),
-            validator: (value) =>
-                (value?.isEmpty ?? true) && _solutionTitle.isEmpty
-                    ? 'Missing text'
-                    : null,
-          ),
-          SizedBox(
-            height: 300,
-            child: SolutionCard(
-              title: _solutionTitle,
-              solution: _solutionContents,
-              revealed: true,
-            ),
-          )
-        ],
+            SizedBox(
+              height: 300,
+              child: SolutionCard(
+                title: _solutionTitle,
+                solution: _solutionContents,
+                revealed: true,
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
