@@ -6,6 +6,7 @@ import 'package:lernapp/widgets/general_purpose/platform_adaptive_scaffold.dart'
 import 'package:lernapp/widgets/listing_screen/connected_task_listing.dart';
 import 'package:lernapp/widgets/listing_screen/start_session_dialog.dart';
 
+import '../../generated/l10n.dart';
 import '../import_flow/import_tile.dart';
 import 'about_list_tile.dart';
 
@@ -18,11 +19,11 @@ class ListingScreen extends StatelessWidget {
       create: (context) => SelectionCubit(),
       child: Builder(
         builder: (context) {
-          return const PlatformAdaptiveScaffold(
-            title: 'Tasks',
-            body: ConnectedTaskListing(),
+          return PlatformAdaptiveScaffold(
+            title: S.of(context).listingScreen_title,
+            body: const ConnectedTaskListing(),
             primary: true,
-            trailing: Trailing(),
+            trailing: const Trailing(),
           );
         },
       ),
@@ -42,6 +43,9 @@ class Trailing extends StatelessWidget {
           children: [
             if (!state.isSelecting) ...[
               IconButton(
+                tooltip: S
+                    .of(context)
+                    .listingScreenTrailing_sessionModeButtonTooltip,
                 onPressed: () =>
                     context.read<SelectionCubit>().toggleSelectionMode(),
                 icon: const Icon(Icons.check_box_outlined),
@@ -56,20 +60,24 @@ class Trailing extends StatelessWidget {
                   PopupMenuItem(
                     padding: EdgeInsets.zero,
                     onTap: () => context.push('/scratchpad'),
-                    child: const IgnorePointer(
+                    child: IgnorePointer(
                       child: ListTile(
-                        leading: Icon(Icons.draw),
-                        title: Text('Scribble'),
+                        leading: const Icon(Icons.draw),
+                        title: Text(
+                          S.of(context).listingScreenTrailing_scribbleTitle,
+                        ),
                       ),
                     ),
                   ),
                   PopupMenuItem(
                     padding: EdgeInsets.zero,
                     onTap: () => context.push('/preferences'),
-                    child: const IgnorePointer(
+                    child: IgnorePointer(
                       child: ListTile(
-                        leading: Icon(Icons.settings),
-                        title: Text('Settings'),
+                        leading: const Icon(Icons.settings),
+                        title: Text(
+                          S.of(context).listingScreenTrailing_settingsTitle,
+                        ),
                       ),
                     ),
                   ),
@@ -84,7 +92,7 @@ class Trailing extends StatelessWidget {
               OutlinedButton(
                 onPressed: () =>
                     context.read<SelectionCubit>().toggleSelectionMode(),
-                child: const Text('Cancel'),
+                child: Text(S.of(context).cancel),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -98,7 +106,7 @@ class Trailing extends StatelessWidget {
                               child: const StartSessionDialog(),
                             ),
                           ),
-                  child: const Text('Start'),
+                  child: Text(S.of(context).start),
                 ),
               ),
             ],

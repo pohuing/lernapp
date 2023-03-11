@@ -11,13 +11,13 @@ class TaskTile extends StatelessWidget {
   final bool allowTap;
   final bool showMostRecent;
 
-  const TaskTile(
-      {super.key,
-      required this.task,
-      this.depth,
-      bool? allowTap,
-      bool? showMostRecent})
-      : allowTap = allowTap ?? true,
+  const TaskTile({
+    super.key,
+    required this.task,
+    this.depth,
+    bool? allowTap,
+    bool? showMostRecent,
+  })  : allowTap = allowTap ?? true,
         showMostRecent = showMostRecent ?? false;
 
   @override

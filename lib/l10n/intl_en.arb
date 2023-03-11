@@ -1,0 +1,15 @@
+{
+  "rootScreenNav_tasks": "Tasks",
+  "rootScreenNav_history": "History",
+  "listingScreen_title": "Tasks",
+  "listingScreenTrailing_scribbleTitle": "Scribble",
+  "listingScreenTrailing_settingsTitle": "Settings",
+  "cancel": "Cancel",
+  "start": "Start",
+  "listingScreenTrailing_sessionModeButtonTooltip": "Select tasks",
+  "connectedTaskListing_emptyRepositoryHint": "You don't appear to have any tasks yet. Tap here to import.",
+  "startSessionDialog_title": "Configure Session",
+  "startSessionDialog_countTitle": "Limit question count",
+  "startSessionDialog_randomizeTitle": "Randomize",
+  "startSessionDialog_countInputTitle": "Count"
+}

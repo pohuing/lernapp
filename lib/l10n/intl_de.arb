@@ -1,0 +1,15 @@
+{
+  "rootScreenNav_tasks": "Aufgaben",
+  "rootScreenNav_history": "Verlauf",
+  "listingScreen_title": "Aufgaben",
+  "listingScreenTrailing_scribbleTitle": "Kritzeln",
+  "listingScreenTrailing_settingsTitle": "Einstellungen",
+  "cancel": "Abbrechen",
+  "start": "Start",
+  "listingScreenTrailing_sessionModeButtonTooltip": "Aufgaben auswählen",
+  "connectedTaskListing_emptyRepositoryHint": "Anscheinend hast du noch keine Aufgaben. Tippe hier um welche zu importieren.",
+  "startSessionDialog_title": "Sitzung vorbereiten",
+  "startSessionDialog_countTitle": "Anzahl begrenzen",
+  "startSessionDialog_randomizeTitle": "Zufällige Reihenfolge",
+  "startSessionDialog_countInputTitle": "Anzahl"
+}

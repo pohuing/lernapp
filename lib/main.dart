@@ -2,7 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/intl_standalone.dart';
 import 'package:lernapp/blocs/preferences/preferences_bloc.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
 import 'package:lernapp/logic/router.dart';
@@ -11,9 +14,12 @@ import 'package:lernapp/repositories/preferences_repository.dart';
 import 'package:provider/provider.dart';
 import 'package:system_theme/system_theme.dart';
 
+import 'generated/l10n.dart';
+
 void main() async {
   final binding = WidgetsFlutterBinding.ensureInitialized();
   binding.addObserver(UIOverlaySetterObserver());
+  Intl.systemLocale = await findSystemLocale();
 
   if (kIsWeb ||
       [TargetPlatform.android, TargetPlatform.windows]
@@ -111,6 +117,13 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       theme: brightTheme,
       darkTheme: darkTheme,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        S.delegate,
+      ],
+      supportedLocales: const [Locale('en'), Locale('de')],
       showPerformanceOverlay: showPerformanceOverlay ?? false,
       routeInformationParser: LernappRouter.router.routeInformationParser,
       routeInformationProvider: LernappRouter.router.routeInformationProvider,

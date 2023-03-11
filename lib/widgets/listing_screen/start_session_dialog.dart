@@ -6,6 +6,8 @@ import 'package:lernapp/blocs/selection_cubit.dart';
 import 'package:lernapp/logic/nullable_extensions.dart';
 import 'package:lernapp/widgets/general_purpose/adaptive_alert_dialog.dart';
 
+import '../../generated/l10n.dart';
+
 class StartSessionDialog extends StatefulWidget {
   const StartSessionDialog({super.key});
 
@@ -18,12 +20,12 @@ class _StartSessionDialogState extends State<StartSessionDialog> {
   Widget build(BuildContext context) {
     return BlocBuilder<SelectionCubit, SelectionState>(
       builder: (context, state) => AdaptiveAlertDialog(
-        title: 'Configure Session',
+        title: S.of(context).startSessionDialog_title,
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             SwitchListTile.adaptive(
-              title: const Text('Number of questions'),
+              title: Text(S.of(context).startSessionDialog_countTitle),
               value: state.withLimit,
               onChanged: (value) {
                 if (value) {
@@ -35,7 +37,7 @@ class _StartSessionDialogState extends State<StartSessionDialog> {
             ),
             if (state.withLimit)
               ListTile(
-                title: const Text('Count'),
+                title: Text(S.of(context).startSessionDialog_countInputTitle),
                 trailing: SizedBox(
                   width: 80,
                   child: TextField(
@@ -51,7 +53,7 @@ class _StartSessionDialogState extends State<StartSessionDialog> {
                 ),
               ),
             SwitchListTile.adaptive(
-              title: const Text('Randomize'),
+              title: Text(S.of(context).startSessionDialog_randomizeTitle),
               value: state.isRandomized,
               onChanged: (_) => context
                   .read<SelectionCubit>()
@@ -60,12 +62,12 @@ class _StartSessionDialogState extends State<StartSessionDialog> {
           ],
         ),
         onCancel: context.pop,
-        cancelChild: const Text('Cancel'),
+        cancelChild: Text(S.of(context).cancel),
         onConfirm: () => context.push(
           '/session',
           extra: context.read<SelectionCubit>().state.maybeShuffledUuids,
         ),
-        confirmChild: const Text('Start'),
+        confirmChild: Text(S.of(context).start),
       ),
     );
   }

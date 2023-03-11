@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:lernapp/blocs/selection_cubit.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
 
+import '../../generated/l10n.dart';
 import 'task_listing.dart';
 
 /// A wrapper around [TaskListing] which connects the listing to the [TasksBloc]
@@ -41,7 +42,7 @@ class ConnectedTaskListing extends StatelessWidget {
                       context.push('/import');
                     },
                     child: Text(
-                      'You don\'t appear to have any tasks yet. Tap here to import.',
+                      S.of(context).connectedTaskListing_emptyRepositoryHint,
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ),
