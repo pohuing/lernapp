@@ -46,7 +46,9 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Task"),
         "createTaskScreen_taskTitleLabel":
             MessageLookupByLibrary.simpleMessage("Task Title"),
-        "differenceindays365YearsAgo": m0,
+        "drawingPreview_description": MessageLookupByLibrary.simpleMessage(
+            "Currently an A with a correction circle would look like this"),
+        "drawingPreview_title": MessageLookupByLibrary.simpleMessage("Preview"),
         "historyScreen_endTitle": MessageLookupByLibrary.simpleMessage("End:"),
         "historyScreen_noAnswersInTimeFrameHint":
             MessageLookupByLibrary.simpleMessage(
@@ -78,9 +80,35 @@ class MessageLookup extends MessageLookupByLibrary {
         "listingScreenTrailing_settingsTitle":
             MessageLookupByLibrary.simpleMessage("Settings"),
         "listingScreen_title": MessageLookupByLibrary.simpleMessage("Tasks"),
+        "repositoryOptionsSelection_addConfigurationTitle":
+            MessageLookupByLibrary.simpleMessage("Add configuration"),
+        "repositoryOptionsSelection_exportDescription":
+            MessageLookupByLibrary.simpleMessage(
+                "Export current storage to file"),
+        "repositoryOptionsSelection_exportTitle":
+            MessageLookupByLibrary.simpleMessage("Export"),
+        "repositoryOptionsSelection_resetConfirmationDialogTitle":
+            MessageLookupByLibrary.simpleMessage("Are you sure?"),
+        "repositoryOptionsSelection_resetConfirmationDialogWarning":
+            MessageLookupByLibrary.simpleMessage(
+                "This will delete all tasks as well as answers!"),
+        "repositoryOptionsSelection_resetStorageDescription":
+            MessageLookupByLibrary.simpleMessage(
+                "Delete all your loaded tasks as well as entered solutions"),
+        "repositoryOptionsSelection_resetStorageTitle":
+            MessageLookupByLibrary.simpleMessage("Reset storage"),
+        "repositoryOptionsSelection_saveDescription":
+            MessageLookupByLibrary.simpleMessage(
+                "This should happen automatically in the background"),
+        "repositoryOptionsSelection_saveTitle":
+            MessageLookupByLibrary.simpleMessage("Save"),
+        "repositoryOptionsSelection_sectionTitle":
+            MessageLookupByLibrary.simpleMessage("Data source"),
         "rootScreenNav_history":
             MessageLookupByLibrary.simpleMessage("History"),
         "rootScreenNav_tasks": MessageLookupByLibrary.simpleMessage("Tasks"),
+        "scratchpadScreen_title":
+            MessageLookupByLibrary.simpleMessage("Scribble"),
         "sessionScreen_nextTitle": MessageLookupByLibrary.simpleMessage("Next"),
         "sessionScreen_previousTitle":
             MessageLookupByLibrary.simpleMessage("Previous"),
@@ -90,6 +118,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Session"),
         "sessionScreen_unknownTaskIdHint": MessageLookupByLibrary.simpleMessage(
             "Something went wrong, could not find any data for that task id"),
+        "settingsScreen_title":
+            MessageLookupByLibrary.simpleMessage("Preferences"),
         "start": MessageLookupByLibrary.simpleMessage("Start"),
         "startSessionDialog_countInputTitle":
             MessageLookupByLibrary.simpleMessage("Count"),
@@ -99,10 +129,35 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Randomize"),
         "startSessionDialog_title":
             MessageLookupByLibrary.simpleMessage("Configure Session"),
+        "taskArea_correctionColorsDescription":
+            MessageLookupByLibrary.simpleMessage(
+                "Colors available after showing solution"),
+        "taskArea_correctionColorsTitle":
+            MessageLookupByLibrary.simpleMessage("Correction colors"),
+        "taskArea_defaultLineWidthDescription":
+            MessageLookupByLibrary.simpleMessage(
+                "How wide new lines should be in pixels"),
+        "taskArea_defaultLineWidthTitle":
+            MessageLookupByLibrary.simpleMessage("Default line width"),
         "taskArea_differenceLessThanOneMinute":
             MessageLookupByLibrary.simpleMessage("Now"),
+        "taskArea_differenceindays365YearsAgo": m0,
         "taskArea_differenceindaysDaysAgo": m1,
         "taskArea_differenceinhoursHoursAgo": m2,
-        "taskArea_differenceinminutesMinutesAgo": m3
+        "taskArea_differenceinminutesMinutesAgo": m3,
+        "taskArea_historyButtonTitle": MessageLookupByLibrary.simpleMessage(
+            "Show history button before revealing solution"),
+        "themeSettingsTile_PaintAATitle":
+            MessageLookupByLibrary.simpleMessage("Enable Paint AA"),
+        "themeSettingsTile_blendAADescription":
+            MessageLookupByLibrary.simpleMessage(
+                "Apply anti-aliasing when blending layers, minor performance impact"),
+        "themeSettingsTile_blendAATitle":
+            MessageLookupByLibrary.simpleMessage("Enable blend AA"),
+        "themeSettingsTile_paintAADescription":
+            MessageLookupByLibrary.simpleMessage(
+                "Apply anti-aliasing when drawing lines, major performance impact"),
+        "themeSettingsTile_visualSectionTitle":
+            MessageLookupByLibrary.simpleMessage("Visual")
       };
 }

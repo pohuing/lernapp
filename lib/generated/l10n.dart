@@ -443,12 +443,252 @@ class S {
   }
 
   /// `{NUMBER, plural, one {one Year} other {{NUMBER} Years}} ago`
-  String differenceindays365YearsAgo(num NUMBER) {
+  String taskArea_differenceindays365YearsAgo(num NUMBER) {
     return Intl.message(
       '${Intl.plural(NUMBER, one: 'one Year', other: '$NUMBER Years')} ago',
-      name: 'differenceindays365YearsAgo',
+      name: 'taskArea_differenceindays365YearsAgo',
       desc: '',
       args: [NUMBER],
+    );
+  }
+
+  /// `Currently an A with a correction circle would look like this`
+  String get drawingPreview_description {
+    return Intl.message(
+      'Currently an A with a correction circle would look like this',
+      name: 'drawingPreview_description',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Preview`
+  String get drawingPreview_title {
+    return Intl.message(
+      'Preview',
+      name: 'drawingPreview_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Data source`
+  String get repositoryOptionsSelection_sectionTitle {
+    return Intl.message(
+      'Data source',
+      name: 'repositoryOptionsSelection_sectionTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Add configuration`
+  String get repositoryOptionsSelection_addConfigurationTitle {
+    return Intl.message(
+      'Add configuration',
+      name: 'repositoryOptionsSelection_addConfigurationTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Reset storage`
+  String get repositoryOptionsSelection_resetStorageTitle {
+    return Intl.message(
+      'Reset storage',
+      name: 'repositoryOptionsSelection_resetStorageTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Delete all your loaded tasks as well as entered solutions`
+  String get repositoryOptionsSelection_resetStorageDescription {
+    return Intl.message(
+      'Delete all your loaded tasks as well as entered solutions',
+      name: 'repositoryOptionsSelection_resetStorageDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure?`
+  String get repositoryOptionsSelection_resetConfirmationDialogTitle {
+    return Intl.message(
+      'Are you sure?',
+      name: 'repositoryOptionsSelection_resetConfirmationDialogTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This will delete all tasks as well as answers!`
+  String get repositoryOptionsSelection_resetConfirmationDialogWarning {
+    return Intl.message(
+      'This will delete all tasks as well as answers!',
+      name: 'repositoryOptionsSelection_resetConfirmationDialogWarning',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Export`
+  String get repositoryOptionsSelection_exportTitle {
+    return Intl.message(
+      'Export',
+      name: 'repositoryOptionsSelection_exportTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Export current storage to file`
+  String get repositoryOptionsSelection_exportDescription {
+    return Intl.message(
+      'Export current storage to file',
+      name: 'repositoryOptionsSelection_exportDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Save`
+  String get repositoryOptionsSelection_saveTitle {
+    return Intl.message(
+      'Save',
+      name: 'repositoryOptionsSelection_saveTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This should happen automatically in the background`
+  String get repositoryOptionsSelection_saveDescription {
+    return Intl.message(
+      'This should happen automatically in the background',
+      name: 'repositoryOptionsSelection_saveDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Preferences`
+  String get settingsScreen_title {
+    return Intl.message(
+      'Preferences',
+      name: 'settingsScreen_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Default line width`
+  String get taskArea_defaultLineWidthTitle {
+    return Intl.message(
+      'Default line width',
+      name: 'taskArea_defaultLineWidthTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `How wide new lines should be in pixels`
+  String get taskArea_defaultLineWidthDescription {
+    return Intl.message(
+      'How wide new lines should be in pixels',
+      name: 'taskArea_defaultLineWidthDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Correction colors`
+  String get taskArea_correctionColorsTitle {
+    return Intl.message(
+      'Correction colors',
+      name: 'taskArea_correctionColorsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Colors available after showing solution`
+  String get taskArea_correctionColorsDescription {
+    return Intl.message(
+      'Colors available after showing solution',
+      name: 'taskArea_correctionColorsDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Show history button before revealing solution`
+  String get taskArea_historyButtonTitle {
+    return Intl.message(
+      'Show history button before revealing solution',
+      name: 'taskArea_historyButtonTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Visual`
+  String get themeSettingsTile_visualSectionTitle {
+    return Intl.message(
+      'Visual',
+      name: 'themeSettingsTile_visualSectionTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enable blend AA`
+  String get themeSettingsTile_blendAATitle {
+    return Intl.message(
+      'Enable blend AA',
+      name: 'themeSettingsTile_blendAATitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Apply anti-aliasing when blending layers, minor performance impact`
+  String get themeSettingsTile_blendAADescription {
+    return Intl.message(
+      'Apply anti-aliasing when blending layers, minor performance impact',
+      name: 'themeSettingsTile_blendAADescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enable Paint AA`
+  String get themeSettingsTile_PaintAATitle {
+    return Intl.message(
+      'Enable Paint AA',
+      name: 'themeSettingsTile_PaintAATitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Apply anti-aliasing when drawing lines, major performance impact`
+  String get themeSettingsTile_paintAADescription {
+    return Intl.message(
+      'Apply anti-aliasing when drawing lines, major performance impact',
+      name: 'themeSettingsTile_paintAADescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Scribble`
+  String get scratchpadScreen_title {
+    return Intl.message(
+      'Scribble',
+      name: 'scratchpadScreen_title',
+      desc: '',
+      args: [],
     );
   }
 }

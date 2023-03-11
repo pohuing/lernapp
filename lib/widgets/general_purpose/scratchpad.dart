@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lernapp/generated/l10n.dart';
 import 'package:lernapp/widgets/drawing_area/drawing_area.dart';
 
 import 'platform_adaptive_scaffold.dart';
@@ -9,7 +10,7 @@ class Scratchpad extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PlatformAdaptiveScaffold(
-      title: 'Scribble',
+      title: S.of(context).scratchpadScreen_title,
       useSliverAppBar: false,
       allowBackGesture: false,
       previousTitle: 'Tasks',

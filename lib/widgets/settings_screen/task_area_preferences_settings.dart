@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lernapp/blocs/preferences/preferences_bloc.dart';
+import 'package:lernapp/generated/l10n.dart';
 import 'package:lernapp/model/color_pair.dart';
 import 'package:lernapp/widgets/general_purpose/color_selection/color_picker_dialogue.dart';
 import 'package:lernapp/widgets/general_purpose/halved_circle.dart';
@@ -14,8 +15,8 @@ class TaskAreaPreferencesSettings extends StatelessWidget {
       builder: (context, state) => Column(
         children: [
           ListTile(
-            title: const Text('Default line width'),
-            subtitle: const Text('How wide new lines should be in pixels'),
+            title: Text(S.of(context).taskArea_defaultLineWidthTitle),
+            subtitle: Text(S.of(context).taskArea_defaultLineWidthDescription),
             trailing: SizedBox(
               width: 120,
               child: Slider(
@@ -28,8 +29,8 @@ class TaskAreaPreferencesSettings extends StatelessWidget {
             ),
           ),
           ListTile(
-            title: const Text('Correction colors'),
-            subtitle: const Text('Colors available after showing solution'),
+            title: Text(S.of(context).taskArea_correctionColorsTitle),
+            subtitle: Text(S.of(context).taskArea_correctionColorsDescription),
             onTap: () async {
               final result = await showDialog<ColorPair?>(
                 context: context,
@@ -55,7 +56,7 @@ class TaskAreaPreferencesSettings extends StatelessWidget {
             ),
           ),
           SwitchListTile.adaptive(
-            title: const Text('Show history button before revealing solution'),
+            title: Text(S.of(context).taskArea_historyButtonTitle),
             value: state.generalPreferences.showHistoryBeforeSolving,
             onChanged: (value) => context.read<PreferencesBloc>().add(
                   ChangeShowHistory(value),

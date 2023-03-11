@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lernapp/blocs/preferences/preferences_bloc.dart';
+import 'package:lernapp/generated/l10n.dart';
 import 'package:lernapp/logic/shapes.dart';
 import 'package:lernapp/model/line.dart';
 import 'package:lernapp/model/line_type.dart';
@@ -12,16 +13,15 @@ class DrawingPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 0),
+      padding: EdgeInsets.zero,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Flexible(
+          Flexible(
             child: ListTile(
-              title: Text('Preview'),
-              subtitle: Text(
-                  'Currently an A with a correction circle would look like this'),
-              contentPadding: EdgeInsets.only(left: 16),
+              title: Text(S.of(context).drawingPreview_title),
+              subtitle: Text(S.of(context).drawingPreview_description),
+              contentPadding: const EdgeInsets.only(left: 16),
             ),
           ),
           BlocBuilder<PreferencesBloc, PreferencesStateBase>(

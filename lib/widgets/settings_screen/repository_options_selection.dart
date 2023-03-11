@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lernapp/blocs/preferences/preferences_bloc.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
+import 'package:lernapp/generated/l10n.dart';
 import 'package:lernapp/model/preferences/repository_configuration/hive_repository_configuration.dart';
 import 'package:lernapp/widgets/general_purpose/adaptive_alert_dialog.dart';
 
@@ -16,7 +17,7 @@ class RepositoryOptionsSelection extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<PreferencesBloc, PreferencesStateBase>(
       builder: (context, state) => ExpansionTile(
-        title: const Text('Data source'),
+        title: Text(S.of(context).repositoryOptionsSelection_sectionTitle),
         children: [
           ...state.repositorySettings.configurations.map(
             (e) => RadioListTile(
@@ -29,24 +30,32 @@ class RepositoryOptionsSelection extends StatelessWidget {
                   .add(ChangeRepositoryConfiguration(e)),
             ),
           ),
-          const ListTile(
-            leading: Icon(Icons.add),
-            title: Text('Add configuration'),
+          ListTile(
+            leading: const Icon(Icons.add),
+            title: Text(
+              S.of(context).repositoryOptionsSelection_addConfigurationTitle,
+            ),
             onTap: _showConfigurationCreationScreen,
           ),
           ListTile(
             leading: const Icon(Icons.delete_forever),
-            title: const Text('Reset storage'),
-            subtitle: const Text(
-              'Delete all your loaded tasks as well as entered solutions',
+            title: Text(
+              S.of(context).repositoryOptionsSelection_resetStorageTitle,
+            ),
+            subtitle: Text(
+              S.of(context).repositoryOptionsSelection_resetStorageDescription,
             ),
             onTap: () async => showDialog(
               context: context,
               builder: (context) => AdaptiveAlertDialog(
-                title: 'Are you sure?',
+                title: S
+                    .of(context)
+                    .repositoryOptionsSelection_resetConfirmationDialogTitle,
                 confirmChild: const Text('Delete'),
-                content: const Text(
-                  'This will delete all tasks as well as answers!',
+                content: Text(
+                  S
+                      .of(context)
+                      .repositoryOptionsSelection_resetConfirmationDialogWarning,
                 ),
                 onConfirm: () async {
                   context.read<TasksBloc>().add(TaskStorageWipe());
@@ -59,8 +68,10 @@ class RepositoryOptionsSelection extends StatelessWidget {
               is HiveRepositoryConfiguration)
             ListTile(
               leading: const Icon(Icons.import_export),
-              title: const Text('Export'),
-              subtitle: const Text('Export current storage to file'),
+              title: Text(S.of(context).repositoryOptionsSelection_exportTitle),
+              subtitle: Text(
+                S.of(context).repositoryOptionsSelection_exportDescription,
+              ),
               onTap: () => export_mp.export(
                 context,
                 'lernapp_export',
@@ -69,9 +80,9 @@ class RepositoryOptionsSelection extends StatelessWidget {
             ),
           ListTile(
             leading: const Icon(Icons.save),
-            title: const Text('Save'),
-            subtitle: const Text(
-              'This should happen automatically in the background',
+            title: Text(S.of(context).repositoryOptionsSelection_saveTitle),
+            subtitle: Text(
+              S.of(context).repositoryOptionsSelection_saveDescription,
             ),
             onTap: () => context.read<TasksBloc>().add(TaskStorageSave()),
           ),

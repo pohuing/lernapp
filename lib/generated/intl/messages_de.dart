@@ -46,7 +46,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Beschreibung"),
         "createTaskScreen_taskTitleLabel":
             MessageLookupByLibrary.simpleMessage("Aufgabentitel"),
-        "differenceindays365YearsAgo": m0,
+        "drawingPreview_description": MessageLookupByLibrary.simpleMessage(
+            "So würde ein \"A\" mit einem Kreis in der Korrekturfarbe aussehen"),
         "historyScreen_endTitle": MessageLookupByLibrary.simpleMessage("Ende:"),
         "historyScreen_noAnswersInTimeFrameHint":
             MessageLookupByLibrary.simpleMessage(
@@ -78,9 +79,35 @@ class MessageLookup extends MessageLookupByLibrary {
         "listingScreenTrailing_settingsTitle":
             MessageLookupByLibrary.simpleMessage("Einstellungen"),
         "listingScreen_title": MessageLookupByLibrary.simpleMessage("Aufgaben"),
+        "repositoryOptionsSelection_addConfigurationTitle":
+            MessageLookupByLibrary.simpleMessage("Konfiguration hinzufügen"),
+        "repositoryOptionsSelection_exportDescription":
+            MessageLookupByLibrary.simpleMessage(
+                "Exportiere die aktuell gespeicherten Daten in eine Datei"),
+        "repositoryOptionsSelection_exportTitle":
+            MessageLookupByLibrary.simpleMessage("Exportieren"),
+        "repositoryOptionsSelection_resetConfirmationDialogTitle":
+            MessageLookupByLibrary.simpleMessage("Bist du dir sicher?"),
+        "repositoryOptionsSelection_resetConfirmationDialogWarning":
+            MessageLookupByLibrary.simpleMessage(
+                "Dies wird alle gespeicherten Aufgaben und Antworten löschen!"),
+        "repositoryOptionsSelection_resetStorageDescription":
+            MessageLookupByLibrary.simpleMessage(
+                "Lösche alle gespeicherten Aufgaben und Antworten"),
+        "repositoryOptionsSelection_resetStorageTitle":
+            MessageLookupByLibrary.simpleMessage("Speicher zurücksetzen"),
+        "repositoryOptionsSelection_saveDescription":
+            MessageLookupByLibrary.simpleMessage(
+                "Dies sollte automatisch im Hintergrund passieren"),
+        "repositoryOptionsSelection_saveTitle":
+            MessageLookupByLibrary.simpleMessage("Speichern"),
+        "repositoryOptionsSelection_sectionTitle":
+            MessageLookupByLibrary.simpleMessage("Datenquelle"),
         "rootScreenNav_history":
             MessageLookupByLibrary.simpleMessage("Verlauf"),
         "rootScreenNav_tasks": MessageLookupByLibrary.simpleMessage("Aufgaben"),
+        "scratchpadScreen_title":
+            MessageLookupByLibrary.simpleMessage("Kritzeln"),
         "sessionScreen_nextTitle":
             MessageLookupByLibrary.simpleMessage("Weiter"),
         "sessionScreen_previousTitle":
@@ -91,6 +118,8 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Sitzung"),
         "sessionScreen_unknownTaskIdHint": MessageLookupByLibrary.simpleMessage(
             "Etwas ist schief gelaufen: diese Aufgabe gibt es nicht."),
+        "settingsScreen_title":
+            MessageLookupByLibrary.simpleMessage("Einstellungen"),
         "start": MessageLookupByLibrary.simpleMessage("Start"),
         "startSessionDialog_countInputTitle":
             MessageLookupByLibrary.simpleMessage("Anzahl"),
@@ -100,10 +129,35 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Zufällige Reihenfolge"),
         "startSessionDialog_title":
             MessageLookupByLibrary.simpleMessage("Sitzung vorbereiten"),
+        "taskArea_correctionColorsDescription":
+            MessageLookupByLibrary.simpleMessage(
+                "Farben welche beim Korrigieren verwendet werden"),
+        "taskArea_correctionColorsTitle":
+            MessageLookupByLibrary.simpleMessage("Korrekturfarben"),
+        "taskArea_defaultLineWidthDescription":
+            MessageLookupByLibrary.simpleMessage(
+                "Wie breit Striche standardmäßig sind"),
+        "taskArea_defaultLineWidthTitle":
+            MessageLookupByLibrary.simpleMessage("Standardstrichstärke"),
         "taskArea_differenceLessThanOneMinute":
             MessageLookupByLibrary.simpleMessage("Now"),
+        "taskArea_differenceindays365YearsAgo": m0,
         "taskArea_differenceindaysDaysAgo": m1,
         "taskArea_differenceinhoursHoursAgo": m2,
-        "taskArea_differenceinminutesMinutesAgo": m3
+        "taskArea_differenceinminutesMinutesAgo": m3,
+        "taskArea_historyButtonTitle": MessageLookupByLibrary.simpleMessage(
+            "Zeige Verlaufleiste selbst wenn Aufgabe noch nicht gelöst wurde"),
+        "themeSettingsTile_PaintAATitle":
+            MessageLookupByLibrary.simpleMessage("Verwende AA beim Zeichnen"),
+        "themeSettingsTile_blendAADescription":
+            MessageLookupByLibrary.simpleMessage(
+                "Verwende Anti-Aliasing beim Überlagern von Ebenen, geringe Auswirkung auf die Leistung"),
+        "themeSettingsTile_blendAATitle":
+            MessageLookupByLibrary.simpleMessage("Verwende AA beim Überlagern"),
+        "themeSettingsTile_paintAADescription":
+            MessageLookupByLibrary.simpleMessage(
+                "Verwende Anti-Aliasing beim Zeichnen der Striche, hohe Auswirkung auf die Leistung"),
+        "themeSettingsTile_visualSectionTitle":
+            MessageLookupByLibrary.simpleMessage("Optisch")
       };
 }
