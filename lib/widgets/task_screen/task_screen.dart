@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
+import 'package:lernapp/generated/l10n.dart';
 import 'package:lernapp/model/task.dart';
 import 'package:lernapp/widgets/general_purpose/timed_snackbar.dart';
 import 'package:lernapp/widgets/task_screen/task_area.dart';
@@ -33,10 +34,8 @@ class TaskScreen extends StatelessWidget {
                 task: snapshot.data!,
               );
             } else if (snapshot.connectionState == ConnectionState.done) {
-              return const Center(
-                child: Text(
-                  'Something went wrong, could not find any data for that task id',
-                ),
+              return Center(
+                child: Text(S.of(context).sessionScreen_unknownTaskIdHint),
               );
             } else {
               return const Center(child: CircularProgressIndicator.adaptive());

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lernapp/blocs/session_cubit.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
+import 'package:lernapp/generated/l10n.dart';
 import 'package:lernapp/widgets/general_purpose/platform_adaptive_scaffold.dart';
 import 'package:lernapp/widgets/task_screen/task_area.dart';
 import 'package:uuid/uuid.dart';
@@ -23,15 +24,17 @@ class _SessionScreenState extends State<SessionScreen> {
   @override
   Widget build(BuildContext context) {
     return PlatformAdaptiveScaffold(
-      title: widget.reviewStyle ? 'Review' : 'Session',
+      title: widget.reviewStyle
+          ? S.of(context).sessionScreen_titleReview
+          : S.of(context).sessionScreen_titleSession,
       useSliverAppBar: false,
-      previousTitle: 'Tasks',
+      previousTitle: S.of(context).listingScreen_title,
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           TextButton(
             onPressed: () => cubit.previous(),
-            child: const Text('Previous'),
+            child: Text(S.of(context).sessionScreen_previousTitle),
           ),
           BlocBuilder<SessionCubit, SessionState>(
             bloc: cubit,
@@ -47,7 +50,7 @@ class _SessionScreenState extends State<SessionScreen> {
           ),
           ElevatedButton(
             onPressed: () => cubit.next(),
-            child: const Text('Next'),
+            child: Text(S.of(context).sessionScreen_nextTitle),
           ),
         ],
       ),
@@ -70,9 +73,9 @@ class _SessionScreenState extends State<SessionScreen> {
                     reviewStyle: widget.reviewStyle,
                   );
                 } else if (snapshot.connectionState == ConnectionState.done) {
-                  return const Center(
+                  return Center(
                     child: Text(
-                      'Something went wrong, could not find any data for that task id',
+                      S.of(context).sessionScreen_unknownTaskIdHint,
                     ),
                   );
                 } else {

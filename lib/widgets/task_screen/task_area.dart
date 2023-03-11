@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lernapp/blocs/preferences/preferences_bloc.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
+import 'package:lernapp/generated/l10n.dart';
 import 'package:lernapp/logic/list_extensions.dart';
 import 'package:lernapp/model/color_pair.dart';
 import 'package:lernapp/model/line.dart';
@@ -310,14 +311,20 @@ class _TaskAreaState extends State<TaskArea> {
   String getHistoryTileTitle(SolutionState solution) {
     final now = DateTime.now();
     final difference = now.difference(solution.timestamp);
-    if (difference < const Duration(hours: 1)) {
-      return '${difference.inMinutes} Minutes ago';
+    if (difference < const Duration(minutes: 1)) {
+      return S.of(context).taskArea_differenceLessThanOneMinute;
+    } else if (difference < const Duration(hours: 1)) {
+      return S
+          .of(context)
+          .taskArea_differenceinminutesMinutesAgo(difference.inMinutes);
     } else if (difference < const Duration(days: 1)) {
-      return '${difference.inHours} Hours ago';
+      return S
+          .of(context)
+          .taskArea_differenceinhoursHoursAgo(difference.inHours);
     } else if (difference < const Duration(days: 365)) {
-      return '${difference.inDays} Days ago';
+      return S.of(context).taskArea_differenceindaysDaysAgo(difference.inDays);
     } else {
-      return '${difference.inDays / 365} Years ago';
+      return S.of(context).differenceindays365YearsAgo(difference.inDays);
     }
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lernapp/blocs/selection_cubit.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
+import 'package:lernapp/generated/l10n.dart';
 import 'package:lernapp/model/custom_date_time_range.dart';
 import 'package:lernapp/model/task_category.dart';
 import 'package:lernapp/widgets/general_purpose/platform_adaptive_scaffold.dart';
@@ -33,26 +34,26 @@ class _HistoryScreenState extends State<HistoryScreen> {
       child: BlocProvider(
         create: (context) => SelectionCubit()..toggleSelectionMode(),
         child: PlatformAdaptiveScaffold(
-          title: 'History',
+          title: S.of(context).historyScreen_title,
           primary: true,
           trailing: buildTrailing(),
           body: ListView(
             children: [
               ListTile(
                 leading: const Icon(Icons.av_timer),
-                title: const Text('Time Frame'),
+                title: Text(S.of(context).historyScreen_timeFrameTitle),
                 trailing: IconButton(
                   onPressed: onResetPressed,
                   icon: const Icon(Icons.undo),
                 ),
               ),
               DateTimeTile(
-                title: 'Start:',
+                title: S.of(context).historyScreen_startTitle,
                 value: range.start,
                 onChange: onStartChange,
               ),
               DateTimeTile(
-                title: 'End:',
+                title: S.of(context).historyScreen_endTitle,
                 value: range.end,
                 onChange: onEndChange,
               ),
@@ -72,7 +73,9 @@ class _HistoryScreenState extends State<HistoryScreen> {
                             padding: const EdgeInsets.all(8),
                             child: Center(
                               child: Text(
-                                'No questions have been answered in this time frame',
+                                S
+                                    .of(context)
+                                    .historyScreen_noAnswersInTimeFrameHint,
                                 style: Theme.of(context).textTheme.titleLarge,
                               ),
                             ),
@@ -153,7 +156,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           onPressed: state.maybeShuffledUuids.isEmpty
               ? null
               : () => context.push('/review', extra: state.maybeShuffledUuids),
-          child: const Text('Start'),
+          child: Text(S.of(context).historyScreen_startButtonTitle),
         ),
       ),
     );

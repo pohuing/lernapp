@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:json_schema2/json_schema2.dart';
 import 'package:lernapp/blocs/selection_cubit.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
+import 'package:lernapp/generated/l10n.dart';
 import 'package:lernapp/logic/import/file_reading.dart';
 import 'package:lernapp/logic/logging.dart';
 import 'package:lernapp/logic/nullable_extensions.dart';
@@ -33,32 +34,33 @@ class _ImportScreenState extends State<ImportScreen> {
   @override
   Widget build(BuildContext context) {
     return PlatformAdaptiveScaffold(
-      title: 'Import',
+      title: S.of(context).importScreen_title,
       body: ListView(
         padding: EdgeInsets.zero,
         children: [
           ListTile(
             leading: const Icon(Icons.file_open),
-            title: const Text('Import'),
+            title: Text(S.of(context).importScreen_importTileTitle),
             subtitle: fileName.map((value) => Text(value)),
             onTap: loadFiles,
           ),
           if (parsedContents != null)
             ListTile(
               leading: const Icon(Icons.check),
-              title: const Text('Import loaded data'),
-              subtitle: const Text('This will overwrite existing data'),
+              title: Text(S.of(context).importScreen_importActionTitle),
+              subtitle: Text(S.of(context).importScreen_importActionWarning),
               onTap: () {
                 context.read<TasksBloc>()
                   ..add(TaskStorageImportCategories(parsedContents!))
                   ..add(TaskStorageLoad());
-                showTimedSnackBar(context, 'Finished import');
+                showTimedSnackBar(
+                    context, S.of(context).importScreen_importConfirmation);
               },
             ),
           if (parsedContents != null)
             ExpansionTile(
               key: Key(parsedContents.hashCode.toString()),
-              title: const Text('Result:'),
+              title: Text(S.of(context).importScreen_previewTitle),
               children: [
                 BlocProvider(
                   create: (context) => SelectionCubit(),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lernapp/generated/l10n.dart';
 import 'package:lernapp/model/task.dart';
 import 'package:lernapp/widgets/task_screen/solution_card.dart';
 import 'package:lernapp/widgets/task_screen/task_card.dart';
@@ -64,9 +65,9 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
           children: [
             TextFormField(
               controller: taskTitleController,
-              decoration: const InputDecoration(
-                label: Text('Task Title'),
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                label: Text(S.of(context).createTaskScreen_taskTitleLabel),
+                border: const OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 8),
@@ -74,22 +75,31 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
               controller: taskController,
               minLines: 1,
               maxLines: 20,
-              decoration: const InputDecoration(
-                  label: Text('Task'), border: OutlineInputBorder()),
+              decoration: InputDecoration(
+                label:
+                    Text(S.of(context).createTaskScreen_taskDescriptionLabel),
+                border: const OutlineInputBorder(),
+              ),
             ),
             const SizedBox(height: 8),
             TextFormField(
               controller: solutionTitleController,
-              decoration: const InputDecoration(
-                  label: Text('Solution Title'), border: OutlineInputBorder()),
+              decoration: InputDecoration(
+                label: Text(S.of(context).createTaskScreen_solutionTitleLabel),
+                border: const OutlineInputBorder(),
+              ),
             ),
             const SizedBox(height: 8),
             TextFormField(
               controller: solutionController,
               minLines: 1,
               maxLines: 20,
-              decoration: const InputDecoration(
-                  label: Text('Solution'), border: OutlineInputBorder()),
+              decoration: InputDecoration(
+                label: Text(
+                  S.of(context).createTaskScreen_solutionDescriptionLabel,
+                ),
+                border: const OutlineInputBorder(),
+              ),
             ),
             const SizedBox(height: 8),
             Expanded(
@@ -105,14 +115,13 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
                     child: SolutionCard(
                       title: solutionTitle,
                       solution: solution,
-                      onReveal: (isFlipped) => null,
                       revealed: true,
                     ),
                   )
                 ],
               ),
             )
-          ].toList(),
+          ],
         ),
       ),
     );

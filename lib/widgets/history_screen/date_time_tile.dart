@@ -81,7 +81,7 @@ class DateTimeTile extends StatelessWidget {
         context: context,
         helpText: title,
         initialDate: DateTime.now(),
-        firstDate: DateTime.now().subtract(const Duration(days: 365)),
+        firstDate: DateTime.fromMillisecondsSinceEpoch(0),
         lastDate: DateTime.now(),
       );
       if (result is DateTime) {

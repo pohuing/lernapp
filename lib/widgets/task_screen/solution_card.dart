@@ -4,7 +4,7 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 class SolutionCard extends StatefulWidget {
   final String title;
   final String solution;
-  final void Function(dynamic isFlipped) onReveal;
+  final void Function(dynamic isFlipped)? onReveal;
 
   /// Instantly reveal solution, does not trigger [onReveal]
   final bool revealed;
@@ -13,7 +13,7 @@ class SolutionCard extends StatefulWidget {
     super.key,
     required this.title,
     required this.solution,
-    required this.onReveal,
+    this.onReveal,
     bool? revealed,
   }) : revealed = revealed ?? false;
 
@@ -80,7 +80,7 @@ class _SolutionCardState extends State<SolutionCard> {
 
   void onTap() {
     if (revealSolution != true) {
-      widget.onReveal(true);
+      widget.onReveal?.call(true);
       setState(() {
         revealSolution = true;
       });
