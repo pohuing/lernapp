@@ -62,5 +62,10 @@
   "themeSettingsTile_blendAADescription": "Apply anti-aliasing when blending layers, minor performance impact",
   "themeSettingsTile_PaintAATitle": "Enable Paint AA",
   "themeSettingsTile_paintAADescription": "Apply anti-aliasing when drawing lines, major performance impact",
-  "scratchpadScreen_title": "Scribble"
+  "scratchpadScreen_title": "Scribble",
+  "colorPickerDialog_title": "Add a new Color",
+  "colorPickerDialog_confirm": "Finish",
+  "colorPickerDialog_separateColorsTitle": "Use separate colors",
+  "colorPickerDialog_brightThemeColourTitle": "Bright Theme Colour",
+  "colorPickerDialog_darkThemeColourTitle": "Dark Theme Colour"
 }

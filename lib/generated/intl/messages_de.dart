@@ -35,6 +35,17 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "cancel": MessageLookupByLibrary.simpleMessage("Abbrechen"),
+        "colorPickerDialog_brightThemeColourTitle":
+            MessageLookupByLibrary.simpleMessage("Farbe für helles Farbschema"),
+        "colorPickerDialog_confirm":
+            MessageLookupByLibrary.simpleMessage("Fertig"),
+        "colorPickerDialog_darkThemeColourTitle":
+            MessageLookupByLibrary.simpleMessage(
+                "Farbe für dunkles Farbschema"),
+        "colorPickerDialog_separateColorsTitle":
+            MessageLookupByLibrary.simpleMessage("Benutze separate Farben"),
+        "colorPickerDialog_title":
+            MessageLookupByLibrary.simpleMessage("Farbe hinzufügen"),
         "connectedTaskListing_emptyRepositoryHint":
             MessageLookupByLibrary.simpleMessage(
                 "Anscheinend hast du noch keine Aufgaben. Tippe hier um welche zu importieren."),
@@ -146,7 +157,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "taskArea_differenceinhoursHoursAgo": m2,
         "taskArea_differenceinminutesMinutesAgo": m3,
         "taskArea_historyButtonTitle": MessageLookupByLibrary.simpleMessage(
-            "Zeige Verlaufleiste selbst wenn Aufgabe noch nicht gelöst wurde"),
+            "Zeige Verlaufsleiste selbst wenn Aufgabe noch nicht gelöst wurde"),
         "themeSettingsTile_PaintAATitle":
             MessageLookupByLibrary.simpleMessage("Verwende AA beim Zeichnen"),
         "themeSettingsTile_blendAADescription":

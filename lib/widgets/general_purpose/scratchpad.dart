@@ -13,7 +13,7 @@ class Scratchpad extends StatelessWidget {
       title: S.of(context).scratchpadScreen_title,
       useSliverAppBar: false,
       allowBackGesture: false,
-      previousTitle: 'Tasks',
+      previousTitle: S.of(context).listingScreen_title,
       // ignore: prefer_const_literals_to_create_immutables
       body: DrawingArea(lines: []),
     );

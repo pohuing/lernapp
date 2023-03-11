@@ -55,11 +55,16 @@
   "taskArea_defaultLineWidthDescription": "Wie breit Striche standardmäßig sind",
   "taskArea_correctionColorsTitle": "Korrekturfarben",
   "taskArea_correctionColorsDescription": "Farben welche beim Korrigieren verwendet werden",
-  "taskArea_historyButtonTitle": "Zeige Verlaufleiste selbst wenn Aufgabe noch nicht gelöst wurde",
+  "taskArea_historyButtonTitle": "Zeige Verlaufsleiste selbst wenn Aufgabe noch nicht gelöst wurde",
   "themeSettingsTile_visualSectionTitle": "Optisch",
   "themeSettingsTile_blendAATitle": "Verwende AA beim Überlagern",
   "themeSettingsTile_blendAADescription": "Verwende Anti-Aliasing beim Überlagern von Ebenen, geringe Auswirkung auf die Leistung",
   "themeSettingsTile_PaintAATitle": "Verwende AA beim Zeichnen",
   "themeSettingsTile_paintAADescription": "Verwende Anti-Aliasing beim Zeichnen der Striche, hohe Auswirkung auf die Leistung",
-  "scratchpadScreen_title": "Kritzeln"
+  "scratchpadScreen_title": "Kritzeln",
+  "colorPickerDialog_title": "Farbe hinzufügen",
+  "colorPickerDialog_confirm": "Fertig",
+  "colorPickerDialog_separateColorsTitle": "Benutze separate Farben",
+  "colorPickerDialog_brightThemeColourTitle": "Farbe für helles Farbschema",
+  "colorPickerDialog_darkThemeColourTitle": "Farbe für dunkles Farbschema"
 }

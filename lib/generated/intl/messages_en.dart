@@ -35,6 +35,16 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+        "colorPickerDialog_brightThemeColourTitle":
+            MessageLookupByLibrary.simpleMessage("Bright Theme Colour"),
+        "colorPickerDialog_confirm":
+            MessageLookupByLibrary.simpleMessage("Finish"),
+        "colorPickerDialog_darkThemeColourTitle":
+            MessageLookupByLibrary.simpleMessage("Dark Theme Colour"),
+        "colorPickerDialog_separateColorsTitle":
+            MessageLookupByLibrary.simpleMessage("Use separate colors"),
+        "colorPickerDialog_title":
+            MessageLookupByLibrary.simpleMessage("Add a new Color"),
         "connectedTaskListing_emptyRepositoryHint":
             MessageLookupByLibrary.simpleMessage(
                 "You don\'t appear to have any tasks yet. Tap here to import."),

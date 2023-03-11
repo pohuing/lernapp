@@ -691,6 +691,56 @@ class S {
       args: [],
     );
   }
+
+  /// `Add a new Color`
+  String get colorPickerDialog_title {
+    return Intl.message(
+      'Add a new Color',
+      name: 'colorPickerDialog_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Finish`
+  String get colorPickerDialog_confirm {
+    return Intl.message(
+      'Finish',
+      name: 'colorPickerDialog_confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Use separate colors`
+  String get colorPickerDialog_separateColorsTitle {
+    return Intl.message(
+      'Use separate colors',
+      name: 'colorPickerDialog_separateColorsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bright Theme Colour`
+  String get colorPickerDialog_brightThemeColourTitle {
+    return Intl.message(
+      'Bright Theme Colour',
+      name: 'colorPickerDialog_brightThemeColourTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dark Theme Colour`
+  String get colorPickerDialog_darkThemeColourTitle {
+    return Intl.message(
+      'Dark Theme Colour',
+      name: 'colorPickerDialog_darkThemeColourTitle',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

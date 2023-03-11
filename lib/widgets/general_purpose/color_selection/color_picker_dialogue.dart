@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:lernapp/generated/l10n.dart';
 import 'package:lernapp/logic/nullable_extensions.dart';
 import 'package:lernapp/model/color_pair.dart';
 import 'package:lernapp/widgets/general_purpose/color_selection/color_selection.dart';
@@ -51,19 +52,21 @@ class _ColorPickerDialogueState extends State<ColorPickerDialogue> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Add a new Color'),
+      title: Text(S.of(context).colorPickerDialog_title),
       actions: [
         OutlinedButton(
           onPressed: Navigator.of(context).pop,
-          child: const Text('Cancel'),
+          child: Text(S.of(context).cancel),
         ),
-        FilledButton(onPressed: finish, child: const Text('Finish'))
+        FilledButton(
+            onPressed: finish,
+            child: Text(S.of(context).colorPickerDialog_confirm))
       ],
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           SwitchListTile.adaptive(
-            title: const Text('Use separate colors'),
+            title: Text(S.of(context).colorPickerDialog_separateColorsTitle),
             value: dualColours,
             onChanged: (value) => setState(() => dualColours = value),
           ),
@@ -77,7 +80,7 @@ class _ColorPickerDialogueState extends State<ColorPickerDialogue> {
                   children: [
                     if (dualColours)
                       Text(
-                        'Bright Theme Colour',
+                        S.of(context).colorPickerDialog_brightThemeColourTitle,
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                     ColorPicker(
@@ -100,7 +103,7 @@ class _ColorPickerDialogueState extends State<ColorPickerDialogue> {
                   child: Column(
                     children: [
                       Text(
-                        'Dark Theme Colour',
+                        S.of(context).colorPickerDialog_darkThemeColourTitle,
                         style: Theme.of(context).textTheme.titleMedium,
                       ),
                       ColorPicker(
