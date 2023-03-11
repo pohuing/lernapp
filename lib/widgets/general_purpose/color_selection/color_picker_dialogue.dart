@@ -82,10 +82,10 @@ class _ColorPickerDialogueState extends State<ColorPickerDialogue> {
                       ),
                     ColorPicker(
                       portraitOnly: true,
-                      pickerColor: darkThemeColor,
+                      pickerColor: brightThemeColor,
                       onColorChanged: (Color value) {
                         setState(() {
-                          darkThemeColor = value;
+                          brightThemeColor = value;
                         });
                       },
                     ),
@@ -105,10 +105,10 @@ class _ColorPickerDialogueState extends State<ColorPickerDialogue> {
                       ),
                       ColorPicker(
                         portraitOnly: true,
-                        pickerColor: brightThemeColor,
+                        pickerColor: darkThemeColor,
                         onColorChanged: (Color value) {
                           setState(() {
-                            brightThemeColor = value;
+                            darkThemeColor = value;
                           });
                         },
                       ),
