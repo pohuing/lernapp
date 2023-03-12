@@ -19,10 +19,10 @@ main() {
       expect(result.first.title, '1大成功');
 
       expect(result.first.tasks, hasLength(2));
-      expect(result.first.tasks.first.title, "1: task 1 オヒオ");
-      expect(result.first.tasks.first.description, "desc: 1.1");
-      expect(result.first.tasks.first.hint, "hint: 1.1");
-      expect(result.first.tasks.first.solution, "sol: 1.1");
+      expect(result.first.tasks.first.title, '1: task 1 オヒオ');
+      expect(result.first.tasks.first.description, 'desc: 1.1');
+      expect(result.first.tasks.first.hint, 'hint: 1.1');
+      expect(result.first.tasks.first.solution, 'sol: 1.1');
 
       expect(result.first.subCategories, hasLength(1));
       expect(result.first.subCategories.first.title, '1: subcategory 1');
@@ -44,10 +44,10 @@ main() {
       expect(result.first.title, '1大成功');
 
       expect(result.first.tasks, hasLength(2));
-      expect(result.first.tasks.first.title, "1: task 1 オヒオ");
-      expect(result.first.tasks.first.description, "desc: 1.1");
-      expect(result.first.tasks.first.hint, "hint: 1.1");
-      expect(result.first.tasks.first.solution, "sol: 1.1");
+      expect(result.first.tasks.first.title, '1: task 1 オヒオ');
+      expect(result.first.tasks.first.description, 'desc: 1.1');
+      expect(result.first.tasks.first.hint, 'hint: 1.1');
+      expect(result.first.tasks.first.solution, 'sol: 1.1');
 
       expect(result.first.subCategories, hasLength(1));
       expect(result.first.subCategories.first.title, '1: subcategory 1');
@@ -69,10 +69,10 @@ main() {
       expect(result.first.title, '1大成功');
 
       expect(result.first.tasks, hasLength(2));
-      expect(result.first.tasks.first.title, "1: task 1 オヒオ");
-      expect(result.first.tasks.first.description, "desc: 1.1");
-      expect(result.first.tasks.first.hint, "hint: 1.1");
-      expect(result.first.tasks.first.solution, "sol: 1.1");
+      expect(result.first.tasks.first.title, '1: task 1 オヒオ');
+      expect(result.first.tasks.first.description, 'desc: 1.1');
+      expect(result.first.tasks.first.hint, 'hint: 1.1');
+      expect(result.first.tasks.first.solution, 'sol: 1.1');
 
       expect(result.first.subCategories, hasLength(1));
       expect(result.first.subCategories.first.title, '1: subcategory 1');

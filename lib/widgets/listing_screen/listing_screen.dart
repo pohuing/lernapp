@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lernapp/blocs/selection_cubit.dart';
 import 'package:lernapp/widgets/general_purpose/platform_adaptive_scaffold.dart';
+import 'package:lernapp/widgets/import_flow/import_tile.dart';
 import 'package:lernapp/widgets/listing_screen/connected_task_listing.dart';
 import 'package:lernapp/widgets/listing_screen/start_session_dialog.dart';
 
@@ -10,9 +11,14 @@ import '../../generated/l10n.dart';
 import '../import_flow/import_tile.dart';
 import 'about_list_tile.dart';
 
-class ListingScreen extends StatelessWidget {
+class ListingScreen extends StatefulWidget {
   const ListingScreen({super.key});
 
+  @override
+  State<ListingScreen> createState() => _ListingScreenState();
+}
+
+class _ListingScreenState extends State<ListingScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -84,6 +90,16 @@ class Trailing extends StatelessWidget {
                   const PopupMenuItem(
                     padding: EdgeInsets.zero,
                     child: CustomAboutListTile(),
+                  ),
+                  PopupMenuItem(
+                    padding: EdgeInsets.zero,
+                    onTap: () => context.push('/editor'),
+                    child: const IgnorePointer(
+                      child: ListTile(
+                        leading: Icon(Icons.edit),
+                        title: Text('Editor'),
+                      ),
+                    ),
                   ),
                 ],
               ),

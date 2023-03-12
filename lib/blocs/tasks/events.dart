@@ -1,6 +1,7 @@
 import 'package:lernapp/model/task.dart';
 import 'package:lernapp/model/task_category.dart';
 import 'package:lernapp/repositories/task_repository.dart';
+import 'package:uuid/uuid.dart';
 
 abstract class TaskStorageEventBase {}
 
@@ -37,4 +38,11 @@ class TaskStorageImportCategories implements TaskStorageEventBase {
   final List<TaskCategory> newCategories;
 
   TaskStorageImportCategories(this.newCategories);
+}
+
+class TaskStorageMoveTask implements TaskStorageEventBase {
+  final Task task;
+  final UuidValue to;
+
+  TaskStorageMoveTask(this.task, this.to);
 }

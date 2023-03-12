@@ -15,7 +15,7 @@ void main() {
           const Offset(1, 0),
           const Offset(2, 0),
         ],
-        const ColorPair(brightTheme: Colors.black, darkTheme: Colors.white),
+        ColorPair.defaultColors,
         1,
       );
 
@@ -97,7 +97,7 @@ void main() {
           const Offset(0, 2),
           const Offset(2, 0),
         ],
-        const ColorPair(brightTheme: Colors.black, darkTheme: Colors.white),
+        ColorPair.defaultColors,
         1,
       );
 
@@ -123,7 +123,7 @@ void main() {
       () {
         final line = Line(
           [Offset.zero],
-          const ColorPair(brightTheme: Colors.black, darkTheme: Colors.white),
+          ColorPair.defaultColors,
           1,
         );
 

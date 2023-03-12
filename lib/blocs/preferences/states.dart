@@ -57,7 +57,7 @@ class PreferencesStateBase {
           GeneralPreferences.fromMap(map[generalPreferencesKey]) ??
               const GeneralPreferences();
     } else {
-      generalPreferences = GeneralPreferences();
+      generalPreferences = const GeneralPreferences();
     }
 
     return PreferencesStateBase(

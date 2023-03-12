@@ -1,28 +1,45 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:implicitly_animated_list/implicitly_animated_list.dart';
+import 'package:lernapp/logic/logging.dart';
 import 'package:lernapp/model/high_performance_listing_wrappers.dart';
 import 'package:lernapp/model/task_category.dart';
 
 import 'category_tile.dart';
 import 'task_tile.dart';
 
+/// Show [categories] or [listingEntries] in an [AnimatedList]
+///
+/// If using [listingEntries], the parent is responsible for tracking the
+/// entries.
 class TaskListing extends StatefulWidget {
-  final List<TaskCategory> categories;
-  final bool withNavBarStyle;
-  final bool? shrinkWrap;
+  /// Categories to display
+  final List<TaskCategory>? categories;
+  final List<ListingEntryCategory>? listingEntries;
+  final bool shrinkWrap;
   final bool allowTapTasks;
   final bool showMostRecent;
 
+  /// Enables [LongPressDraggable] and the [DropListener] of the children.
+  /// This widget will not rebuild after one of the entries has been moved.
+  final bool allowReordering;
+
   const TaskListing({
     super.key,
-    required this.categories,
-    required this.withNavBarStyle,
-    this.shrinkWrap,
+    this.categories,
+    bool? shrinkWrap,
     bool? clickableTasks,
     bool? showMostRecent,
-  })  : allowTapTasks = clickableTasks ?? true,
-        showMostRecent = showMostRecent ?? false;
+    this.listingEntries,
+    bool? allowReordering,
+  })  : shrinkWrap = shrinkWrap ?? false,
+        allowTapTasks = clickableTasks ?? true,
+        showMostRecent = showMostRecent ?? false,
+        allowReordering = allowReordering ?? false,
+        assert(
+          (categories != null) ^ (listingEntries != null),
+          'Either categories or listing entries must be non null, not both, not neither',
+        );
 
   @override
   State<TaskListing> createState() => _TaskListingState();
@@ -30,7 +47,7 @@ class TaskListing extends StatefulWidget {
 
 class _TaskListingState extends State<TaskListing>
     with AutomaticKeepAliveClientMixin {
-  late final List<ListingEntryCategory> entries;
+  List<ListingEntryCategory> _entriesCache = [];
 
   @override
   bool get wantKeepAlive => true;
@@ -38,7 +55,8 @@ class _TaskListingState extends State<TaskListing>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final flattened = <ListingEntryBase>[];
+
+    final List<ListingEntryBase> flattened = [];
 
     for (int i = 0; i < entries.length; i++) {
       flattened.add(entries[i]);
@@ -47,16 +65,16 @@ class _TaskListingState extends State<TaskListing>
     }
 
     return ImplicitlyAnimatedList(
+      itemEquality: (a, b) => a.uuid == b.uuid,
       itemData: flattened,
       initialAnimation: false,
-      shrinkWrap: widget.shrinkWrap ?? false,
-      physics: const PageScrollPhysics(),
+      shrinkWrap: widget.shrinkWrap,
+      physics: const ClampingScrollPhysics(),
       itemBuilder: (context, entry) {
         if (entry is ListingEntryCategory) {
           return CategoryTile(
             key: Key(entry.category.uuid.toString()),
             entry: entry,
-            asNavigationBarItem: widget.withNavBarStyle,
             onTap: () {
               setState(() {
                 entry.isExpanded = !entry.isExpanded;
@@ -70,6 +88,7 @@ class _TaskListingState extends State<TaskListing>
             depth: entry.depth,
             allowTap: widget.allowTapTasks,
             showMostRecent: widget.showMostRecent,
+            allowDragging: widget.allowReordering,
           );
         }
         return DummyHighPerfListingTile();
@@ -77,12 +96,20 @@ class _TaskListingState extends State<TaskListing>
     );
   }
 
-  @override
-  void initState() {
-    super.initState();
-    entries = widget.categories
-        .map((e) => ListingEntryCategory.fromCategory(e, 0))
-        .whereType<ListingEntryCategory>()
-        .toList();
+  List<ListingEntryCategory> get entries {
+    if (widget.listingEntries != null) {
+      return widget.listingEntries!;
+    }
+    if (widget.categories != null) {
+      if (_entriesCache.isEmpty) {
+        _entriesCache = widget.categories!
+            .map((e) => ListingEntryCategory.fromCategory(e, 0))
+            .whereType<ListingEntryCategory>()
+            .toList();
+      }
+      return _entriesCache;
+    }
+    log('Categories and entries is null in state', name: '_TaskListingState');
+    return [];
   }
 }

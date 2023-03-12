@@ -5,9 +5,9 @@ import 'package:go_router/go_router.dart';
 class TaskCard extends StatelessWidget {
   final String title;
   final String description;
-  final Function()? secondaryAction;
+  final Widget? secondaryAction;
   final bool showBackButton;
-  final bool? isExpanded;
+  final bool isExpanded;
 
   final _scrollController = ScrollController();
 
@@ -16,9 +16,10 @@ class TaskCard extends StatelessWidget {
     required this.title,
     required this.description,
     this.secondaryAction,
-    this.isExpanded,
+    bool? isExpanded,
     bool? showBackButton,
-  }) : showBackButton = showBackButton ?? true;
+  })  : isExpanded = isExpanded ?? false,
+        showBackButton = showBackButton ?? true;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +32,7 @@ class TaskCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   if (showBackButton)
                     Expanded(
@@ -42,38 +44,32 @@ class TaskCard extends StatelessWidget {
                         },
                       ),
                     ),
-                  if (secondaryAction != null)
-                    Expanded(
-                      child: ExpandIcon(
-                        onPressed: (v) => secondaryAction!.call(),
-                        isExpanded: isExpanded!,
-                      ),
-                    ),
+                  if (secondaryAction != null) secondaryAction!,
                 ],
               ),
-              const VerticalDivider(width: 8),
+              if (showBackButton || secondaryAction != null)
+                const VerticalDivider(width: 8),
               Expanded(
-                child: Scrollbar(
+                child: SingleChildScrollView(
                   controller: _scrollController,
-                  thumbVisibility: true,
-                  child: SingleChildScrollView(
-                    controller: _scrollController,
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (title.isNotEmpty)
                           Text(
                             title,
                             style: Theme.of(context).textTheme.titleLarge,
                             textAlign: TextAlign.start,
                           ),
-                          Markdown(
-                            data: description,
-                            shrinkWrap: true,
-                          ),
-                        ],
-                      ),
+                        Markdown(
+                          padding: EdgeInsets.zero,
+                          data: description,
+                          shrinkWrap: true,
+                        ),
+                      ],
                     ),
                   ),
                 ),

@@ -12,6 +12,9 @@ class TaskCategory {
   List<Task> tasks;
   String title;
 
+  // TODO: Don't let this get into master
+  bool expanded;
+
   static const String tasksKey = 'tasks';
   static const String subCategoriesKey = 'subCategories';
   static const String titleKey = 'title';
@@ -22,6 +25,7 @@ class TaskCategory {
     List<TaskCategory>? subCategories,
     List<Task>? tasks,
     UuidValue? id,
+    this.expanded = false,
   })  : uuid = id ?? const Uuid().v4obj(),
         subCategories = subCategories ?? [],
         tasks = tasks ?? [];
@@ -123,5 +127,37 @@ class TaskCategory {
       );
       return null;
     }
+  }
+
+  /// Delete task from this and all child categories
+  void deleteTask(UuidValue uuid) {
+    tasks.removeWhere((task) => task.uuid == uuid);
+    subCategories.forEach((element) => element.deleteTask(uuid));
+  }
+
+  /// Tries to insert [task] at [uuid]
+  /// returns true if task was successfully inserted in [this] or a subcategory
+  bool tryInsertAt(Task task, UuidValue uuid) {
+    final cat = findTaskCategory(uuid);
+    if (cat != null) {
+      cat.tasks.add(task);
+      return true;
+    }
+    return false;
+  }
+
+  TaskCategory? findTaskCategory(UuidValue uuid) {
+    if (this.uuid == uuid) {
+      return this;
+    } else {
+      for (final category in subCategories) {
+        final r = category.findTaskCategory(uuid);
+        if (r != null) {
+          return r;
+        }
+      }
+    }
+
+    return null;
   }
 }

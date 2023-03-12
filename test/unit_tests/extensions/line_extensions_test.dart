@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:lernapp/logic/list_extensions.dart';
 import 'package:lernapp/model/pair.dart';
@@ -76,6 +77,14 @@ main() {
 
       test('.min one element', () {
         expect([1].max(), 1);
+      });
+    });
+
+    group('.flattened', () {
+      test('one level deep', () {
+        final data = [[1], [2], [3, 4]];
+
+        expect(data.flattened, [1, 2, 3, 4]);
       });
     });
   });

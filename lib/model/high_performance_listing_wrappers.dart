@@ -1,9 +1,12 @@
 import 'package:collection/collection.dart';
 import 'package:lernapp/model/task.dart';
 import 'package:lernapp/model/task_category.dart';
+import 'package:uuid/uuid.dart';
 
 abstract class ListingEntryBase {
   int get depth;
+
+  UuidValue get uuid;
 }
 
 class ListingEntryTask extends ListingEntryBase {
@@ -24,27 +27,33 @@ class ListingEntryTask extends ListingEntryBase {
 
   @override
   int get hashCode => task.hashCode ^ depth.hashCode;
+
+  @override
+  UuidValue get uuid => task.uuid;
 }
 
 class ListingEntryCategory extends ListingEntryBase {
   List<ListingEntryCategory> childCategories;
   TaskCategory category;
-  bool isExpanded;
+
+  bool _isExpanded = false;
+
+  bool get isExpanded => _isExpanded;
+
+  set isExpanded(v) => _isExpanded = v;
   @override
   int depth = 0;
 
   ListingEntryCategory()
       : childCategories = [],
-        category = TaskCategory(title: 'Dummy'),
-        isExpanded = false;
+        category = TaskCategory(title: 'Dummy');
 
   ListingEntryCategory.fromCategory(this.category, this.depth)
       : childCategories = category.subCategories
             .map(
               (e) => ListingEntryCategory.fromCategory(e, depth + 1),
             )
-            .toList(),
-        isExpanded = false;
+            .toList();
 
   Iterable<Iterable<ListingEntryBase>> getVisibleChildren() sync* {
     if (isExpanded) {
@@ -56,6 +65,13 @@ class ListingEntryCategory extends ListingEntryBase {
       }
       yield category.tasks.map((e) => ListingEntryTask(e, depth));
     }
+  }
+
+  /// Calls [action] on all [childCategories], as well as their
+  /// [childCategories]
+  void traverse(void Function(ListingEntryCategory category) action) {
+    childCategories.forEach(action);
+    childCategories.forEach((element) => element.traverse(action));
   }
 
   @override
@@ -74,4 +90,7 @@ class ListingEntryCategory extends ListingEntryBase {
       category.hashCode ^
       isExpanded.hashCode ^
       depth.hashCode;
+
+  @override
+  UuidValue get uuid => category.uuid;
 }

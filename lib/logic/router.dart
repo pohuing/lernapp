@@ -1,4 +1,5 @@
 import 'package:go_router/go_router.dart';
+import 'package:lernapp/widgets/editor_screen/editor_screen.dart';
 import 'package:lernapp/widgets/general_purpose/scratchpad.dart';
 import 'package:lernapp/widgets/import_flow/import_screen.dart';
 import 'package:lernapp/widgets/root_screen.dart';
@@ -6,6 +7,9 @@ import 'package:lernapp/widgets/settings_screen/settings_screen.dart';
 import 'package:lernapp/widgets/task_screen/session_screen.dart';
 import 'package:lernapp/widgets/task_screen/task_screen.dart';
 import 'package:uuid/uuid.dart';
+
+import '../model/task.dart';
+import '../widgets/editor_screen/create_task_screen.dart';
 
 class LernappRouter {
   static final GoRouter router = GoRouter(
@@ -55,6 +59,20 @@ class LernappRouter {
         path: '/import',
         name: 'import',
         builder: (context, state) => const ImportScreen(),
+      ),
+      GoRoute(
+        name: 'editor',
+        path: '/editor',
+        builder: (context, state) => const EditorScreen(),
+        routes: [
+          GoRoute(
+            path: 'new',
+            name: 'newTask',
+            builder: (context, state) => CreateTaskScreen(
+              onChange: state.extra as void Function(Task?),
+            ),
+          ),
+        ],
       ),
     ],
   );

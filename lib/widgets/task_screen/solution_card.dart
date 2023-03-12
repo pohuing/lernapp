@@ -39,27 +39,26 @@ class _SolutionCardState extends State<SolutionCard> {
               padding: const EdgeInsets.all(8.0),
               child: revealSolution
                   ? SizedBox.expand(
-                      child: Scrollbar(
+                      child: SingleChildScrollView(
                         controller: _scrollController,
-                        thumbVisibility: true,
-                        child: SingleChildScrollView(
-                          controller: _scrollController,
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 8),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
+                        child: Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (widget.title.isNotEmpty)
                                 Text(
                                   widget.title,
                                   style: Theme.of(context).textTheme.titleLarge,
                                   textAlign: TextAlign.start,
                                 ),
-                                Markdown(
-                                  data: widget.solution,
-                                  shrinkWrap: true,
-                                ),
-                              ],
-                            ),
+                              Markdown(
+                                padding: EdgeInsets.zero,
+                                data: widget.solution,
+                                shrinkWrap: true,
+                              ),
+                            ],
                           ),
                         ),
                       ),

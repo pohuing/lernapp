@@ -167,6 +167,25 @@ class HiveTaskRepository implements TaskRepositoryBase {
 
     return Future.value(results);
   }
+
+  @override
+  Future<bool> moveTask(Task task, UuidValue to) async {
+    await deleteTask(task.uuid);
+    return await insertTaskAt(task, to);
+  }
+
+  @override
+  Future<bool> insertTaskAt(Task task, UuidValue uuid) async {
+    categories.firstWhere((element) => element.tryInsertAt(task, uuid));
+    return false;
+  }
+
+  @override
+  Future<void> deleteTask(UuidValue uuid) async {
+    categories.forEach((element) {
+      element.deleteTask(uuid);
+    });
+  }
 }
 
 abstract class TaskRepositoryBase {
@@ -187,6 +206,9 @@ abstract class TaskRepositoryBase {
   /// Save category and it's children
   Future<void> saveCategory(TaskCategory category);
 
+  /// Deletes a [Task]
+  Future<void> deleteTask(UuidValue uuid);
+
   /// Save just a task.
   /// Throws if task was not found in hierarchy
   Future<void> saveTask(Task task);
@@ -197,4 +219,15 @@ abstract class TaskRepositoryBase {
 
   /// Import new Categories
   Future<void> import(List<TaskCategory> newCategories);
+
+  /// Move a task by deleting all instances, then inserting [task] in [to]
+  ///
+  // returns false if the category does not exist
+  Future<bool> moveTask(Task task, UuidValue category);
+
+  /// Inserts a task at [category]
+  ///
+  /// Does *not* check for duplicates
+  /// returns false if the category does not exist
+  Future<bool> insertTaskAt(Task task, UuidValue category);
 }

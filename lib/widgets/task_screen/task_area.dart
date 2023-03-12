@@ -37,7 +37,7 @@ class _TaskAreaState extends State<TaskArea> {
   late final Task task;
   late final TasksBloc tasksBloc;
   var expandedTopRow = false;
-  ColorSelectionController colorController =
+  final ColorSelectionController colorController =
       ColorSelectionController.standardColors();
   Duration expandDuration = const Duration(milliseconds: 200);
   List<Line> lines = [];
@@ -78,8 +78,13 @@ class _TaskAreaState extends State<TaskArea> {
                 Expanded(
                   child: TaskCard(
                     title: task.title,
-                    secondaryAction: () => setState(
-                      () => expandedTopRow = !expandedTopRow,
+                    secondaryAction: Expanded(
+                      child: ExpandIcon(
+                        isExpanded: expandedTopRow,
+                        onPressed: (v) => setState(
+                          () => expandedTopRow = !expandedTopRow,
+                        ),
+                      ),
                     ),
                     isExpanded: expandedTopRow,
                     description: task.description,
@@ -179,26 +184,34 @@ class _TaskAreaState extends State<TaskArea> {
                 Icon(Icons.undo)
               ],
             ),
-            ColorSelectionRow(controller: colorController),
-            if (!controller.isCorrecting)
-              IconButton(
-                tooltip: 'Add a new color',
-                onPressed: () async {
-                  final result = await showDialog(
-                    context: context,
-                    builder: (context) => ColorPickerDialogue(
-                      colorController: colorController,
-                    ),
-                  );
-                  if (result is ColorPair) {
-                    setState(() {
-                      colorController.selectedIndex =
-                          colorController.colors.length - 1;
-                    });
-                  }
-                },
-                icon: const Icon(Icons.add),
-              ),
+            AnimatedSize(
+              curve: Curves.easeInOut,
+              duration: const Duration(milliseconds: 200),
+              child: ColorSelectionRow(controller: colorController),
+            ),
+            AnimatedSize(
+              duration: const Duration(milliseconds: 200),
+              child: !controller.isCorrecting
+                  ? IconButton(
+                      tooltip: 'Add a new color',
+                      onPressed: () async {
+                        final result = await showDialog(
+                          context: context,
+                          builder: (context) => ColorPickerDialogue(
+                            colorController: colorController,
+                          ),
+                        );
+                        if (result is ColorPair) {
+                          setState(() {
+                            colorController.selectedIndex =
+                                colorController.colors.length - 1;
+                          });
+                        }
+                      },
+                      icon: const Icon(Icons.add),
+                    )
+                  : Container(),
+            ),
             Slider(
               min: 1,
               max: 20,
@@ -277,6 +290,8 @@ class _TaskAreaState extends State<TaskArea> {
 
   @override
   void initState() {
+    super.initState();
+
     task = widget.task;
     tasksBloc = context.read<TasksBloc>();
     controller.penSize =
@@ -288,8 +303,6 @@ class _TaskAreaState extends State<TaskArea> {
       controller.isCorrecting = widget.reviewStyle;
       updateColorController();
     }
-
-    super.initState();
   }
 
   void updateColorController() {

@@ -9,6 +9,10 @@ import 'package:lernapp/blocs/preferences/preferences_bloc.dart';
 import 'package:lernapp/blocs/selection_cubit.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
 import 'package:lernapp/main.dart';
+import 'package:lernapp/model/preferences/repository_configuration/hive_repository_configuration.dart';
+import 'package:lernapp/model/preferences/repository_configuration/repository_settings.dart';
+import 'package:lernapp/model/preferences/theme_preferences.dart';
+import 'package:lernapp/repositories/preferences_repository.dart';
 import 'package:lernapp/widgets/drawing_area/drawing_area.dart';
 import 'package:lernapp/widgets/listing_screen/category_tile.dart';
 import 'package:lernapp/widgets/listing_screen/task_tile.dart';
@@ -16,8 +20,13 @@ import 'package:lernapp/widgets/task_screen/task_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:system_theme/system_theme.dart';
 
-main() {
+main() async {
   final bindings = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  Hive.init('.');
+  var box = await Hive.openBox('testing_performance_test');
+  await box.clear();
+  final prefsRepo = PreferencesRepository(box);
+
   testWidgets('Test drawing perf in TaskScreen', (widgetTester) async {
     if (kIsWeb ||
         [TargetPlatform.android, TargetPlatform.windows]
@@ -38,6 +47,7 @@ main() {
         ),
         ThemePreferences.defaults(),
       ),
+      prefsRepo,
     );
     final defaultRepository =
         await hiveRepositoryConfiguration.createRepository();
