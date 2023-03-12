@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lernapp/generated/l10n.dart';
 import 'package:lernapp/model/task.dart';
 import 'package:lernapp/widgets/task_screen/solution_card.dart';
 import 'package:lernapp/widgets/task_screen/task_card.dart';
@@ -68,9 +69,9 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
             const SizedBox(height: 8),
             TextFormField(
               controller: taskTitleController,
-              decoration: const InputDecoration(
-                label: Text('Task Title'),
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                label: Text(S.of(context).createTaskScreen_taskTitleLabel),
+                border: const OutlineInputBorder(),
               ),
               validator: (value) =>
                   (value?.isEmpty ?? true) && _taskContents.isEmpty
@@ -82,9 +83,10 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
               controller: taskController,
               minLines: 1,
               maxLines: 20,
-              decoration: const InputDecoration(
-                label: Text('Task'),
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                label:
+                    Text(S.of(context).createTaskScreen_taskDescriptionLabel),
+                border: const OutlineInputBorder(),
               ),
               validator: (value) =>
                   (value?.isEmpty ?? true) && _taskTitle.isEmpty
@@ -103,9 +105,9 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
             ),
             TextFormField(
               controller: solutionTitleController,
-              decoration: const InputDecoration(
-                label: Text('Solution Title'),
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                label: Text(S.of(context).createTaskScreen_solutionTitleLabel),
+                border: const OutlineInputBorder(),
               ),
               validator: (value) =>
                   (value?.isEmpty ?? true) && _solutionContents.isEmpty
@@ -117,9 +119,11 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
               controller: solutionController,
               minLines: 1,
               maxLines: 20,
-              decoration: const InputDecoration(
-                label: Text('Solution'),
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                label: Text(
+                  S.of(context).createTaskScreen_solutionDescriptionLabel,
+                ),
+                border: const OutlineInputBorder(),
               ),
               validator: (value) =>
                   (value?.isEmpty ?? true) && _solutionTitle.isEmpty

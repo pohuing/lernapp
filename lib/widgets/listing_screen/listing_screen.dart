@@ -1,14 +1,17 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lernapp/blocs/selection_cubit.dart';
+import 'package:lernapp/widgets/general_purpose/optionally_wrapped.dart';
 import 'package:lernapp/widgets/general_purpose/platform_adaptive_scaffold.dart';
 import 'package:lernapp/widgets/import_flow/import_tile.dart';
 import 'package:lernapp/widgets/listing_screen/connected_task_listing.dart';
 import 'package:lernapp/widgets/listing_screen/start_session_dialog.dart';
 
 import '../../generated/l10n.dart';
-import '../import_flow/import_tile.dart';
 import 'about_list_tile.dart';
 
 class ListingScreen extends StatefulWidget {
@@ -27,7 +30,11 @@ class _ListingScreenState extends State<ListingScreen> {
         builder: (context) {
           return PlatformAdaptiveScaffold(
             title: S.of(context).listingScreen_title,
-            body: const ConnectedTaskListing(),
+            body: OptionallyWrapped(
+              applyWrapper: !kIsWeb && Platform.isIOS,
+              wrapper: (context, child) => SafeArea(child: child),
+              child: const ConnectedTaskListing(),
+            ),
             primary: true,
             trailing: const Trailing(),
           );

@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -6,6 +9,7 @@ import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
 import 'package:lernapp/generated/l10n.dart';
 import 'package:lernapp/model/custom_date_time_range.dart';
 import 'package:lernapp/model/task_category.dart';
+import 'package:lernapp/widgets/general_purpose/optionally_wrapped.dart';
 import 'package:lernapp/widgets/general_purpose/platform_adaptive_scaffold.dart';
 import 'package:lernapp/widgets/history_screen/date_time_tile.dart';
 import 'package:lernapp/widgets/listing_screen/task_listing.dart';
@@ -37,60 +41,65 @@ class _HistoryScreenState extends State<HistoryScreen> {
           title: S.of(context).historyScreen_title,
           primary: true,
           trailing: buildTrailing(),
-          body: ListView(
-            children: [
-              ListTile(
-                leading: const Icon(Icons.av_timer),
-                title: Text(S.of(context).historyScreen_timeFrameTitle),
-                trailing: IconButton(
-                  onPressed: onResetPressed,
-                  icon: const Icon(Icons.undo),
+          body: OptionallyWrapped(
+            applyWrapper: !kIsWeb && Platform.isIOS,
+            wrapper: (context, child) => SafeArea(child: child),
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.av_timer),
+                  title: Text(S.of(context).historyScreen_timeFrameTitle),
+                  trailing: IconButton(
+                    onPressed: onResetPressed,
+                    icon: const Icon(Icons.undo),
+                  ),
                 ),
-              ),
-              DateTimeTile(
-                title: S.of(context).historyScreen_startTitle,
-                value: range.start,
-                onChange: onStartChange,
-              ),
-              DateTimeTile(
-                title: S.of(context).historyScreen_endTitle,
-                value: range.end,
-                onChange: onEndChange,
-              ),
-              const Divider(),
-              SizedBox(
-                child: FutureBuilder<List<TaskCategory>>(
-                  future: loader,
-                  builder: (context, snapshot) {
-                    switch (snapshot.connectionState) {
-                      case ConnectionState.none:
-                      case ConnectionState.waiting:
-                      case ConnectionState.active:
-                        return const CircularProgressIndicator.adaptive();
-                      case ConnectionState.done:
-                        if (snapshot.data!.isEmpty) {
-                          return Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Center(
-                              child: Text(
-                                S
-                                    .of(context)
-                                    .historyScreen_noAnswersInTimeFrameHint,
-                                style: Theme.of(context).textTheme.titleLarge,
+                DateTimeTile(
+                  title: S.of(context).historyScreen_startTitle,
+                  value: range.start,
+                  onChange: onStartChange,
+                ),
+                DateTimeTile(
+                  title: S.of(context).historyScreen_endTitle,
+                  value: range.end,
+                  onChange: onEndChange,
+                ),
+                const Divider(),
+                SizedBox(
+                  child: FutureBuilder<List<TaskCategory>>(
+                    future: loader,
+                    builder: (context, snapshot) {
+                      switch (snapshot.connectionState) {
+                        case ConnectionState.none:
+                        case ConnectionState.waiting:
+                        case ConnectionState.active:
+                          return const CircularProgressIndicator.adaptive();
+                        case ConnectionState.done:
+                          if (snapshot.data!.isEmpty) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8),
+                              child: Center(
+                                child: Text(
+                                  S
+                                      .of(context)
+                                      .historyScreen_noAnswersInTimeFrameHint,
+                                  style: Theme.of(context).textTheme.titleLarge,
+                                ),
                               ),
-                            ),
+                            );
+                          }
+                          return TaskListing(
+                            shrinkWrap: true,
+                            categories: snapshot.data!,
+                            showMostRecent: true,
                           );
-                        }
-                        return TaskListing(
-                          shrinkWrap: true,
-                          categories: snapshot.data!,
-                          showMostRecent: true,
-                        );
-                    }
-                  },
-                ),
-              )
-            ],
+                      }
+                    },
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

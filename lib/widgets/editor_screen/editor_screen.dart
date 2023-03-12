@@ -3,6 +3,7 @@ import 'package:flutter_adaptive_scaffold/flutter_adaptive_scaffold.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lernapp/blocs/selection_cubit.dart';
+import 'package:lernapp/generated/l10n.dart';
 import 'package:lernapp/model/task.dart';
 import 'package:lernapp/widgets/general_purpose/platform_adaptive_scaffold.dart';
 import 'package:lernapp/widgets/listing_screen/connected_task_listing.dart';
@@ -26,7 +27,7 @@ class _EditorScreenState extends State<EditorScreen> {
       create: (BuildContext context) => SelectionCubit(),
       child: PlatformAdaptiveScaffold(
         title: 'Editor',
-        previousTitle: 'Tasks',
+        previousTitle: S.of(context).listingScreen_title,
         primary: true,
         useSliverAppBar: false,
         trailing: buildTrailing(),
