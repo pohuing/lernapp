@@ -67,5 +67,7 @@
   "colorPickerDialog_confirm": "Finish",
   "colorPickerDialog_separateColorsTitle": "Use separate colors",
   "colorPickerDialog_brightThemeColourTitle": "Bright Theme Colour",
-  "colorPickerDialog_darkThemeColourTitle": "Dark Theme Colour"
+  "colorPickerDialog_darkThemeColourTitle": "Dark Theme Colour",
+  "taskScreen_errorTitle": "Error",
+  "taskScreen_loadingTitle": "Loading"
 }

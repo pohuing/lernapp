@@ -157,6 +157,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "taskArea_differenceinminutesMinutesAgo": m3,
         "taskArea_historyButtonTitle": MessageLookupByLibrary.simpleMessage(
             "Show history button before revealing solution"),
+        "taskScreen_errorTitle": MessageLookupByLibrary.simpleMessage("Error"),
+        "taskScreen_loadingTitle":
+            MessageLookupByLibrary.simpleMessage("Loading"),
         "themeSettingsTile_PaintAATitle":
             MessageLookupByLibrary.simpleMessage("Enable Paint AA"),
         "themeSettingsTile_blendAADescription":

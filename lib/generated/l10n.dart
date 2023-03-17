@@ -741,6 +741,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Error`
+  String get taskScreen_errorTitle {
+    return Intl.message(
+      'Error',
+      name: 'taskScreen_errorTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Loading`
+  String get taskScreen_loadingTitle {
+    return Intl.message(
+      'Loading',
+      name: 'taskScreen_loadingTitle',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

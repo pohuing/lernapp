@@ -158,6 +158,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "taskArea_differenceinminutesMinutesAgo": m3,
         "taskArea_historyButtonTitle": MessageLookupByLibrary.simpleMessage(
             "Zeige Verlaufsleiste selbst wenn Aufgabe noch nicht gelöst wurde"),
+        "taskScreen_errorTitle": MessageLookupByLibrary.simpleMessage("Fehler"),
+        "taskScreen_loadingTitle":
+            MessageLookupByLibrary.simpleMessage("Laden"),
         "themeSettingsTile_PaintAATitle":
             MessageLookupByLibrary.simpleMessage("Verwende AA beim Zeichnen"),
         "themeSettingsTile_blendAADescription":

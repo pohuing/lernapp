@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:lernapp/logic/logging.dart';
 import 'package:lernapp/logic/map_extensions.dart';
 import 'package:lernapp/logic/nullable_extensions.dart';
@@ -12,9 +13,6 @@ class TaskCategory {
   List<Task> tasks;
   String title;
 
-  // TODO: Don't let this get into master
-  bool expanded;
-
   static const String tasksKey = 'tasks';
   static const String subCategoriesKey = 'subCategories';
   static const String titleKey = 'title';
@@ -25,7 +23,6 @@ class TaskCategory {
     List<TaskCategory>? subCategories,
     List<Task>? tasks,
     UuidValue? id,
-    this.expanded = false,
   })  : uuid = id ?? const Uuid().v4obj(),
         subCategories = subCategories ?? [],
         tasks = tasks ?? [];
@@ -36,21 +33,8 @@ class TaskCategory {
 
   /// Recursively search if task in tree
   Task? findTask(UuidValue uuid) {
-    Task? task;
-    for (var t in tasks) {
-      if (t.uuid == uuid) {
-        return t;
-      }
-    }
-    if (task == null) {
-      for (var c in subCategories) {
-        var t = c.findTask(uuid);
-        if (t != null) {
-          return t;
-        }
-      }
-    }
-    return null;
+    return tasks.firstWhereOrNull((t) => t.uuid == uuid) ??
+        subCategories.map((c) => c.findTask(uuid)).whereNotNull().firstOrNull;
   }
 
   /// Recursively gather Uuids of all children

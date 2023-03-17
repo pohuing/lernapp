@@ -66,5 +66,7 @@
   "colorPickerDialog_confirm": "Fertig",
   "colorPickerDialog_separateColorsTitle": "Benutze separate Farben",
   "colorPickerDialog_brightThemeColourTitle": "Farbe für helles Farbschema",
-  "colorPickerDialog_darkThemeColourTitle": "Farbe für dunkles Farbschema"
+  "colorPickerDialog_darkThemeColourTitle": "Farbe für dunkles Farbschema",
+  "taskScreen_errorTitle": "Fehler",
+  "taskScreen_loadingTitle": "Laden"
 }

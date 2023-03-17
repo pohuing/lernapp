@@ -34,11 +34,23 @@ class TaskScreen extends StatelessWidget {
                 task: snapshot.data!,
               );
             } else if (snapshot.connectionState == ConnectionState.done) {
-              return Center(
-                child: Text(S.of(context).sessionScreen_unknownTaskIdHint),
+              return Scaffold(
+                appBar: AppBar(
+                  title: Text(S.of(context).taskScreen_errorTitle),
+                ),
+                body: Center(
+                  child: Text(S.of(context).sessionScreen_unknownTaskIdHint),
+                ),
               );
             } else {
-              return const Center(child: CircularProgressIndicator.adaptive());
+              return Scaffold(
+                appBar: AppBar(
+                  title: Text(S.of(context).taskScreen_loadingTitle),
+                ),
+                body: const Center(
+                  child: CircularProgressIndicator.adaptive(),
+                ),
+              );
             }
           },
         ),

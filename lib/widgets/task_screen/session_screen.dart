@@ -58,32 +58,41 @@ class _SessionScreenState extends State<SessionScreen> {
         child: BlocBuilder<SessionCubit, SessionState>(
           bloc: cubit,
           builder: (context, state) {
-            return FutureBuilder(
-              key: Key(state.currentTask.toString()),
-              future: context
-                  .read<TasksBloc>()
-                  .repository
-                  .findByUuid(state.currentTask!),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return TaskArea(
-                    key: Key(state.currentTask!.uuid.toString()),
-                    showBackButton: false,
-                    task: snapshot.data!,
-                    reviewStyle: widget.reviewStyle,
-                  );
-                } else if (snapshot.connectionState == ConnectionState.done) {
-                  return Center(
-                    child: Text(
-                      S.of(context).sessionScreen_unknownTaskIdHint,
-                    ),
-                  );
-                } else {
-                  return const Center(
-                    child: CircularProgressIndicator.adaptive(),
-                  );
-                }
-              },
+            return AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              child: FutureBuilder(
+                key: Key(state.currentTask.toString()),
+                future: context
+                    .read<TasksBloc>()
+                    .repository
+                    .findByUuid(state.currentTask!),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 200),
+                      child: TaskArea(
+                        key: Key(state.currentTask!.uuid.toString()),
+                        showBackButton: false,
+                        task: snapshot.data!,
+                        reviewStyle: widget.reviewStyle,
+                      ),
+                    );
+                  } else if (snapshot.connectionState == ConnectionState.done) {
+                    return Center(
+                      child: Text(
+                        S.of(context).sessionScreen_unknownTaskIdHint,
+                      ),
+                    );
+                  } else {
+                    return const AnimatedSwitcher(
+                      duration: Duration(milliseconds: 200),
+                      child: Center(
+                        child: CircularProgressIndicator.adaptive(),
+                      ),
+                    );
+                  }
+                },
+              ),
             );
           },
         ),
