@@ -21,7 +21,8 @@ Future<void> export(
   if (appendTimestamp) {
     final now = DateTime.now();
     filename =
-        '$filename ${DateFormat(DateFormat.YEAR_MONTH_DAY).format(now)} ${DateFormat(DateFormat.HOUR24_MINUTE_SECOND).format(now)}';
+        '$filename ${DateFormat(DateFormat.YEAR_MONTH_DAY).format(now)} ${DateFormat(DateFormat.HOUR24_MINUTE_SECOND).format(now)}'
+            .replaceAll(':', ' ');
   }
 
   if (repo is! HiveTaskRepository) {
@@ -40,12 +41,13 @@ Future<void> export(
 
 Future<void> _exportAndroid(String data, String filename) async {
   try {
-    final res = await PickOrSave().fileSaver(
+    await PickOrSave().fileSaver(
       params: FileSaverParams(
         saveFiles: [
           SaveFileInfo(
-              fileName: '$filename.json',
-              fileData: Uint8List.fromList(utf8.encode(data))),
+            fileName: '$filename.json',
+            fileData: Uint8List.fromList(utf8.encode(data)),
+          ),
         ],
       ),
     );

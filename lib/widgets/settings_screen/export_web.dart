@@ -18,7 +18,8 @@ Future<void> export(
   if (appendTimestamp) {
     final now = DateTime.now();
     filename =
-        '$filename ${DateFormat(DateFormat.YEAR_MONTH_DAY).format(now)} ${DateFormat(DateFormat.HOUR24_MINUTE_SECOND).format(now)}';
+        '$filename ${DateFormat(DateFormat.YEAR_MONTH_DAY).format(now)} ${DateFormat(DateFormat.HOUR24_MINUTE_SECOND).format(now)}'
+            .replaceAll(':', ' ');
   }
 
   if (repo is! HiveTaskRepository) {
