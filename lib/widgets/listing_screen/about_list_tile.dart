@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lernapp/logic/version.dart';
+import 'package:lernapp/generated/application_information/about_contents.dart';
 
 class CustomAboutListTile extends StatelessWidget {
   const CustomAboutListTile({
@@ -11,10 +11,11 @@ class CustomAboutListTile extends StatelessWidget {
     return const AboutListTile(
       icon: Icon(Icons.info),
       applicationVersion: versionName,
+      applicationLegalese: applicationLegalese,
       applicationIcon: Image(
         isAntiAlias: false,
         width: 200,
-        image: AssetImage('images/dorime.gif'),
+        image: AssetImage('images/logo'),
       ),
     );
   }

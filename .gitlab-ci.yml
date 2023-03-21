@@ -1,5 +1,7 @@
 before_script:
-  - echo "const versionName = '$CI_COMMIT_REF_NAME $CI_COMMIT_SHORT_SHA';" > lib/logic/version.dart
+  - echo "const versionName = '$CI_COMMIT_REF_NAME $CI_COMMIT_SHORT_SHA';" > lib/generated/application_information/about_contents.dart
+  - if [[ $Attributions ]]; then echo "const applicationLegalese = '$Attributions';" >> lib/generated/application_information/about_contents.dart; fi
+  - cat lib/generated/application_information/about_contents.dart
 
 
 test:
@@ -12,7 +14,7 @@ test:
 web:
   stage: build
   image: "cirrusci/flutter:stable"
-  dependencies:
+  needs:
     - test
   script:
     - flutter build web --dart-define=FLUTTER_WEB_CANVASKIT_URL=/canvaskit/ # Self host canvaskit
@@ -25,7 +27,7 @@ web:
 apk:
   stage: build
   image: "cirrusci/flutter:stable"
-  dependencies:
+  needs:
     - test
   script:
     - flutter build apk
@@ -39,7 +41,7 @@ apk:
 
 deploy:
   stage: deploy
-  dependencies:
+  needs:
     - web
   only:
     - master
