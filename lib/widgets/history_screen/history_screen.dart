@@ -28,6 +28,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
     DateTime.now().subtract(const Duration(hours: 1)),
     DateTime.now(),
   );
+  final SelectionCubit selectionCubit = SelectionCubit();
 
   Future<List<TaskCategory>>? loader;
 
@@ -35,8 +36,8 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Widget build(BuildContext context) {
     return BlocListener<TasksBloc, TaskStorageStateBase>(
       listener: (context, state) => setState(() => updateLoader()),
-      child: BlocProvider(
-        create: (context) => SelectionCubit()..toggleSelectionMode(),
+      child: BlocProvider.value(
+        value: selectionCubit,
         child: PlatformAdaptiveScaffold(
           title: S.of(context).historyScreen_title,
           primary: true,
@@ -76,7 +77,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                         case ConnectionState.active:
                           return const CircularProgressIndicator.adaptive();
                         case ConnectionState.done:
-                          if (snapshot.data!.isEmpty) {
+                          if (snapshot.data == null || snapshot.data!.isEmpty) {
                             return Padding(
                               padding: const EdgeInsets.all(8),
                               child: Center(
@@ -88,12 +89,13 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                 ),
                               ),
                             );
+                          } else {
+                            return TaskListing(
+                              shrinkWrap: true,
+                              categories: snapshot.data!,
+                              showMostRecent: true,
+                            );
                           }
-                          return TaskListing(
-                            shrinkWrap: true,
-                            categories: snapshot.data!,
-                            showMostRecent: true,
-                          );
                       }
                     },
                   ),
@@ -147,11 +149,24 @@ class _HistoryScreenState extends State<HistoryScreen> {
   }
 
   void updateLoader() {
-    loader = context.read<TasksBloc>().repository.recent(range);
+    loader = () async {
+      var recent = await context.read<TasksBloc>().repository.recent(range);
+
+      /// Deselect tasks which are no longer visible
+      selectionCubit.retainTasks(
+        recent.fold(
+          {},
+          (previousValue, category) =>
+              previousValue..addAll(category.gatherUuids()),
+        ),
+      );
+      return recent;
+    }();
   }
 
   @override
   void initState() {
+    selectionCubit.toggleSelectionMode();
     updateLoader();
     super.initState();
   }

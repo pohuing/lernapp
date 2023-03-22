@@ -15,6 +15,20 @@ class SelectionCubit extends Cubit<SelectionState> {
     emit(state.copyWith(selectedUuids: selected));
   }
 
+  /// Remove tasks with matching uuid
+  void deselectTasks(Set<UuidValue> taskUuids) {
+    final selected = Set<UuidValue>.from(state.selectedUuids);
+    selected.removeAll(taskUuids);
+    emit(state.copyWith(selectedUuids: selected));
+  }
+
+  /// Remove all tasks which are not in [taskUuids]
+  void retainTasks(Set<UuidValue> taskUuids) {
+    final selected = Set<UuidValue>.from(state.selectedUuids);
+    selected.retainAll(taskUuids);
+    emit(state.copyWith(selectedUuids: selected));
+  }
+
   void enableSelectionMode() {
     emit(state.copyWith(isSelecting: true));
   }
