@@ -52,6 +52,13 @@ class _SolutionCardState extends State<SolutionCard> {
                                   data: widget.title,
                                   shrinkWrap: true,
                                 ),
+                              SizedBox(
+                                height: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall
+                                        ?.fontSize ??
+                                    10,
+                              ),
                               Markdown(
                                 padding: EdgeInsets.zero,
                                 data: widget.solution,
