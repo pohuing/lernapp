@@ -48,10 +48,9 @@ class _SolutionCardState extends State<SolutionCard> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               if (widget.title.isNotEmpty)
-                                Text(
-                                  widget.title,
-                                  style: Theme.of(context).textTheme.titleLarge,
-                                  textAlign: TextAlign.start,
+                                MarkdownBody(
+                                  data: widget.title,
+                                  shrinkWrap: true,
                                 ),
                               Markdown(
                                 padding: EdgeInsets.zero,

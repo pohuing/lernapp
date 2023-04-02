@@ -1,8 +1,13 @@
 import 'package:collection/collection.dart';
 import 'package:lernapp/model/task.dart';
 import 'package:lernapp/model/task_category.dart';
+import 'package:lernapp/widgets/listing_screen/connected_task_listing.dart';
 import 'package:uuid/uuid.dart';
 
+/// A wrapper class for a [Task] or a [TaskCategory] that is used in the [ConnectedTaskListing].
+///
+/// This class is used to keep track of the depth of the [Task] or
+/// [TaskCategory] in the [TaskCategory] tree.
 abstract class ListingEntryBase {
   int get depth;
 

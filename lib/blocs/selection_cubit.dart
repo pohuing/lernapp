@@ -5,6 +5,12 @@ import 'package:lernapp/logic/list_extensions.dart';
 import 'package:lernapp/model/task_category.dart';
 import 'package:uuid/uuid.dart';
 
+/// The Selection Cubit is responsible for keeping track of the currently
+/// selected tasks and categories.
+///
+/// It also provides methods to select and deselect categories and tasks. It is
+/// used by the [ListingScreen] and [HistoryScreen] to determine which tasks to
+/// show in upcoming Sessions.
 class SelectionCubit extends Cubit<SelectionState> {
   SelectionCubit() : super(SelectionState(<UuidValue>{}, false, false, -1));
 
