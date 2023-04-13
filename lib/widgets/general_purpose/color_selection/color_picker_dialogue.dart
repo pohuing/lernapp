@@ -139,8 +139,8 @@ class _ColorPickerDialogueState extends State<ColorPickerDialogue> {
 
   ColorPair buildColorPair() {
     return ColorPair(
-      darkTheme: darkThemeColor,
-      brightTheme: dualColours ? brightThemeColor : darkThemeColor,
+      darkTheme: dualColours ? darkThemeColor : brightThemeColor,
+      brightTheme: brightThemeColor,
     );
   }
 }
