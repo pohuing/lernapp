@@ -62,6 +62,7 @@ class _ColorPickerDialogueState extends State<ColorPickerDialogue> {
             onPressed: finish,
             child: Text(S.of(context).colorPickerDialog_confirm))
       ],
+      scrollable: true,
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

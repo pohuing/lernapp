@@ -24,7 +24,7 @@ werden.
 Unit tests können einfach mit `flutter test` ausgeführt werden.
 
 Integration Tests mit
-``flutter drive flutter drive --driver=test/test_driver/integration_test.dart --target=test/integration_test/*test_name_hier*_test.dart --no-dds``.
+`flutter drive flutter drive --driver=test/test_driver/integration_test.dart --target=test/integration_test/*test_name_hier*_test.dart --no-dds`.
 
 Diese werden am besten auf dem Zielgerät ausgeführt, `flutter devices` gibt eine Liste an möglichen Zielplattformen aus.
 Mit `flutter test ... -d <ziel>` kann das Ziel für tests angegeben werden.

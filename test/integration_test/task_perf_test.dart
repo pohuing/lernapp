@@ -22,12 +22,12 @@ import 'package:system_theme/system_theme.dart';
 
 main() async {
   final bindings = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-  Hive.init('.');
-  var box = await Hive.openBox('testing_performance_test');
-  await box.clear();
-  final prefsRepo = PreferencesRepository(box);
 
   testWidgets('Test drawing perf in TaskScreen', (widgetTester) async {
+    Hive.init('.');
+    var box = await Hive.openBox('testing_performance_test');
+    await box.clear();
+    final prefsRepo = PreferencesRepository(box);
     if (kIsWeb ||
         [TargetPlatform.android, TargetPlatform.windows]
             .contains(defaultTargetPlatform)) {
@@ -107,7 +107,7 @@ main() async {
       find.byType(ColorPickerSlider).last,
     );
     await widgetTester.pumpAndSettle();
-    await widgetTester.tap(find.text('Confirm'));
+    await widgetTester.tap(find.text('Finish'));
     await widgetTester.pumpAndSettle();
 
     for (var i = 0.0; i < 30; i++) {
