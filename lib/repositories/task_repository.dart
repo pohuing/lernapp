@@ -13,16 +13,17 @@ import '../model/task_category.dart';
 class HiveTaskRepository implements TaskRepositoryBase {
   @override
   final List<TaskCategory> categories;
-  final Box<List<dynamic>>? box;
+  final Box<List<dynamic>> box;
   static const tasksKey = 'tasks';
 
-  HiveTaskRepository({this.box}) : categories = _loadCategories(box);
+  HiveTaskRepository({required this.box}) : categories = _loadCategories(box);
 
-  static List<TaskCategory> _loadCategories([Box<List<dynamic>>? box]) {
+  static List<TaskCategory> _loadCategories(Box<List<dynamic>> box) {
     final start = DateTime.now();
     final List<TaskCategory> categories = [];
     log('initialising load', name: 'HiveTaskRepository._loadCategories');
-    if ((box?.isNotEmpty ?? false) && box!.containsKey(tasksKey)) {
+    // load from storage if box contains data
+    if (box.isNotEmpty && box.containsKey(tasksKey)) {
       final list = List<Map>.from(box.get(tasksKey) ?? [])
           .map((e) => Map<String, dynamic>.from(e));
       for (final categoryMap in list) {
@@ -62,8 +63,8 @@ class HiveTaskRepository implements TaskRepositoryBase {
   Future<void> save() async {
     final start = DateTime.now();
     log('Starting save', name: 'TaskRepository.save');
-    await box?.delete(tasksKey);
-    await box?.put(tasksKey, asMap());
+    await box.delete(tasksKey);
+    await box.put(tasksKey, asMap());
     log(
       'Finished save, duration: ${DateTime.now().difference(start).inMilliseconds}ms',
       name: 'HiveTaskRepository.save',
@@ -133,7 +134,7 @@ class HiveTaskRepository implements TaskRepositoryBase {
 
   @override
   Future<void> wipeStorage() async {
-    await box?.clear();
+    await box.clear();
     categories.clear();
   }
 
@@ -149,7 +150,7 @@ class HiveTaskRepository implements TaskRepositoryBase {
 
   @override
   void dispose() {
-    box?.close();
+    box.close();
   }
 
   @override
