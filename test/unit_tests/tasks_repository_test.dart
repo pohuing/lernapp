@@ -8,25 +8,35 @@ import 'package:uuid/uuid.dart';
 main() async {
   await testImplementation(
     'HiveTaskRepository',
-    () async {
+    repoCallback: () async {
       final String randomName = const Uuid().v4();
-      Box<List<dynamic>> box = await Hive.openBox(randomName, path: 'test');
+      Box<List<dynamic>> box =
+          await Hive.openBox(randomName, path: 'testRepositories');
       return HiveTaskRepository(box: box);
+    },
+    tearDownCallback: (repo) async {
+      await (repo as HiveTaskRepository).box.deleteFromDisk();
     },
   );
 }
 
 /// Run the TaskRepositoryBase test suite
 ///
-/// title becomes the group title
-/// repoCallback is used to create a new repository instance on every test run
+/// [title] becomes the group title
+/// [repoCallback] is used to create a new repository instance on every test run
+/// [tearDownCallback] is used as the [tearDown] for the group, with the
+/// repository used for the test supplied as an argument
 Future<void> testImplementation(
-  String title,
-  Future<TaskRepositoryBase> Function() repoCallback,
-) async {
+  String title, {
+  required Future<TaskRepositoryBase> Function() repoCallback,
+  Future<void> Function(TaskRepositoryBase repo)? tearDownCallback,
+}) async {
   group(title, () {
     late TaskRepositoryBase repository;
     setUp(() async => repository = await repoCallback());
+    if (tearDownCallback != null) {
+      tearDown(() => tearDownCallback.call(repository));
+    }
 
     test('Import category', () async {
       final category = TaskCategory(title: 'TestCategory');
