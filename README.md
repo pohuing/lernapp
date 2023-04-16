@@ -49,3 +49,6 @@ In [lib/generated/application_information/about_contents.dart](lib/generated/app
 lassen sich Versionsnummer und ein Hinweis in applicationLegalese ändern. Das Logo ist unter [images/logo](images/logo)
 austauschbar.
 Diese Werte werden alle in der Gitlab Ci in der `before_script` Stage durch Variablen ersetzt.
+
+## Import und Export von Aufgaben
+Die Lernapp hat eine Import- und Exportfunktion von Aufgaben und Lösungen. Die Aufgaben werden in einer Json Datei exportiert und wird gegen das Json Schema unter [assets/importSchema.json](assets/importSchema.json) validiert. Fehler werden beim Import detailliert angezeigt.
