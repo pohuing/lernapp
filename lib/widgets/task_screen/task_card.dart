@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 
 class TaskCard extends StatelessWidget {
   final String title;
-  final String description;
+  final String body;
   final Widget? secondaryAction;
   final bool showBackButton;
   final bool isExpanded;
@@ -14,7 +14,7 @@ class TaskCard extends StatelessWidget {
   TaskCard({
     super.key,
     required this.title,
-    required this.description,
+    required this.body,
     this.secondaryAction,
     bool? isExpanded,
     bool? showBackButton,
@@ -59,14 +59,18 @@ class TaskCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         if (title.isNotEmpty)
-                          Text(
-                            title,
-                            style: Theme.of(context).textTheme.titleLarge,
-                            textAlign: TextAlign.start,
+                          MarkdownBody(
+                            data: title,
+                            shrinkWrap: true,
                           ),
+                        SizedBox(
+                          height:
+                              Theme.of(context).textTheme.bodySmall?.fontSize ??
+                                  10,
+                        ),
                         Markdown(
                           padding: EdgeInsets.zero,
-                          data: description,
+                          data: body,
                           shrinkWrap: true,
                         ),
                       ],

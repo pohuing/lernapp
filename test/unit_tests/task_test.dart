@@ -18,28 +18,28 @@ void main() {
             'mismatch, original: ${original.uuid}, serialized: ${serialized[Task.uuidKey]}',
       );
       expect(
-        serialized[Task.titleKey],
-        original.title,
+        serialized[Task.taskTitleKey],
+        original.taskTitle,
         reason:
-            'mismatch, original: ${original.title}, serialized: ${serialized[Task.titleKey]}',
+            'mismatch, original: ${original.taskTitle}, serialized: ${serialized[Task.taskTitleKey]}',
       );
       expect(
-        serialized[Task.descriptionKey],
-        original.description,
+        serialized[Task.taskBodyKey],
+        original.taskBody,
         reason:
-            'mismatch, original: ${original.description}, serialized: ${serialized[Task.descriptionKey]}',
+            'mismatch, original: ${original.taskBody}, serialized: ${serialized[Task.taskBodyKey]}',
       );
       expect(
-        serialized[Task.hintKey],
-        original.hint,
+        serialized[Task.solutionBodyKey],
+        original.solutionBody,
         reason:
-            'mismatch, original: ${original.hint}, serialized: ${serialized[Task.hintKey]}',
+            'mismatch, original: ${original.solutionBody}, serialized: ${serialized[Task.solutionBodyKey]}',
       );
       expect(
-        serialized[Task.solutionKey],
-        original.solution,
+        serialized[Task.solutionTitleKey],
+        original.solutionTitle,
         reason:
-            'mismatch, original: ${original.solution}, serialized: ${serialized[Task.solutionKey]}',
+            'mismatch, original: ${original.solutionTitle}, serialized: ${serialized[Task.solutionTitleKey]}',
       );
       expect(
         serialized[Task.solutionsKey],
@@ -64,10 +64,10 @@ void main() {
 
       final original = {
         Task.uuidKey: uuid.toString(),
-        Task.titleKey: title,
-        Task.descriptionKey: description,
-        Task.hintKey: hint,
-        Task.solutionKey: solution,
+        Task.taskTitleKey: title,
+        Task.taskBodyKey: description,
+        Task.solutionBodyKey: hint,
+        Task.solutionTitleKey: solution,
         Task.solutionsKey: solutionStates.map((e) => e.toMap()).toList(),
       };
 
@@ -79,28 +79,28 @@ void main() {
             'uuid mismatch, original: $uuid, deserialized: ${deserialized.uuid}',
       );
       expect(
-        deserialized.title,
+        deserialized.taskTitle,
         title,
         reason:
-            'title mismatch, original: $title, deserialized: ${deserialized.title}',
+            'title mismatch, original: $title, deserialized: ${deserialized.taskTitle}',
       );
       expect(
-        deserialized.description,
+        deserialized.taskBody,
         description,
         reason:
-            'description mismatch, original: $description, deserialized: ${deserialized.description}',
+            'description mismatch, original: $description, deserialized: ${deserialized.taskBody}',
       );
       expect(
-        deserialized.hint,
+        deserialized.solutionBody,
         hint,
         reason:
-            'hint mismatch, original: $hint, deserialized: ${deserialized.hint}',
+            'hint mismatch, original: $hint, deserialized: ${deserialized.solutionBody}',
       );
       expect(
-        deserialized.solution,
+        deserialized.solutionTitle,
         solution,
         reason:
-            'solution mismatch, original: $solution, deserialized: ${deserialized.solution}',
+            'solution mismatch, original: $solution, deserialized: ${deserialized.solutionTitle}',
       );
       expect(
         deserialized.solutions,

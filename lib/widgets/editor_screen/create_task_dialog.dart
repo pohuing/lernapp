@@ -7,6 +7,7 @@ import 'package:lernapp/widgets/task_screen/task_card.dart';
 class CreateTaskDialog extends StatefulWidget {
   final Widget? Function(Task task)? secondaryAction;
   final void Function(Task? task)? onChange;
+
   const CreateTaskDialog({super.key, this.secondaryAction, this.onChange});
 
   @override
@@ -98,7 +99,7 @@ class _CreateTaskDialogState extends State<CreateTaskDialog> {
               height: 300,
               child: TaskCard(
                 title: _taskTitle,
-                description: _taskContents,
+                body: _taskContents,
                 showBackButton: false,
                 secondaryAction: widget.secondaryAction?.call(task),
               ),

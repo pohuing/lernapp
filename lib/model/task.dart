@@ -8,43 +8,43 @@ import 'package:uuid/uuid.dart';
 
 class Task {
   static const uuidKey = 'uuid';
-  static const solutionKey = 'solution';
-  static const hintKey = 'hint';
-  static const descriptionKey = 'description';
-  static const titleKey = 'title';
+  static const solutionTitleKey = 'solutionTitle';
+  static const solutionBodyKey = 'solutionBody';
+  static const taskBodyKey = 'taskBody';
+  static const taskTitleKey = 'taskTitle';
   static const solutionsKey = 'solutions';
 
-  String title;
-  String description;
-  String hint;
-  String solution;
+  String taskTitle;
+  String taskBody;
+  String solutionBody;
+  String solutionTitle;
   UuidValue uuid;
   List<SolutionState> solutions;
 
   Task(
-    this.title,
-    this.description,
-    this.hint,
-    this.solution, {
+    this.taskTitle,
+    this.taskBody,
+    this.solutionBody,
+    this.solutionTitle, {
     UuidValue? uuid,
     List<SolutionState>? solutions,
   })  : solutions = solutions ?? [],
         uuid = uuid ?? const Uuid().v4obj();
 
   Task.lorem()
-      : title = ameno(paragraphs: 1, words: 4),
-        description = ameno(paragraphs: 2, words: 20),
-        hint = ameno(paragraphs: 1, words: 10),
-        solution = ameno(paragraphs: 1, words: 20),
+      : taskTitle = ameno(paragraphs: 1, words: 4),
+        taskBody = ameno(paragraphs: 2, words: 20),
+        solutionBody = ameno(paragraphs: 1, words: 10),
+        solutionTitle = ameno(paragraphs: 1, words: 20),
         uuid = const Uuid().v4obj(),
         solutions = [];
 
   @override
   int get hashCode =>
-      title.hashCode ^
-      description.hashCode ^
-      hint.hashCode ^
-      solution.hashCode ^
+      taskTitle.hashCode ^
+      taskBody.hashCode ^
+      solutionBody.hashCode ^
+      solutionTitle.hashCode ^
       uuid.hashCode ^
       solutions.hashCode;
 
@@ -67,40 +67,40 @@ class Task {
       identical(this, other) ||
       other is Task &&
           runtimeType == other.runtimeType &&
-          title == other.title &&
-          description == other.description &&
-          hint == other.hint &&
-          solution == other.solution &&
+          taskTitle == other.taskTitle &&
+          taskBody == other.taskBody &&
+          solutionBody == other.solutionBody &&
+          solutionTitle == other.solutionTitle &&
           uuid == other.uuid &&
           solutions.equals(other.solutions);
 
   @override
   String toString() {
-    return 'Task{title: $title, description: $description, hint: $hint, solution: $solution, uuid: $uuid, solutions: $solutions}';
+    return 'Task{title: $taskTitle, description: $taskBody, hint: $solutionBody, solution: $solutionTitle, uuid: $uuid, solutions: $solutions}';
   }
 
   Map<String, dynamic> toMap() {
     return {
       uuidKey: uuid.toString(),
-      titleKey: title,
-      descriptionKey: description,
-      hintKey: hint,
-      solutionKey: solution,
+      taskTitleKey: taskTitle,
+      taskBodyKey: taskBody,
+      solutionBodyKey: solutionBody,
+      solutionTitleKey: solutionTitle,
       solutionsKey: solutions.map((e) => e.toMap()).toList(),
     };
   }
 
   static Task? fromMap(Map map) {
     try {
-      final title = map[titleKey] as String;
+      final title = map[taskTitleKey] as String;
       final uuid = map.transformOrFallback<UuidValue>(
         uuidKey,
         (value) => UuidValue(value),
         const Uuid().v4obj(),
       );
-      final description = map[descriptionKey] as String;
-      final hint = map[hintKey] as String;
-      final solution = map[solutionKey] as String;
+      final description = map[taskBodyKey] as String;
+      final hint = map[solutionBodyKey] as String;
+      final solution = map[solutionTitleKey] as String;
       final solutions = List<Map>.from(map[solutionsKey] ?? [])
           .map((e) => SolutionState.fromMap(e))
           .whereType<SolutionState>()

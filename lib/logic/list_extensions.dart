@@ -43,6 +43,7 @@ extension MinMax<E extends Comparable> on List<E> {
     return this[minI];
   }
 
+  /// Find the largest member using a linear search
   E max() {
     assert(isNotEmpty);
     if (length == 1) {

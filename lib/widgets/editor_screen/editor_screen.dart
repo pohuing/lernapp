@@ -78,8 +78,8 @@ class _EditorScreenState extends State<EditorScreen> {
               flightShuttleBuilder: (flightContext, animation, flightDirection,
                   fromHeroContext, toHeroContext) {
                 return TaskCard(
-                  title: newTask!.title,
-                  description: newTask!.description,
+                  title: newTask!.taskTitle,
+                  body: newTask!.taskBody,
                   showBackButton: false,
                 );
               },
@@ -105,7 +105,7 @@ class _EditorScreenState extends State<EditorScreen> {
       dragAnchorStrategy: pointerDragAnchorStrategy,
       data: task,
       maxSimultaneousDrags:
-          task.title.isNotEmpty || task.description.isNotEmpty ? 1 : 0,
+          task.taskTitle.isNotEmpty || task.taskBody.isNotEmpty ? 1 : 0,
       feedback: Material(
         child: SizedBox(
           height: 100,
@@ -113,8 +113,8 @@ class _EditorScreenState extends State<EditorScreen> {
           child: Transform.translate(
             offset: const Offset(-50, -100),
             child: TaskCard(
-              title: task.title,
-              description: task.description,
+              title: task.taskTitle,
+              body: task.taskBody,
               showBackButton: false,
             ),
           ),

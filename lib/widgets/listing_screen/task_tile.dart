@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:go_router/go_router.dart';
 import 'package:lernapp/blocs/selection_cubit.dart';
 import 'package:lernapp/model/task.dart';
@@ -42,7 +43,7 @@ class TaskTile extends StatelessWidget {
           child: Card(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(task.title),
+              child: Text(task.taskTitle),
             ),
           ),
         ),
@@ -64,14 +65,8 @@ class TaskTile extends StatelessWidget {
               ),
               child: ListTile(
                 subtitle: showMostRecent ? Text(task.mostRecentSummary) : null,
-                title: Text(
-                  task.title,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        color:
-                            Theme.of(context).colorScheme.onSecondaryContainer,
-                      ),
+                title: MarkdownBody(
+                  data: task.taskTitle,
                 ),
                 leading: state.isSelecting
                     ? Checkbox(

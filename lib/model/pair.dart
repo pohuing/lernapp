@@ -1,3 +1,4 @@
+/// A pair of two objects.
 class Pair<T> {
   T one;
   T two;

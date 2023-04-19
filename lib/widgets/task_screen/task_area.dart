@@ -77,7 +77,7 @@ class _TaskAreaState extends State<TaskArea> {
               children: [
                 Expanded(
                   child: TaskCard(
-                    title: task.title,
+                    title: task.taskTitle,
                     secondaryAction: Expanded(
                       child: ExpandIcon(
                         isExpanded: expandedTopRow,
@@ -87,14 +87,14 @@ class _TaskAreaState extends State<TaskArea> {
                       ),
                     ),
                     isExpanded: expandedTopRow,
-                    description: task.description,
+                    body: task.taskBody,
                     showBackButton: widget.showBackButton,
                   ),
                 ),
                 Expanded(
                   child: SolutionCard(
-                    title: task.hint,
-                    solution: task.solution,
+                    title: task.solutionTitle,
+                    solution: task.solutionBody,
                     onReveal: onRevealSolution,
                     revealed: widget.reviewStyle,
                   ),
