@@ -9,9 +9,9 @@ import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
 import 'package:lernapp/generated/l10n.dart';
 import 'package:lernapp/model/custom_date_time_range.dart';
 import 'package:lernapp/model/task_category.dart';
+import 'package:lernapp/widgets/general_purpose/date_time_tile.dart';
 import 'package:lernapp/widgets/general_purpose/optionally_wrapped.dart';
 import 'package:lernapp/widgets/general_purpose/platform_adaptive_scaffold.dart';
-import 'package:lernapp/widgets/history_screen/date_time_tile.dart';
 import 'package:lernapp/widgets/listing_screen/task_listing.dart';
 
 /// A Screen which lets the user select a timespan and then shows tasks which

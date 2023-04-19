@@ -68,7 +68,7 @@ Future<void> testImplementation(
       final categoryUuid = category.uuid;
       final taskUuid = task.uuid;
       category.title = 'A changed title';
-      task.title = 'A new title';
+      task.taskTitle = 'A new title';
       await repository.save();
       await repository.reload();
       final loadedCategory = repository.categories
@@ -80,8 +80,8 @@ Future<void> testImplementation(
         reason: 'loaded category is different from stored category',
       );
       expect(
-        loadedTask!.title,
-        task.title,
+        loadedTask!.taskTitle,
+        task.taskTitle,
         reason: 'loaded task is different from stored task',
       );
     });
