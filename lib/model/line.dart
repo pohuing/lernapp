@@ -21,6 +21,7 @@ class Line {
   BoundingBox? _lastBox;
 
   BoundingBox get boundingBox {
+    // Cache bounding box
     if (_lastLength == path.length) {
       _lastLength = path.length;
       _lastBox ??= BoundingBox.fromLine(this);
@@ -127,9 +128,9 @@ class Line {
   ///
   /// Redundant points are point that are almost exactly on the line drawn from
   /// their neighbor points
-  bool prune() {
+  void prune() {
     if (path.length < 3) {
-      return false;
+      return;
     }
     final List<int> offsetsToRemove = [];
     for (var i = 0; i < path.length - 2; ++i) {
@@ -157,7 +158,6 @@ class Line {
     if (kDebugMode) {
       log('Pruned points $offsetsToRemove', name: 'Line.prune()');
     }
-    return offsetsToRemove.isNotEmpty;
   }
 
   /// Calculate the distance of point p from the finite line drawn between a and b

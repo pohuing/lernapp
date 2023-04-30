@@ -70,6 +70,7 @@ class _DrawingAreaState extends State<DrawingArea> {
               eraserSize: controller.eraserSize,
               antiAliasBlend: state.themePreferences.blendAA,
               antiAliasPaint: state.themePreferences.paintAA,
+              scale: controller.scale,
             ),
             painter: DrawingAreaPainter(
               tag: 'lines',
@@ -79,6 +80,7 @@ class _DrawingAreaState extends State<DrawingArea> {
               yOffset: controller.yOffset,
               antiAliasBlend: state.themePreferences.blendAA,
               antiAliasPaint: state.themePreferences.paintAA,
+              scale: controller.scale,
             ),
           ),
         ),
@@ -87,8 +89,9 @@ class _DrawingAreaState extends State<DrawingArea> {
   }
 
   void drawAt(Offset localPosition) {
-    final point =
-        localPosition.translate(-controller.xOffset, -controller.yOffset);
+    final point = localPosition
+        .translate(-controller.xOffset, -controller.yOffset)
+        .scale(1 / controller.scale, 1 / controller.scale);
     line.add(point);
   }
 
@@ -101,7 +104,9 @@ class _DrawingAreaState extends State<DrawingArea> {
         return ((controller.isCorrecting && line.type == LineType.correction) ||
                 !controller.isCorrecting) &&
             line.isInCircle(
-              localPosition.translate(-controller.xOffset, -controller.yOffset),
+              localPosition
+                  .translate(-controller.xOffset, -controller.yOffset)
+                  .scale(1 / controller.scale, 1 / controller.scale),
               controller.eraserSize,
             );
       },

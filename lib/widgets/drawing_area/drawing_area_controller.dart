@@ -4,6 +4,7 @@ class DrawingAreaController {
   TapMode tapMode = TapMode.draw;
   double xOffset = 0;
   double yOffset = 0;
+  double scale = 1;
 
   double penSize = 1;
   double eraserSize = 5;

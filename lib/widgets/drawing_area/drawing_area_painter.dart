@@ -11,6 +11,7 @@ class DrawingAreaPainter extends CustomPainter {
   final List<Line> lines;
   final double xOffset;
   final double yOffset;
+  final double scale;
   final Offset? eraserAt;
   final double eraserSize;
   final bool antiAliasBlend;
@@ -35,10 +36,12 @@ class DrawingAreaPainter extends CustomPainter {
     bool? antiAliasBlend,
     bool? antiAliasPaint,
     bool? showBoundingBoxes,
+    double? scale,
   })  : antiAliasBlend = antiAliasBlend ?? false,
         antiAliasPaint = antiAliasPaint ?? false,
         eraserSize = eraserSize ?? 2,
-        showBoundingBoxes = showBoundingBoxes ?? false;
+        showBoundingBoxes = showBoundingBoxes ?? false,
+        scale = scale ?? 1;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -59,6 +62,7 @@ class DrawingAreaPainter extends CustomPainter {
     }
 
     canvas.translate(xOffset, yOffset);
+    canvas.scale(scale);
 
     for (int i = 0; i < lines.length; i++) {
       intransparentPaint.strokeWidth = lines[i].size;
@@ -145,6 +149,7 @@ class DrawingAreaPainter extends CustomPainter {
           (previousValue, element) => previousValue ^ element.hashCode,
         ) ^
         xOffset.hashCode ^
-        yOffset.hashCode;
+        yOffset.hashCode ^
+        scale.hashCode;
   }
 }

@@ -219,10 +219,27 @@ class _TaskAreaState extends State<TaskArea> {
               onChanged: (value) => setState(() {
                 controller.penSize = value;
               }),
-            )
+            ),
+            const Icon(Icons.zoom_out),
+            Slider(
+              value: step,
+              min: 0,
+              max: 6,
+              divisions: 6,
+              label: controller.scale.toString(),
+              onChanged: (value) {
+                setState(() {
+                  step = value;
+                  controller.scale = steps[step.toInt()];
+                });
+              },
+            ),
+            const Icon(Icons.zoom_in),
           ],
         ),
       );
+  double step = 3;
+  static const List<double> steps = [0.3, 0.5, 0.8, 1, 1.5, 2, 3];
 
   Widget buildHistory() {
     return Padding(
