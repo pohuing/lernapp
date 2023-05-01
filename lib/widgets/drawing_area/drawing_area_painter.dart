@@ -61,8 +61,9 @@ class DrawingAreaPainter extends CustomPainter {
       );
     }
 
-    canvas.translate(xOffset, yOffset);
+    canvas.translate(size.width / 2, size.height / 2);
     canvas.scale(scale);
+    canvas.translate(-size.width / 2 + xOffset, -size.height / 2 + yOffset);
 
     for (int i = 0; i < lines.length; i++) {
       intransparentPaint.strokeWidth = lines[i].size;
