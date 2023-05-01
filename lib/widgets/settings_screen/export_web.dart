@@ -26,6 +26,7 @@ Future<void> export(
     return;
   }
   final data = jsonEncode(repo.asMap());
+  // Trick to prompt a file download action in a browser
   AnchorElement()
     ..href = Uri.dataFromString(data, mimeType: 'text/json', encoding: utf8)
         .toString()
