@@ -8,7 +8,7 @@ import 'package:uuid/uuid.dart';
 ///
 /// This class is used to keep track of the depth of the [Task] or
 /// [TaskCategory] in the [TaskCategory] tree.
-abstract class ListingEntryBase {
+sealed class ListingEntryBase {
   int get depth;
 
   UuidValue get uuid;

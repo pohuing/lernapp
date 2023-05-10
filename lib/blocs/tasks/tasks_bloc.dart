@@ -77,13 +77,13 @@ class TasksBloc extends Bloc<TaskStorageEventBase, TaskStorageStateBase> {
   }
 
   FutureOr<void> _onSaveTask(event, emit) async {
-    emit(TaskStorageSaving());
+    emit(TaskStorageSaving(repository.categories));
     await repository.saveTask(event.task);
     emit(TaskStorageRepositoryFinishedSaving(repository.categories));
   }
 
   Future<void> _onSaveCategory(event, emit) async {
-    emit(TaskStorageSaving());
+    emit(TaskStorageSaving(repository.categories));
     await repository.saveCategory(event.category);
     emit(TaskStorageRepositoryFinishedSaving(repository.categories));
   }
@@ -94,7 +94,7 @@ class TasksBloc extends Bloc<TaskStorageEventBase, TaskStorageStateBase> {
   }
 
   Future<void> _onSave(event, emit) async {
-    emit(TaskStorageSaving());
+    emit(TaskStorageSaving(repository.categories));
     await repository.save();
     emit(TaskStorageRepositoryFinishedSaving(repository.categories));
   }
