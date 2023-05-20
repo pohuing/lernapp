@@ -43,4 +43,4 @@ class ChangeShowHistory implements PreferencesEventBase {
   ChangeShowHistory(this.showHistory);
 }
 
-abstract class PreferencesEventBase {}
+sealed class PreferencesEventBase {}
