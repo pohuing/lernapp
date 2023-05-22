@@ -6,6 +6,7 @@ class TaskStorageUninitialized implements TaskStorageStateBase {}
 
 class TaskStorageLoading implements TaskStorageStateBase {}
 
+/// Used for States where the Repository has data available
 sealed class TaskStorageHasContents implements TaskStorageStateBase {
   List<TaskCategory> get contents;
 }
