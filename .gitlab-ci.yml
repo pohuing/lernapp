@@ -6,14 +6,14 @@ before_script:
 
 test:
   stage: test
-  image: "cirrusci/flutter:stable"
+  image: "ghcr.io/cirruslabs/flutter:stable"
   script:
     - flutter test test/unit_tests
 
 
 web:
   stage: build
-  image: "cirrusci/flutter:stable"
+  image: "ghcr.io/cirruslabs/flutter:stable"
   needs:
     - test
   script:
@@ -26,7 +26,7 @@ web:
 
 apk:
   stage: build
-  image: "cirrusci/flutter:stable"
+  image: "ghcr.io/cirruslabs/flutter:stable"
   needs:
     - test
   script:
@@ -45,7 +45,7 @@ deploy:
     - web
   only:
     - master
-  image: "cirrusci/flutter:stable"
+  image: "ghcr.io/cirruslabs/flutter:stable"
   script:
     # Ssh refuses to read keyfiles which are globally readable
     - chmod 600 $DeployKey

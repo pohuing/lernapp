@@ -37,58 +37,59 @@ class _ConnectedTaskListingState extends State<ConnectedTaskListing> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<TasksBloc, TaskStorageStateBase>(
-      buildWhen: (previous, current) =>
-          current is TaskStorageLoaded ||
-          current is TaskStorageLoading ||
-          current is TaskStorageUninitialized ||
-          current is TaskStorageChanged ||
-          current is TaskStorageDataChanged,
+      buildWhen: (previous, current) {
+        return switch (current) {
+          TaskStorageLoaded() ||
+          TaskStorageLoading() ||
+          TaskStorageUninitialized() ||
+          TaskStorageChanged() ||
+          TaskStorageDataChanged() =>
+            true,
+          TaskStorageSaving() || TaskStorageRepositoryFinishedSaving() => false
+        };
+      },
       builder: (context, state) {
-        if (state is TaskStorageUninitialized) {
-          context.read<TasksBloc>().add(TaskStorageLoad());
-          return const Center(
-            child: Text('Storage is uninitialized'),
-          );
-        } else if (state is TaskStorageLoaded ||
-            state is TaskStorageRepositoryFinishedSaving ||
-            state is TaskStorageDataChanged) {
-          if ((state as dynamic).contents.isEmpty) {
-            return Padding(
-              padding: const EdgeInsets.all(8),
-              child: Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    context.push('/import');
-                  },
-                  child: Text(
-                    S.of(context).connectedTaskListing_emptyRepositoryHint,
-                    style: Theme.of(context).textTheme.bodyLarge,
+        switch (state) {
+          case TaskStorageUninitialized():
+            context.read<TasksBloc>().add(TaskStorageLoad());
+            return const Center(
+              child: Text('Storage is uninitialized'),
+            );
+          case TaskStorageHasContents(:final contents):
+            updateEntries(contents);
+
+            if (contents.isEmpty) {
+              return Padding(
+                padding: const EdgeInsets.all(8),
+                child: Center(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      context.push('/import');
+                    },
+                    child: Text(
+                      S.of(context).connectedTaskListing_emptyRepositoryHint,
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
                   ),
                 ),
-              ),
+              );
+            } else {
+              return TaskListing(
+                listingEntries: listingEntries,
+                showMostRecent: widget.showMostRecent,
+                allowReordering: widget.allowReordering,
+              );
+            }
+          case TaskStorageLoading():
+            return const Center(
+              child: CircularProgressIndicator.adaptive(),
             );
-          }
-
-          updateEntries(state);
-
-          return TaskListing(
-            listingEntries: listingEntries,
-            showMostRecent: widget.showMostRecent,
-            allowReordering: widget.allowReordering,
-          );
-        } else if (state is TaskStorageLoading) {
-          return const Center(
-            child: CircularProgressIndicator.adaptive(),
-          );
-        } else {
-          return Text(state.toString());
         }
       },
     );
   }
 
-  void updateEntries(dynamic state) {
-    final contents = state.contents as List<TaskCategory>;
+  void updateEntries(List<TaskCategory> contents) {
     final Set<UuidValue> oldExpandedCategories = listingEntries
         .map((e) => e.getVisibleChildren())
         .followedBy(

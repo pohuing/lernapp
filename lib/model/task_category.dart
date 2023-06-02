@@ -27,6 +27,7 @@ class TaskCategory {
         subCategories = subCategories ?? [],
         tasks = tasks ?? [];
 
+  /// Get the count of direct children
   int get numberOfChildren {
     return subCategories.length + tasks.length;
   }

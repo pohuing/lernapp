@@ -9,7 +9,7 @@ import 'line.dart';
 /// A user created answer to a [Task]
 ///
 /// Comparison through [compare] is based on the [timestamp]
-class SolutionState extends Comparable {
+class SolutionState implements Comparable {
   final UuidValue id;
   final List<Line> lines;
   final DateTime timestamp;

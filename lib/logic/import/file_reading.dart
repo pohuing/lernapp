@@ -18,6 +18,8 @@ Future<List<TaskCategory>> readByteArrayToTaskCategory(Uint8List bytes) async {
   }
 }
 
+/// Converts to a UTF-8 String, even if bytes contain UTF16 encoded Text
+/// Trims the data, removing any leading or trailing whitespace
 Future<String> prepareString(Uint8List bytes) async {
   final codes = convertUtf16ToUtf8(bytes);
   final encoding = guessFileEncoding(bytes);
@@ -36,6 +38,9 @@ String uint16ToString(Uint16List codes, Encoding encoding) {
   }
 }
 
+/// Convert list of bytes to list of 2-byte integers.
+/// Bit shifting the lower or higher byte depending on the BOM.
+/// Does nothing if input is deemed UTF-8 based on [guessFileEncoding].
 Uint16List convertUtf16ToUtf8(Uint8List bytes) {
   switch (guessFileEncoding(bytes)) {
     case Encoding.utf8:
