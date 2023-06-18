@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:json_schema2/json_schema2.dart';
+import 'package:json_schema2/json_schema.dart';
 import 'package:lernapp/blocs/selection_cubit.dart';
 import 'package:lernapp/blocs/tasks/tasks_bloc.dart';
 import 'package:lernapp/generated/l10n.dart';
@@ -54,7 +54,9 @@ class _ImportScreenState extends State<ImportScreen> {
                   ..add(TaskStorageImportCategories(parsedContents!))
                   ..add(TaskStorageLoad());
                 showTimedSnackBar(
-                    context, S.of(context).importScreen_importConfirmation);
+                  context,
+                  S.of(context).importScreen_importConfirmation,
+                );
               },
             ),
           if (parsedContents != null)
@@ -123,10 +125,10 @@ class _ImportScreenState extends State<ImportScreen> {
   Future<bool> validateJson(String json) async {
     final schema = await rootBundle.loadString('assets/importSchema.json');
     final validator =
-        JsonSchema.createSchema(schema, schemaVersion: SchemaVersion.draft6);
+        JsonSchema.create(schema, schemaVersion: SchemaVersion.draft6);
     try {
-      final result = validator.validateWithErrors(json, parseJson: true);
-      if (result.isNotEmpty) {
+      final result = validator.validate(json, parseJson: true);
+      if (!result.isValid) {
         if (mounted) {
           await showDialog(
             context: context,
@@ -139,7 +141,7 @@ class _ImportScreenState extends State<ImportScreen> {
                     child: SelectionArea(
                       child: Column(
                         children: [
-                          ...result
+                          ...result.errors
                               .map((e) => [Text(e.message), const Divider()])
                               .flattened
                         ],

@@ -85,8 +85,8 @@ class TaskTile extends StatelessWidget {
                               .toggleSelection(task.uuid);
                         } else {
                           context.pushNamed(
-                            'Task',
-                            params: {'tid': task.uuid.toString()},
+                            'task',
+                            pathParameters: {'tid': task.uuid.toString()},
                           );
                         }
                       },
