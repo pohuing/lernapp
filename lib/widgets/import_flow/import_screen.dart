@@ -23,10 +23,11 @@ class ImportScreen extends StatefulWidget {
   const ImportScreen({super.key});
 
   @override
-  State<ImportScreen> createState() => _ImportScreenState();
+  State<ImportScreen> createState() => ImportScreenState();
 }
 
-class _ImportScreenState extends State<ImportScreen> {
+/// This state is public to allow injecting file contents in integration tests
+class ImportScreenState extends State<ImportScreen> {
   String? fileName;
   String? fileContents;
   List<TaskCategory>? parsedContents;
@@ -42,7 +43,7 @@ class _ImportScreenState extends State<ImportScreen> {
             leading: const Icon(Icons.file_open),
             title: Text(S.of(context).importScreen_importTileTitle),
             subtitle: fileName.map((value) => Text(value)),
-            onTap: loadFiles,
+            onTap: tapImport,
           ),
           if (parsedContents != null)
             ListTile(
@@ -80,7 +81,41 @@ class _ImportScreenState extends State<ImportScreen> {
     );
   }
 
-  Future<void> loadFiles() async {
+  Future<void> tapImport() async {
+    final file = await loadFile();
+    if (file?.bytes case Uint8List bytes when file != null) {
+      await parseContents(await prepareString(bytes), file.name);
+    }
+  }
+
+  Future<void> parseContents(String contents, String fileName) async {
+    try {
+      await validateJson(contents);
+      final categories = await readStringToTaskCategory(contents);
+      setState(() {
+        parsedContents = categories;
+        fileName = fileName;
+      });
+    } on FormatException catch (e) {
+      log(e.toString(), name: 'ImportScreen');
+      if (mounted) {
+        await showDialog(
+          context: context,
+          builder: (context) => AdaptiveAlertDialog(
+            title: 'Error parsing file',
+            content: Column(
+              children: [
+                Text(e.message),
+                Text(e.toString()),
+              ],
+            ),
+          ),
+        );
+      }
+    }
+  }
+
+  Future<PlatformFile?> loadFile() async {
     if (!kIsWeb && Platform.isAndroid) {
       await FilePicker.platform.clearTemporaryFiles();
     }
@@ -94,32 +129,10 @@ class _ImportScreenState extends State<ImportScreen> {
         result.names.isNotEmpty &&
         result.files.first.bytes != null) {
       final file = result.files.first;
-      try {
-        final contents = await prepareString(file.bytes!);
-        await validateJson(contents);
-        final categories = await readByteArrayToTaskCategory(file.bytes!);
-        setState(() {
-          parsedContents = categories;
-          fileName = file.name;
-        });
-      } on FormatException catch (e) {
-        log(e.toString(), name: 'ImportScreen');
-        if (mounted) {
-          await showDialog(
-            context: context,
-            builder: (context) => AdaptiveAlertDialog(
-              title: 'Error parsing file',
-              content: Column(
-                children: [
-                  Text(e.message),
-                  Text(e.toString()),
-                ],
-              ),
-            ),
-          );
-        }
-      }
+      return file;
     }
+
+    return null;
   }
 
   Future<bool> validateJson(String json) async {

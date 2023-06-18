@@ -7,7 +7,11 @@ import 'package:lernapp/model/task_category.dart';
 enum Encoding { utf8, utf16BE, utf16LE }
 
 Future<List<TaskCategory>> readByteArrayToTaskCategory(Uint8List bytes) async {
-  final object = json.decode(await prepareString(bytes));
+  return readStringToTaskCategory(await prepareString(bytes));
+}
+
+Future<List<TaskCategory>> readStringToTaskCategory(String contents) async {
+  final object = json.decode(contents);
   if ((object is Iterable)) {
     return object
         .map((e) => TaskCategory.fromMap(e))
